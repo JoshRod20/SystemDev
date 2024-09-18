@@ -42,4 +42,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Export default
 export default RegisterScreen;

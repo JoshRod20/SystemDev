@@ -1,9 +1,10 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import 'react-native-gesture-handler';
 import WelcomeScreen from './src/app/screens/welcomeScreen';
-import RegisterScreen from './src/app/screens/registerScreen';
-import LoginScreen from './src/app/screens/loginScreen';
+import RegisterScreen from '../AgroSense/src/app/screens/registerScreen';
+import LoginScreen from '../AgroSense/src/app/screens/loginScreen';
 
 const Stack = createStackNavigator();
 

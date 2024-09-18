@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import InputField from '../components/inputField';
 import Button from '../components/button';
-import GoogleButton from '../components/googleButton';
+import GoogleButton from '../components/googleButton'; // Asegúrate de que este componente también esté bien definido.
 
 const LoginScreen = ({ navigation }) => {
   return (
