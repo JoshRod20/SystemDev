@@ -1,21 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import InputField from '../components/inputField';
 import Button from '../components/button';
-import GoogleButton from '../components/googleButton'; // Asegúrate de que este componente también esté bien definido.
+import GoogleButton from '../components/googleButton';
 
 const LoginScreen = ({ navigation }) => {
+  // Estado para almacenar el correo y la contraseña
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // Estado para manejar errores
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
+  // Función que maneja el inicio de sesión
+  const handleLogin = () => {
+    // Reiniciar los errores antes de validar
+    setEmailError(!email);
+    setPasswordError(!password);
+
+    // Si algún campo está vacío, no procedemos
+    if (!email || !password) {
+      return;
+    }
+
+    // Si los campos están correctos, se puede proceder con la autenticación
+    console.log('Login exitoso');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Iniciar sesión</Text>
+
+      {/* Campo para el correo electrónico */}
+      <InputField 
+        placeholder="Correo electrónico" 
+        keyboardType="email-address" 
+        value={email} 
+        onChangeText={(text) => setEmail(text)} 
+        error={emailError}
+      />
+      {emailError && <Text style={styles.errorText}>El correo electrónico es obligatorio</Text>}
+
+      {/* Campo para la contraseña */}
+      <InputField 
+        placeholder="Contraseña" 
+        secureTextEntry 
+        value={password} 
+        onChangeText={(text) => setPassword(text)} 
+        error={passwordError}
+      />
+      {passwordError && <Text style={styles.errorText}>La contraseña es obligatoria</Text>}
+
+      {/* Botón de Google Sign In */}
       <GoogleButton onPress={() => console.log('Google Sign In')} />
-      <InputField placeholder="Correo electrónico" keyboardType="email-address" />
-      <InputField placeholder="Contraseña" secureTextEntry />
-      <Button title="Iniciar" onPress={() => console.log('Login')} />
+
+      {/* Botón para iniciar sesión */}
+      <Button title="Iniciar sesión" onPress={handleLogin} />
     </View>
   );
 };
 
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -28,6 +74,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     color: '#4F7C44',
+  },
+  errorText: {
+    color: 'red',
+    marginTop: 5,
   },
 });
 
