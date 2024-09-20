@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 
 const FeatureButton = ({ icon, label, onPress }) => {
   return (
@@ -12,12 +12,21 @@ const FeatureButton = ({ icon, label, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#e0e0e0',
-    borderRadius: 10,
+    width: '45%',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 15,
     padding: 15,
     alignItems: 'center',
-    margin: 10,
-    width: '40%',
+    marginBottom: 20,
+    shadowColor: "#000",
+shadowOffset: {
+	width: 0,
+	height: 7,
+},
+shadowOpacity: 0.41,
+shadowRadius: 9.11,
+
+elevation: 14,
   },
   icon: {
     width: 40,
@@ -27,6 +36,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

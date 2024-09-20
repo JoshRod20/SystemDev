@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { getWeatherIcon } from '../services/wheatherServices'; 
 
 const WeatherCard = ({ weather }) => {
   return (
     <View style={styles.card}>
-      <Text style={styles.temperature}>{weather.temperature}°</Text>
-      <Image source={require('../../assets/cloudy.png')} style={styles.weatherIcon} />
-      <Text>{weather.description}</Text>
-      <Text>Max: {weather.maxTemp}° Min: {weather.minTemp}°</Text>
-      <Text>Sensación térmica: {weather.feelsLike}°</Text>
+      <Text style={styles.temperature}>{weather.main.temp}°</Text>
+      <Image source={{ uri: getWeatherIcon(weather.weather[0].icon) }} style={styles.weatherIcon} />
+      <Text>{weather.weather[0].description}</Text>
+      <Text>Max: {weather.main.temp_max}° Min: {weather.main.temp_min}°</Text>
+      <Text>Sensación térmica: {weather.main.feels_like}°</Text>
     </View>
   );
 };

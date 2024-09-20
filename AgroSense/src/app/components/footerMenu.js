@@ -1,20 +1,20 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 
 const FooterMenu = ({ navigation }) => {
   return (
     <View style={styles.footer}>
-      <TouchableOpacity onPress={() => navigation.navigate('Cultivos')}>
-        <Image source={require('../../assets/cultivos.png')} style={styles.icon} />
-        <Text>Cultivos</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Cultivos')} style={styles.menuItem}>
+        <Image source={require('../../app/assets/cultivos-48.png')} style={styles.icon} />
+        <Text style={styles.menuText}>Sus cultivos</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('ChatBot')}>
-        <Image source={require('../../assets/chatbot.png')} style={styles.icon} />
-        <Text>ChatBot</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('ChatBot')} style={styles.menuItem}>
+        <Image source={require('../../app/assets/chatbot-48.png')} style={styles.icon} />
+        <Text style={styles.menuText}>ChatBot</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Biblioteca')}>
-        <Image source={require('../../assets/biblioteca.png')} style={styles.icon} />
-        <Text>Biblioteca</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Biblioteca')} style={styles.menuItem}>
+        <Image source={require('../../app/assets/biblioteca-48.png')} style={styles.icon} />
+        <Text style={styles.menuText}>Biblioteca agrícola</Text>
       </TouchableOpacity>
     </View>
   );
@@ -24,12 +24,27 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 20,
+    alignItems: 'center',
     backgroundColor: '#d0e7d0',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
+    position: 'absolute', // Fijar el footer en la parte inferior
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  menuItem: {
+    alignItems: 'center',
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
+  },
+  menuText: {
+    fontSize: 12,
+    marginTop: 5,
+    color: '#333',
   },
 });
 
