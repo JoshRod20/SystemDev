@@ -7,6 +7,8 @@ const InputField = ({ placeholder, keyboardType, secureTextEntry }) => (
     placeholder={placeholder}
     keyboardType={keyboardType}
     secureTextEntry={secureTextEntry}
+    onChangeText={setEmail}
+    placeholderTextColor="#4A6B3E"
   />
 );
 
