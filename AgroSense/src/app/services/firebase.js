@@ -1,23 +1,29 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp, getApps } from 'firebase/app';
+import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa AsyncStorage
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Tu configuración de Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyBIbB3Sm4vsNaKGiACQ75_mXp_xortCklM",
-    authDomain: "agrosense-dd62f.firebaseapp.com",
-    projectId: "agrosense-dd62f",
-    storageBucket: "agrosense-dd62f.appspot.com",
-    messagingSenderId: "392700285794",
-    appId: "1:392700285794:web:7053ed7e808105cecc923b",
-    measurementId: "G-7GTTYBW69L"
+  apiKey: "AIzaSyBIbB3Sm4vsNaKGiACQ75_mXp_xortCklM",
+  authDomain: "agrosense-dd62f.firebaseapp.com",
+  projectId: "agrosense-dd62f",
+  storageBucket: "agrosense-dd62f.appspot.com",
+  messagingSenderId: "392700285794",
+  appId: "1:392700285794:web:7053ed7e808105cecc923b"
 };
 
-// Initialize Firebase
-const appFirebase = initializeApp(firebaseConfig);
-const analytics = getAnalytics(appFirebase);
+// Verificar si la app ya está inicializada
+let app;
+let auth;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+  // Inicializa Firebase Auth con persistencia de AsyncStorage
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage)
+  });
+} else {
+  app = getApps()[0];
+  auth = getAuth(app); // Si ya fue inicializada, usa getAuth
+}
 
-export default appFirebase;
+export { auth, app };
