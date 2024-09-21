@@ -4,6 +4,10 @@ import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 const FooterMenu = ({ navigation }) => {
   return (
     <View style={styles.footer}>
+      <TouchableOpacity onPress={() => navigation.navigate('MainScreen')} style={styles.menuItem}>
+        <Image source={require('../../app/assets/casa-48.png')} style={styles.icon} />
+        <Text style={styles.menuText}>Inicio</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Cultivos')} style={styles.menuItem}>
         <Image source={require('../../app/assets/cultivos-48.png')} style={styles.icon} />
         <Text style={styles.menuText}>Sus cultivos</Text>
