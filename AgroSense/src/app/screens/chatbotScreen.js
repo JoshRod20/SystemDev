@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
 import * as GoogleGenerativeAI from "@google/generative-ai";
 import {
   View,
@@ -6,7 +6,6 @@ import {
   TextInput,
   FlatList,
   StyleSheet,
-  ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
 import * as Speech from "expo-speech";
@@ -27,10 +26,10 @@ const GeminiChat = () => {
     const startChat = async () => {
       const genAI = new GoogleGenerativeAI.GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const prompt = "hello! ";
+      const prompt = "¡Hola! Bienvenido al ChatBot AgroSense, ¿en qué puedo ayudarte hoy?";
       const result = await model.generateContent(prompt);
       const response = result.response;
-      const text = response.text();
+      const text = cleanText(response.text());
       console.log(text);
       showMessage({
         message: "Bienvenido al ChatBot AgroSense 🤖",
@@ -46,9 +45,17 @@ const GeminiChat = () => {
         },
       ]);
     };
-    //function call
     startChat();
   }, []);
+
+  // Función para limpiar caracteres no deseados
+  const cleanText = (text) => {
+    return text
+      .replace(/\*/g, "") // Remover asteriscos
+      .replace(/_/g, "") // Remover guiones bajos
+      .replace(/\n+/g, "\n") // Limpiar saltos de línea extra
+      .trim(); // Eliminar espacios en blanco al inicio y final
+  };
 
   const sendMessage = async () => {
     setLoading(true);
@@ -60,16 +67,13 @@ const GeminiChat = () => {
     const prompt = userMessage.text;
     const result = await model.generateContent(prompt);
     const response = result.response;
-    const text = response.text();
-    setMessages([...messages, { text, user: false }]);
+    
+    const cleanResponseText = cleanText(response.text());
+    setMessages([...messages, { text: cleanResponseText, user: false }]);
     setLoading(false);
     setUserInput("");
 
-    // if (text) {
-    //   Speech.speak(text);
-    // }
-    if (text && !isSpeaking) {
-      Speech.speak(text);
+    if (cleanResponseText && !isSpeaking) {
       setIsSpeaking(true);
       setShowStopIcon(true);
     }
@@ -132,7 +136,7 @@ const GeminiChat = () => {
           )}
         </TouchableOpacity>
         <TextInput
-          placeholder="Type a message"
+          placeholder="Escribe algo..."
           onChangeText={setUserInput}
           value={userInput}
           onSubmitEditing={sendMessage}
@@ -140,14 +144,12 @@ const GeminiChat = () => {
           placeholderTextColor="#fff"
         />
         {
-          //show stop icon only when speaking
           showStopIcon && (
             <TouchableOpacity style={styles.stopIcon} onPress={ClearMessage}>
               <Entypo name="controller-stop" size={24} color="white" />
             </TouchableOpacity>
           )
         }
-        {/* {loading && <ActivityIndicator size="large" color="black" />} */}
       </View>
     </View>
   );
