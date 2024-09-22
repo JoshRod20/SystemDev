@@ -42,6 +42,8 @@ const RegisterScreen = ({ navigation }) => {
       <Text style={styles.title}>Registrarse</Text>
       
       {/* Campo de Nombre */}
+    <View>
+      <Image sourece={require('../assets/icons8-usuario-48.png')}/>
       <InputField 
         placeholder="Nombre" 
         value={name} 
@@ -49,6 +51,8 @@ const RegisterScreen = ({ navigation }) => {
         error={nameError} 
       />
       {nameError && <Text style={styles.errorText}>El nombre es obligatorio</Text>}
+
+    </View>
 
       {/* Campo de Teléfono */}
       <InputField 
