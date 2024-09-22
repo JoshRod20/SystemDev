@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -6,7 +6,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import WelcomeScreen from "../screens/welcomeScreen";
 import RegisterScreen from "../screens/registerScreen";
 import LoginScreen from "../screens/loginScreen";
-import MainScreen from "../screens/mainScreen"; // Asegurarse de tener una pantalla HomeScreen correctamente configurada
+import MainScreen from "../screens/mainScreen";
+import ChatbotScreen from "../screens/chatbotScreen"; // Importar la pantalla de Chatbot
 
 const Stack = createStackNavigator();
 
@@ -15,12 +16,19 @@ const AppNavigator = ({ user }) => {
     <NavigationContainer>
       <Stack.Navigator>
         {user ? (
-          // Si el usuario está autenticado, redirige a la pantalla Home
-          <Stack.Screen
-            name="Home"
-            component={MainScreen}
-            options={{ headerShown: false }}
-          />
+          <>
+            {/* Si el usuario está autenticado, mostrar la pantalla Main y Chatbot */}
+            <Stack.Screen
+              name="MainScreen"
+              component={MainScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChatBot"
+              component={ChatbotScreen} // Pantalla de Chatbot
+              options={{ title: "ChatBot" }}
+            />
+          </>
         ) : (
           <>
             {/* Si no está autenticado, mostrar Welcome, Register y Login */}
