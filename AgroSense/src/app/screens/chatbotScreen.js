@@ -93,7 +93,7 @@ const GeminiChat = () => {
     >
       {!item.user && (
         <Image
-          source={require('../assets/chatbot-48.png')}
+          source={require('../assets/chatbot.png')}
           style={styles.botAvatar}
         />
       )}
