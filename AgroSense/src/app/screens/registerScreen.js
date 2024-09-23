@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import InputField from '../components/inputField';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import InputField from '../components/inputField'; // Asegúrate de que este componente funcione correctamente.
 import Button from '../components/button';
 
 const RegisterScreen = ({ navigation }) => {
@@ -42,17 +42,16 @@ const RegisterScreen = ({ navigation }) => {
       <Text style={styles.title}>Registrarse</Text>
       
       {/* Campo de Nombre */}
-    <View>
-      <Image sourece={require('../assets/icons8-usuario-48.png')}/>
-      <InputField 
-        placeholder="Nombre" 
-        value={name} 
-        onChangeText={setName} 
-        error={nameError} 
-      />
-      {nameError && <Text style={styles.errorText}>El nombre es obligatorio</Text>}
-
-    </View>
+      <View>
+        <Image source={require('../assets/icons8-usuario-48.png')} />
+        <InputField 
+          placeholder="Nombre" 
+          value={name} 
+          onChangeText={setName} 
+          error={nameError} 
+        />
+        {nameError && <Text style={styles.errorText}>El nombre es obligatorio</Text>}
+      </View>
 
       {/* Campo de Teléfono */}
       <InputField 
@@ -69,7 +68,7 @@ const RegisterScreen = ({ navigation }) => {
         placeholder="Correo electrónico" 
         keyboardType="email-address" 
         value={email} 
-        onChangeText={setEmail} 
+        onChangeText={setEmail} // Aquí defines setEmail
         error={emailError} 
       />
       {emailError && <Text style={styles.errorText}>El correo electrónico es obligatorio</Text>}
@@ -130,5 +129,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// Export default
 export default RegisterScreen;

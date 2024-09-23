@@ -143,7 +143,7 @@ const GeminiChat = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(188, 234, 187, 0.5)",
+    backgroundColor: "#FFFFFF",
   },
   messageContainer: {
     borderRadius: 10,

@@ -1,13 +1,14 @@
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
-const InputField = ({ placeholder, keyboardType, secureTextEntry }) => (
+const InputField = ({ placeholder, keyboardType, secureTextEntry, value, onChangeText }) => (
   <TextInput
     style={styles.input}
     placeholder={placeholder}
     keyboardType={keyboardType}
     secureTextEntry={secureTextEntry}
-    onChangeText={setEmail}
+    value={value}
+    onChangeText={onChangeText} // Aquí pasamos la función onChangeText
     placeholderTextColor="#4A6B3E"
   />
 );
