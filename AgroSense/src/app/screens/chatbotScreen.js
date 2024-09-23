@@ -7,6 +7,7 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -17,7 +18,7 @@ const GeminiChat = () => {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showStopIcon, setShowStopIcon] = useState(false);
-  const currentGeneration = useRef(null);  // Para almacenar la referencia de la generación actual
+  const currentGeneration = useRef(null);
 
   const API_KEY = "AIzaSyDvXtfYrTjnq9FU-6aPNk9ahItFTtyKpZo";
 
@@ -46,18 +47,17 @@ const GeminiChat = () => {
     startChat();
   }, []);
 
-  // Función para limpiar caracteres no deseados y agregar saltos de línea
   const cleanText = (text) => {
     return text
-      .replace(/\*/g, "") // Remover asteriscos
-      .replace(/_/g, "") // Remover guiones bajos
-      .replace(/\n+/g, "\n") // Limpiar saltos de línea extra
-      .replace(/\n/g, "\n\n") // Agregar doble salto para separación de párrafos
-      .trim(); // Eliminar espacios en blanco al inicio y final
+      .replace(/\*/g, "")
+      .replace(/_/g, "")
+      .replace(/\n+/g, "\n")
+      .replace(/\n/g, "\n\n")
+      .trim();
   };
 
   const sendMessage = async () => {
-    if (!userInput.trim()) return; // No hacer nada si el input está vacío
+    if (!userInput.trim()) return;
     setLoading(true);
     const userMessage = { text: userInput, user: true };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
@@ -66,22 +66,21 @@ const GeminiChat = () => {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const prompt = userMessage.text;
 
-    currentGeneration.current = model.generateContent(prompt); // Guardamos la generación actual
+    currentGeneration.current = model.generateContent(prompt);
     const result = await currentGeneration.current;
     const response = result.response;
 
     const cleanResponseText = cleanText(response.text());
     setMessages((prevMessages) => [...prevMessages, { text: cleanResponseText, user: false }]);
     setLoading(false);
-    setUserInput(""); // Limpiar el campo de entrada después de enviar el mensaje
+    setUserInput("");
   };
 
-  // Función para detener la generación actual
   const stopGeneration = () => {
     if (currentGeneration.current) {
-      currentGeneration.current.cancel(); // Cancelar la generación en curso
-      setShowStopIcon(false);  // Ocultar el botón de detener
-      setLoading(false);  // Detener el estado de carga
+      currentGeneration.current.cancel();
+      setShowStopIcon(false);
+      setLoading(false);
     }
   };
 
@@ -92,6 +91,12 @@ const GeminiChat = () => {
         item.user ? styles.userMessageContainer : styles.botMessageContainer,
       ]}
     >
+      {!item.user && (
+        <Image
+          source={require('../assets/chatbot-48.png')}
+          style={styles.botAvatar}
+        />
+      )}
       <Text style={[styles.messageText, item.user && styles.userMessage]}>
         {item.text}
       </Text>
@@ -119,14 +124,13 @@ const GeminiChat = () => {
             <Entypo name="controller-stop" size={24} color="white" />
           </TouchableOpacity>
         )}
-        {/* Botón para enviar el mensaje */}
         <TouchableOpacity
           style={[
             styles.inputButton,
             userInput.trim() ? styles.inputButtonEnabled : styles.inputButtonDisabled,
           ]}
           onPress={sendMessage}
-          disabled={!userInput.trim()}  // Deshabilitar el botón si el input está vacío
+          disabled={!userInput.trim()}
         >
           <Text style={styles.inputButtonText}>Enviar</Text>
           <FontAwesome name="send" size={24} color="black" />
@@ -139,51 +143,68 @@ const GeminiChat = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D8F3DC",  // Fondo verde claro
+    backgroundColor: "rgba(188, 234, 187, 0.5)",
   },
   messageContainer: {
     borderRadius: 10,
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     marginVertical: 8,
     marginHorizontal: 16,
     maxWidth: "80%",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
   },
   userMessageContainer: {
-    backgroundColor: "#74C69D",  // Fondo verde claro para el mensaje del usuario
-    alignSelf: "flex-end",  // Mensaje del usuario alineado a la derecha
+    backgroundColor: "#BCEABB",
+    alignSelf: "flex-end",
   },
   botMessageContainer: {
-    backgroundColor: "#FFFFFF",  // Fondo blanco para el mensaje del bot
-    alignSelf: "flex-start",  // Mensaje del bot alineado a la izquierda
+    backgroundColor: "#FFFFFF",
+    alignSelf: "flex-start",
+    marginLeft: 60, // Aumenta el margen para que haya espacio para el avatar
+  },
+  botAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    position: "absolute",
+    left: -50, // Ajuste de la posición izquierda
+    top: -5, // Alineación vertical del avatar
   },
   messageText: {
     fontSize: 16,
-    color: "#1B4332",  // Color del texto
+    color: "#1B4332",
+    flexShrink: 1,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    backgroundColor: "#B7E4C7",  // Fondo verde claro del input
+    backgroundColor: "#B7E4C7",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   input: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#40916C",  // Fondo verde oscuro del campo de entrada
+    backgroundColor: "#40916C",
     borderRadius: 20,
     height: 50,
     color: "white",
   },
   stopIcon: {
     padding: 10,
-    backgroundColor: "#40916C",  // Fondo verde oscuro del ícono de detener
+    backgroundColor: "#40916C",
     borderRadius: 25,
     height: 50,
     width: 50,
@@ -192,7 +213,7 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   },
   inputButton: {
-    backgroundColor: "#74C69D",  // Fondo verde suave para el botón
+    backgroundColor: "#74C69D",
     borderRadius: 20,
     padding: 15,
     margin: 10,
@@ -201,10 +222,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   inputButtonEnabled: {
-    backgroundColor: "#52B788",  // Fondo verde más fuerte cuando el botón está habilitado
+    backgroundColor: "#52B788",
   },
   inputButtonDisabled: {
-    backgroundColor: "#A8DADC",  // Color más apagado cuando está deshabilitado
+    backgroundColor: "#A8DADC",
   },
   inputButtonText: {
     color: "black",
