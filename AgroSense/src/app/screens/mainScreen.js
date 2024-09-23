@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     marginTop:10,
     marginLeft:52,
     fontWeight: 'bold',
-    color: '#4CAF50',
+    color: '#4A6B3E',
     textAlign: 'center',
     flex: 1,
   },
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   weatherCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#d0e7d0',
+    backgroundColor: '#BCEABB',
     marginTop:40,
     padding: 30,
     borderRadius: 10,

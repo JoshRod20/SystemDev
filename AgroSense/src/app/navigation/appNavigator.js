@@ -1,6 +1,7 @@
 import React from "react"; 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { Text, StyleSheet } from "react-native";
 
 // Importar las pantallas
 import WelcomeScreen from "../screens/welcomeScreen";
@@ -26,7 +27,16 @@ const AppNavigator = ({ user }) => {
             <Stack.Screen
               name="ChatBot"
               component={ChatbotScreen} // Pantalla de Chatbot
-              options={{ title: "ChatBot" }}
+              options={{
+                headerTitle: () => (
+                  <Text style={styles.headerTitle}>ChatBot AgroSense</Text>
+                ),
+                headerStyle: {
+                  backgroundColor: '#BCEABB', // Color de fondo
+                },
+                headerTintColor: '#000000', // Color del texto del encabezado
+                headerTitleAlign: 'center', // Alinear el título al centro
+              }}
             />
           </>
         ) : (
@@ -53,5 +63,13 @@ const AppNavigator = ({ user }) => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold', // Negrita
+    color: '#000000', // Color blanco para el texto
+  },
+});
 
 export default AppNavigator;

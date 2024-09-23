@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#d0e7d0',
+    backgroundColor: '#BCEABB',
     paddingVertical: 10,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 12,
     marginTop: 5,
-    color: '#333',
+    fontWeight: 'bold',
+    color: '#181818',
   },
 });
 
