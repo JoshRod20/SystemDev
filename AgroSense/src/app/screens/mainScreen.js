@@ -62,7 +62,7 @@ const Home = ({ navigation }) => {
         </View>
         <View style={styles.featureRow}>
           <FeatureButton 
-            icon={require('../../app/assets/advice.png')} 
+            icon={require('../../app/assets/crops.png')} 
             label="Consejo de cultivo" 
             onPress={() => navigation.navigate('CropAdvice')} 
             style={styles.featureButton}
@@ -128,15 +128,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#BCEABB',
-    marginTop:40,
+    height:200,
+    marginTop:60,
     padding: 30,
     borderRadius: 10,
     marginHorizontal: 20,
     marginBottom: 20,
     alignItems: 'center',
-    shadowColor: "#000",
-    shadowColor: "#000",
-    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 7,

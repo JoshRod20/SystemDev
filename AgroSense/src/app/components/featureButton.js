@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   icon: {
-    width: 40,
-    height: 40,
+    width: 70,
+    height: 65,
     marginBottom: 10,
   },
   label: {

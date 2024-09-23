@@ -16,7 +16,7 @@ const WeatherCard = ({ weather }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#d4f7c5',
+    backgroundColor: '#BCEABB',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',

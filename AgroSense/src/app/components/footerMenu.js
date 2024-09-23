@@ -9,7 +9,7 @@ const FooterMenu = ({ navigation }) => {
         <Text style={styles.menuText}>Inicio</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Cultivos')} style={styles.menuItem}>
-        <Image source={require('../../app/assets/crops.png')} style={styles.icon} />
+        <Image source={require('../../app/assets/advice.png')} style={styles.icon} />
         <Text style={styles.menuText}>Sus cultivos</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('ChatBot')} style={styles.menuItem}>
