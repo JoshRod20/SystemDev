@@ -48,13 +48,13 @@ const Home = ({ navigation }) => {
       <View style={styles.featureContainer}>
         <View style={styles.featureRow}>
           <FeatureButton 
-            icon={require('../../app/assets/fertilizer-64.png')} 
+            icon={require('../../app/assets/fertilizer.png')} 
             label="Calculadora de fertilizante" 
             onPress={() => navigation.navigate('FertilizerCalculator')} 
             style={styles.featureButton}
           />
           <FeatureButton 
-            icon={require('../../app/assets/pest-32.png')} 
+            icon={require('../../app/assets/pest.png')} 
             label="Plagas y enfermedades" 
             onPress={() => navigation.navigate('PestsDiseases')} 
             style={styles.featureButton}
@@ -62,13 +62,13 @@ const Home = ({ navigation }) => {
         </View>
         <View style={styles.featureRow}>
           <FeatureButton 
-            icon={require('../../app/assets/advice-32.png')} 
+            icon={require('../../app/assets/advice.png')} 
             label="Consejo de cultivo" 
             onPress={() => navigation.navigate('CropAdvice')} 
             style={styles.featureButton}
           />
           <FeatureButton 
-            icon={require('../../app/assets/alert-48.png')} 
+            icon={require('../../app/assets/alerts.png')} 
             label="Alertas de plagas" 
             onPress={() => navigation.navigate('PestAlerts')} 
             style={styles.featureButton}
