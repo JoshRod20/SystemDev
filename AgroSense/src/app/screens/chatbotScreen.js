@@ -109,7 +109,6 @@ const GeminiChat = () => {
         data={messages}
         renderItem={renderMessage}
         keyExtractor={(item) => item.text}
-        inverted
       />
       <View style={styles.inputContainer}>
         <TouchableOpacity style={styles.micIcon} onPress={toggleSpeech}>
@@ -143,34 +142,82 @@ const GeminiChat = () => {
           style={styles.input}
           placeholderTextColor="#fff"
         />
-        {
-          showStopIcon && (
-            <TouchableOpacity style={styles.stopIcon} onPress={ClearMessage}>
-              <Entypo name="controller-stop" size={24} color="white" />
-            </TouchableOpacity>
-          )
-        }
+        {showStopIcon && (
+          <TouchableOpacity style={styles.stopIcon} onPress={ClearMessage}>
+            <Entypo name="controller-stop" size={24} color="white" />
+          </TouchableOpacity>
+        )}
+        {/* Botón para enviar el mensaje */}
+        <TouchableOpacity style={styles.inputButton} onPress={sendMessage}>
+          <Text style={styles.inputButtonText}></Text>
+          <FontAwesome name="send" size={24} color="black" />
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffff", marginTop: 50 },
-  messageContainer: { padding: 10, marginVertical: 5 },
-  messageText: { fontSize: 16 },
-  inputContainer: { flexDirection: "row", alignItems: "center", padding: 10 },
+  container: {
+    flex: 1,
+    backgroundColor: "#D8F3DC",  // Fondo verde claro
+  },
+  header: {
+    backgroundColor: "#95D5B2", // Verde más oscuro para la cabecera
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "black",
+  },
+  messageContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    alignSelf: "flex-start",
+    maxWidth: "80%",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  userMessage: {
+    alignSelf: "flex-end",
+    backgroundColor: "#B7E4C7",  // Mensaje del usuario con fondo verde claro
+  },
+  messageText: {
+    fontSize: 16,
+    color: "#1B4332",  // Color del texto
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "#B7E4C7",  // Fondo verde claro del input
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
   input: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#131314",
-    borderRadius: 10,
+    backgroundColor: "#40916C",  // Fondo verde oscuro del campo de entrada
+    borderRadius: 20,
     height: 50,
     color: "white",
   },
   micIcon: {
     padding: 10,
-    backgroundColor: "#131314",
+    backgroundColor: "#40916C",  // Fondo verde oscuro del ícono de micrófono
     borderRadius: 25,
     height: 50,
     width: 50,
@@ -180,13 +227,27 @@ const styles = StyleSheet.create({
   },
   stopIcon: {
     padding: 10,
-    backgroundColor: "#131314",
+    backgroundColor: "#40916C",  // Fondo verde oscuro del ícono de detener
     borderRadius: 25,
     height: 50,
     width: 50,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 3,
+  },
+  inputButton: {
+    backgroundColor: "#74C69D",  // Fondo verde suave para el botón
+    borderRadius: 20,
+    padding: 15,
+    margin: 10,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  inputButtonText: {
+    color: "black",
+    fontSize: 16,
+    marginRight: 5,
   },
 });
 
