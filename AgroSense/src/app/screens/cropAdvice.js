@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FooterMenu from '../components/footerMenu';
 
-const PestsDiseases = ({navigation}) => {
+const CropAdvice = ({navigation}) => {
   return (
     <View style={styles.container}>
         <FooterMenu navigation={navigation} />
-        <Text style={styles.title}>Plagas y enfermedades</Text>
+        <Text style={styles.title}>Consejo de cultivos</Text>
     </View>
   );
 };
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default PestsDiseases;
+export default CropAdvice;

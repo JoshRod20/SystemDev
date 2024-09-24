@@ -9,7 +9,10 @@ import RegisterScreen from "../screens/registerScreen";
 import LoginScreen from "../screens/loginScreen";
 import MainScreen from "../screens/mainScreen";
 import ChatbotScreen from "../screens/chatbotScreen"; // Importar la pantalla de Chatbot
-import FertilizerCalculator from "../screens/fertilizerCalculator"; // Importar la pantalla FertilizerCalculator
+import FertilizerCalculator from "../screens/fertilizerCalculator"; // Importar la pantalla Calculadora de fertilizantes
+import PestsDiseases from "../screens/pestsDiseases"; //Importar la pantalla Plagas y enfermedades
+import CropAdvice from "../screens/cropAdvice"; //Importar la pantalla Consejo de cultivo
+import PestAlerts from "../screens/pestsAlerts";
 
 const Stack = createStackNavigator();
 
@@ -27,7 +30,22 @@ const AppNavigator = ({ user }) => {
             />
             <Stack.Screen
               name="FertilizerCalculator"
-              component={FertilizerCalculator} // Pantalla FertilizerCalculator
+              component={FertilizerCalculator} // Pantalla Calculadora de Fertilizantes
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PestsDiseases"
+              component={PestsDiseases} // Pantalla Plagas y enfermedades
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CropAdvice"
+              component={CropAdvice} // Pantalla Consejo de cultivos
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PestAlerts"
+              component={PestAlerts} // Pantalla Alertas de plagas
               options={{ headerShown: false }}
             />
             <Stack.Screen
