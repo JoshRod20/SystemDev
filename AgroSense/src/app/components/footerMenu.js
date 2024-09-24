@@ -8,16 +8,16 @@ const FooterMenu = ({ navigation }) => {
         <Image source={require('../../app/assets/casa-48.png')} style={styles.icon} />
         <Text style={styles.menuText}>Inicio</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Cultivos')} style={styles.menuItem}>
-        <Image source={require('../../app/assets/cultivos-48.png')} style={styles.icon} />
+      <TouchableOpacity onPress={() => navigation.navigate('theirCrops')} style={styles.menuItem}>
+        <Image source={require('../../app/assets/advice.png')} style={styles.icon} />
         <Text style={styles.menuText}>Sus cultivos</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('ChatBot')} style={styles.menuItem}>
-        <Image source={require('../../app/assets/chatbot-48.png')} style={styles.icon} />
+        <Image source={require('../../app/assets/chatbot.png')} style={styles.icon} />
         <Text style={styles.menuText}>ChatBot</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Biblioteca')} style={styles.menuItem}>
-        <Image source={require('../../app/assets/biblioteca-48.png')} style={styles.icon} />
+      <TouchableOpacity onPress={() => navigation.navigate('agriculturalLibrary')} style={styles.menuItem}>
+        <Image source={require('../../app/assets/library.png')} style={styles.icon} />
         <Text style={styles.menuText}>Biblioteca agrícola</Text>
       </TouchableOpacity>
     </View>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#d0e7d0',
+    backgroundColor: '#BCEABB',
     paddingVertical: 10,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 12,
     marginTop: 5,
-    color: '#333',
+    fontWeight: 'bold',
+    color: '#181818',
   },
 });
 
