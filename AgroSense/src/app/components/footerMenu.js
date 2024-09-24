@@ -8,7 +8,7 @@ const FooterMenu = ({ navigation }) => {
         <Image source={require('../../app/assets/casa-48.png')} style={styles.icon} />
         <Text style={styles.menuText}>Inicio</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Cultivos')} style={styles.menuItem}>
+      <TouchableOpacity onPress={() => navigation.navigate('theirCrops')} style={styles.menuItem}>
         <Image source={require('../../app/assets/advice.png')} style={styles.icon} />
         <Text style={styles.menuText}>Sus cultivos</Text>
       </TouchableOpacity>
@@ -16,7 +16,7 @@ const FooterMenu = ({ navigation }) => {
         <Image source={require('../../app/assets/chatbot.png')} style={styles.icon} />
         <Text style={styles.menuText}>ChatBot</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Biblioteca')} style={styles.menuItem}>
+      <TouchableOpacity onPress={() => navigation.navigate('agriculturalLibrary')} style={styles.menuItem}>
         <Image source={require('../../app/assets/library.png')} style={styles.icon} />
         <Text style={styles.menuText}>Biblioteca agrícola</Text>
       </TouchableOpacity>

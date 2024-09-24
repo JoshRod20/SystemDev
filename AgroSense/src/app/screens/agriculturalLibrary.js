@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import FooterMenu from '../components/footerMenu';
 
-const FertilizerCalculator = ({navigation}) => {
+const AgriculturalLibrary = ({navigation}) => {
   return (
     <View style={styles.container}>
         <FooterMenu navigation={navigation} />
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FertilizerCalculator;
+export default AgriculturalLibrary;

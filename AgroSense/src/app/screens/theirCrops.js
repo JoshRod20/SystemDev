@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import FooterMenu from '../components/footerMenu';
 
-const FertilizerCalculator = ({navigation}) => {
+const TheirCrops = ({navigation}) => {
   return (
     <View style={styles.container}>
         <FooterMenu navigation={navigation} />
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FertilizerCalculator;
+export default TheirCrops;
