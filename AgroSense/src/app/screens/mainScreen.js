@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import FeatureButton from '../components/featureButton'; 
-import FooterMenu from '../components/footerMenu'; 
+import FeatureButton from '../components/featureButton'; // Asegúrate que esta ruta sea correcta
+import FooterMenu from '../components/footerMenu'; // Asegúrate que esta ruta sea correcta
+import WeatherCard from '../components/weatherCard'; // Asegúrate que esta ruta sea correcta
+import { fetchWeatherData } from '../services/wheatherServices'; // Corrige la ruta si es necesario
 
 const Home = ({ navigation }) => {
-  // Datos simulados para la tarjeta de clima
-  const [weather, setWeather] = useState({
-    temp: 23, 
-    maxTemp: 27,
-    minTemp: 23,
-    description: 'Nublado',
-    feelsLike: 31
-  });
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    const getWeather = async () => {
+      const latitude = 12.1364; // Coordenadas de Managua
+      const longitude = -86.2514;
+      const weatherData = await fetchWeatherData(latitude, longitude);
+      if (weatherData) {
+        setWeather(weatherData);
+      }
+    };
+
+    getWeather();
+  }, []);
 
   return (
     <View style={styles.container}>
-      {/* Encabezado con el nombre de la app */}
+      {/* Encabezado */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image source={require('../../app/assets/menú-48.png')} style={styles.hamburgerIcon} />
@@ -32,17 +40,11 @@ const Home = ({ navigation }) => {
       </View>
 
       {/* Tarjeta del clima */}
-      <View style={styles.weatherCard}>
-        <View style={styles.weatherLeft}>
-          <Text style={styles.temp}>{weather.temp}°</Text>
-          <Text style={styles.weatherText}>máxima: {weather.maxTemp}° mínima: {weather.minTemp}°</Text>
-        </View>
-        <View style={styles.weatherRight}>
-          <Image source={require('../../app/assets/cloudy.png')} style={styles.weatherIcon} />
-          <Text style={styles.descriptionText}>{weather.description}</Text>
-          <Text style={styles.feelsLikeText}>sensación térmica {weather.feelsLike}°</Text>
-        </View>
-      </View>
+      {weather ? (
+        <WeatherCard weather={weather} />
+      ) : (
+        <Text>Cargando datos del clima...</Text>
+      )}
 
       {/* Botones de funcionalidades */}
       <View style={styles.featureContainer}>
@@ -91,14 +93,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop:10,
+    marginTop: 10,
     padding: 15,
     backgroundColor: '#fff',
   },
   appName: {
     fontSize: 28,
-    marginTop:10,
-    marginLeft:52,
+    marginTop: 10,
+    marginLeft: 52,
     fontWeight: 'bold',
     color: '#4A6B3E',
     textAlign: 'center',
@@ -109,76 +111,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   hamburgerIcon: {
-    marginTop:15,
+    marginTop: 15,
     width: 35,
     height: 30,
   },
   bellIcon: {
-    marginTop:15,
+    marginTop: 15,
     width: 35,
     height: 30,
     marginRight: 15,
   },
   userIcon: {
-    marginTop:15,
+    marginTop: 15,
     width: 35,
     height: 30,
-  },
-  weatherCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#BCEABB',
-    height:200,
-    marginTop:60,
-    padding: 30,
-    borderRadius: 10,
-    marginHorizontal: 20,
-    marginBottom: 20,
-    alignItems: 'center',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.41,
-    shadowRadius: 9.11,
-    
-    elevation: 14,
-  },
-  weatherLeft: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  temp: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  weatherText: {
-    fontSize: 13,
-    color: '#333',
-  },
-  weatherRight: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  weatherIcon: {
-    width: 50,
-    height: 50,
-    marginBottom: 0,
-  },
-  descriptionText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  feelsLikeText: {
-    fontSize: 13,
-    color: '#666',
   },
   featureContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     marginHorizontal: 20,
-    marginTop:30,
+    marginTop: 30,
     marginBottom: 20,
     shadowColor: "#000",
   },
