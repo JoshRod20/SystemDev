@@ -26,23 +26,26 @@ const GeminiChat = () => {
     const startChat = async () => {
       const genAI = new GoogleGenerativeAI.GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const prompt = "¡Hola! Bienvenido al ChatBot AgroSense, ¿en qué puedo ayudarte hoy?";
-      const result = await model.generateContent(prompt);
-      const response = result.response;
-      const text = cleanText(response.text());
+
+      // Mensaje inicial de Agri
+      const initialMessage = "¡Hola! Bienvenido, soy Agri, tu asistente de AgroSense. ¿En qué puedo ayudarte hoy?";
+      
+      // Se añade el mensaje inicial al chat
+      setMessages([
+        {
+          text: initialMessage,
+          user: false,
+        },
+      ]);
+
+      // Mostrar mensaje de bienvenida
       showMessage({
-        message: "Bienvenido al ChatBot AgroSense 🤖",
-        description: text,
+        message: "Bienvenido, soy Agri 🤖",
+        description: initialMessage,
         type: "info",
         icon: "info",
         duration: 2000,
       });
-      setMessages([
-        {
-          text,
-          user: false,
-        },
-      ]);
     };
     startChat();
   }, []);

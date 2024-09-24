@@ -30,9 +30,6 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.appName}>AgroSense</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
-            <Image source={require('../../app/assets/bell-48.png')} style={styles.bellIcon} />
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('UserProfile')}>
             <Image source={require('../../app/assets/perfilUser-48.png')} style={styles.userIcon} />
           </TouchableOpacity>
@@ -100,7 +97,6 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 28,
     marginTop: 10,
-    marginLeft: 52,
     fontWeight: 'bold',
     color: '#4A6B3E',
     textAlign: 'center',
