@@ -9,6 +9,7 @@ import RegisterScreen from "../screens/registerScreen";
 import LoginScreen from "../screens/loginScreen";
 import MainScreen from "../screens/mainScreen";
 import ChatbotScreen from "../screens/chatbotScreen"; // Importar la pantalla de Chatbot
+import FertilizerCalculator from "../screens/fertilizerCalculator"; // Importar la pantalla FertilizerCalculator
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,11 @@ const AppNavigator = ({ user }) => {
             <Stack.Screen
               name="MainScreen"
               component={MainScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="FertilizerCalculator"
+              component={FertilizerCalculator} // Pantalla FertilizerCalculator
               options={{ headerShown: false }}
             />
             <Stack.Screen
