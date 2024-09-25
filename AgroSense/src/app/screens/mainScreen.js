@@ -5,6 +5,8 @@ import FooterMenu from '../components/footerMenu';
 import WeatherCard from '../components/weatherCard';
 import { fetchWeatherData } from '../services/wheatherServices';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { auth } from '../../app/services/firebase'; // Importar auth de Firebase
+import { signOut } from 'firebase/auth'; // Importar signOut de Firebase
 
 const Home = ({ navigation }) => {
   const [weather, setWeather] = useState(null);
@@ -37,13 +39,13 @@ const Home = ({ navigation }) => {
           <FeatureButton
             icon={require('../../app/assets/fertilizer.png')}
             label="Calculadora de fertilizante"
-            onPress={() => navigation.navigate('FertilizerCalculator')}
+            onPress={() => navigation.navigate('FertilizerCalculator')} // Asegúrate de que esto esté bien
             style={styles.featureButton}
           />
           <FeatureButton
             icon={require('../../app/assets/pest.png')}
             label="Plagas y enfermedades"
-            onPress={() => navigation.navigate('PestsDiseases')}
+            onPress={() => navigation.navigate('PestsDiseases')} // Asegúrate de que esto esté bien
             style={styles.featureButton}
           />
         </View>
@@ -51,13 +53,13 @@ const Home = ({ navigation }) => {
           <FeatureButton
             icon={require('../../app/assets/crops.png')}
             label="Consejo de cultivo"
-            onPress={() => navigation.navigate('CropAdvice')}
+            onPress={() => navigation.navigate('CropAdvice')} // Asegúrate de que esto esté bien
             style={styles.featureButton}
           />
           <FeatureButton
             icon={require('../../app/assets/alerts.png')}
             label="Alertas de plagas"
-            onPress={() => navigation.navigate('PestAlerts')}
+            onPress={() => navigation.navigate('PestAlerts')} // Asegúrate de que esto esté bien
             style={styles.featureButton}
           />
         </View>
@@ -70,19 +72,24 @@ const Home = ({ navigation }) => {
 };
 
 // Componente para las configuraciones
-const SettingsScreen = ({ navigation }) => (
-  <View style={styles.container}>
-    <TouchableOpacity
-      style={styles.button}
-      onPress={() => {
-        // Cerrar sesión y navegar al Login
-        navigation.replace('Login');
-      }}
-    >
-      <Text style={styles.buttonText}>Cerrar Sesión</Text>
-    </TouchableOpacity>
-  </View>
-);
+const SettingsScreen = ({ navigation }) => {
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Cerrar sesión en Firebase
+      navigation.replace('Register'); // Navegar a la pantalla de Login
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.button} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Cerrar Sesión</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 // Configuración del Drawer
 const Drawer = createDrawerNavigator();
@@ -91,8 +98,8 @@ function UserProfileDrawer() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen
-        name="AgroSense"
-        component={Home}
+        name="AgroSense" // Cambiado a HomeScreen
+        component={UserProfileDrawer}
         options={{
           drawerLabel: () => <Text style={styles.drawerLabel}>Inicio</Text>,
         }}
