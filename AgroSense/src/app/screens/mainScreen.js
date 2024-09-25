@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import FeatureButton from '../components/featureButton'; // Asegúrate que esta ruta sea correcta
-import FooterMenu from '../components/footerMenu'; // Asegúrate que esta ruta sea correcta
-import WeatherCard from '../components/weatherCard'; // Asegúrate que esta ruta sea correcta
-import { fetchWeatherData } from '../services/wheatherServices'; // Corrige la ruta si es necesario
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import FeatureButton from '../components/featureButton';
+import FooterMenu from '../components/footerMenu';
+import WeatherCard from '../components/weatherCard';
+import { fetchWeatherData } from '../services/wheatherServices';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const Home = ({ navigation }) => {
   const [weather, setWeather] = useState(null);
@@ -23,19 +24,6 @@ const Home = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Encabezado */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Image source={require('../../app/assets/menú-48.png')} style={styles.hamburgerIcon} />
-        </TouchableOpacity>
-        <Text style={styles.appName}>AgroSense</Text>
-        <View style={styles.headerIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('UserProfile')}>
-            <Image source={require('../../app/assets/perfilUser-48.png')} style={styles.userIcon} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
       {/* Tarjeta del clima */}
       {weather ? (
         <WeatherCard weather={weather} />
@@ -46,30 +34,30 @@ const Home = ({ navigation }) => {
       {/* Botones de funcionalidades */}
       <View style={styles.featureContainer}>
         <View style={styles.featureRow}>
-          <FeatureButton 
-            icon={require('../../app/assets/fertilizer.png')} 
-            label="Calculadora de fertilizante" 
-            onPress={() => navigation.navigate('FertilizerCalculator')} 
+          <FeatureButton
+            icon={require('../../app/assets/fertilizer.png')}
+            label="Calculadora de fertilizante"
+            onPress={() => navigation.navigate('FertilizerCalculator')}
             style={styles.featureButton}
           />
-          <FeatureButton 
-            icon={require('../../app/assets/pest.png')} 
-            label="Plagas y enfermedades" 
-            onPress={() => navigation.navigate('PestsDiseases')} 
+          <FeatureButton
+            icon={require('../../app/assets/pest.png')}
+            label="Plagas y enfermedades"
+            onPress={() => navigation.navigate('PestsDiseases')}
             style={styles.featureButton}
           />
         </View>
         <View style={styles.featureRow}>
-          <FeatureButton 
-            icon={require('../../app/assets/crops.png')} 
-            label="Consejo de cultivo" 
-            onPress={() => navigation.navigate('CropAdvice')} 
+          <FeatureButton
+            icon={require('../../app/assets/crops.png')}
+            label="Consejo de cultivo"
+            onPress={() => navigation.navigate('CropAdvice')}
             style={styles.featureButton}
           />
-          <FeatureButton 
-            icon={require('../../app/assets/alerts.png')} 
-            label="Alertas de plagas" 
-            onPress={() => navigation.navigate('PestAlerts')} 
+          <FeatureButton
+            icon={require('../../app/assets/alerts.png')}
+            label="Alertas de plagas"
+            onPress={() => navigation.navigate('PestAlerts')}
             style={styles.featureButton}
           />
         </View>
@@ -81,46 +69,50 @@ const Home = ({ navigation }) => {
   );
 };
 
+// Componente para las configuraciones
+const SettingsScreen = ({ navigation }) => (
+  <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => {
+        // Cerrar sesión y navegar al Login
+        navigation.replace('Login');
+      }}
+    >
+      <Text style={styles.buttonText}>Cerrar Sesión</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+// Configuración del Drawer
+const Drawer = createDrawerNavigator();
+
+function UserProfileDrawer() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name="AgroSense"
+        component={Home}
+        options={{
+          drawerLabel: () => <Text style={styles.drawerLabel}>Inicio</Text>,
+        }}
+      />
+      <Drawer.Screen
+        name="Configuraciones"
+        component={SettingsScreen}
+        options={{
+          drawerLabel: () => <Text style={styles.drawerLabel}>Configuraciones</Text>,
+        }}
+      />
+    </Drawer.Navigator>
+  );
+}
+
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
-    padding: 15,
-    backgroundColor: '#fff',
-  },
-  appName: {
-    fontSize: 28,
-    marginTop: 10,
-    fontWeight: 'bold',
-    color: '#4A6B3E',
-    textAlign: 'center',
-    flex: 1,
-  },
-  headerIcons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  hamburgerIcon: {
-    marginTop: 15,
-    width: 35,
-    height: 30,
-  },
-  bellIcon: {
-    marginTop: 15,
-    width: 35,
-    height: 30,
-    marginRight: 15,
-  },
-  userIcon: {
-    marginTop: 15,
-    width: 35,
-    height: 30,
   },
   featureContainer: {
     flexDirection: 'column',
@@ -128,7 +120,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 30,
     marginBottom: 20,
-    shadowColor: "#000",
   },
   featureRow: {
     flexDirection: 'row',
@@ -139,6 +130,29 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
   },
+  settingsText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#4A6B3E',
+    textAlign: 'center',
+  },
+  button: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#4A6B3E',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  drawerLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#4A6B3E',
+  },
 });
 
-export default Home;
+export default UserProfileDrawer;
