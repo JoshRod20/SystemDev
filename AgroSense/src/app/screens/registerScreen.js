@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import InputField from '../components/inputField'; // Asegúrate de que este componente funcione correctamente.
+import InputField from '../components/inputField'; 
 import Button from '../components/button';
 
 const RegisterScreen = ({ navigation }) => {
@@ -43,7 +43,14 @@ const RegisterScreen = ({ navigation }) => {
       
       {/* Campo de Nombre */}
       <View>
-        <Image source={require('../assets/icons8-usuario-48.png')} />
+        <View style={styles.icon}>
+          <Image source={require('../assets/icons8-usuario-48.png')} />
+        </View>
+
+      <View style={styles.inputContainer}>
+
+
+      </View>
         <InputField 
           placeholder="Nombre" 
           value={name} 
@@ -113,6 +120,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginTop: 20,
     marginBottom: 20,
     textAlign: 'center',
     color: '#4F7C44',
@@ -127,6 +135,9 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: 5,
   },
+  icon: {
+    alignItems: 'center'
+  }
 });
 
 export default RegisterScreen;

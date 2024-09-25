@@ -4,8 +4,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Text, StyleSheet } from "react-native";
 
 // Importar las pantallas
-import WelcomeScreen from "../screens/welcomeScreen";
-import RegisterScreen from "../screens/registerScreen";
+import WelcomeScreen from "../screens/welcomeScreen"; //Importar pantalla de bienvenida
+import RegisterScreen from "../screens/registerScreen"; //Importar pantalla de registro
 import LoginScreen from "../screens/loginScreen"; //Importar la pantalla de login
 import MainScreen from "../screens/mainScreen"; //Importar la pantalla principal
 import ChatbotScreen from "../screens/chatbotScreen"; // Importar la pantalla de Chatbot

@@ -39,13 +39,13 @@ const Home = ({ navigation }) => {
           <FeatureButton
             icon={require('../../app/assets/fertilizer.png')}
             label="Calculadora de fertilizante"
-            onPress={() => navigation.navigate('FertilizerCalculator')} // Asegúrate de que esto esté bien
+            onPress={() => navigation.navigate('FertilizerCalculator')}
             style={styles.featureButton}
           />
           <FeatureButton
             icon={require('../../app/assets/pest.png')}
             label="Plagas y enfermedades"
-            onPress={() => navigation.navigate('PestsDiseases')} // Asegúrate de que esto esté bien
+            onPress={() => navigation.navigate('PestsDiseases')}
             style={styles.featureButton}
           />
         </View>
@@ -53,13 +53,13 @@ const Home = ({ navigation }) => {
           <FeatureButton
             icon={require('../../app/assets/crops.png')}
             label="Consejo de cultivo"
-            onPress={() => navigation.navigate('CropAdvice')} // Asegúrate de que esto esté bien
+            onPress={() => navigation.navigate('CropAdvice')}
             style={styles.featureButton}
           />
           <FeatureButton
             icon={require('../../app/assets/alerts.png')}
             label="Alertas de plagas"
-            onPress={() => navigation.navigate('PestAlerts')} // Asegúrate de que esto esté bien
+            onPress={() => navigation.navigate('PestAlerts')}
             style={styles.featureButton}
           />
         </View>
@@ -76,7 +76,7 @@ const SettingsScreen = ({ navigation }) => {
   const handleLogout = async () => {
     try {
       await signOut(auth); // Cerrar sesión en Firebase
-      navigation.replace('Register'); // Navegar a la pantalla de Login
+      navigation.replace('Register'); // Navegar a la pantalla de Registro
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }
@@ -99,7 +99,7 @@ function UserProfileDrawer() {
     <Drawer.Navigator>
       <Drawer.Screen
         name="AgroSense" // Cambiado a HomeScreen
-        component={UserProfileDrawer}
+        component={Home}
         options={{
           drawerLabel: () => <Text style={styles.drawerLabel}>Inicio</Text>,
         }}
