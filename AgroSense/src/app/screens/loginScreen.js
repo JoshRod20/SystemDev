@@ -1,6 +1,6 @@
   import React, { useState } from 'react';
   import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
-  import { auth } from "../../app/services/firebase";  // Importar auth correctamente
+  import { auth } from "../../app/services/firebase"; 
   import { signInWithEmailAndPassword } from "firebase/auth";
 
   export default function LoginScreen({ navigation }) {
