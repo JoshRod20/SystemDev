@@ -1,134 +1,140 @@
-  import React, { useState } from 'react';
-  import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
-  import { auth } from "../../app/services/firebase"; 
-  import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from 'react';
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image, Alert, Dimensions } from 'react-native';
+import { auth } from "../../app/services/firebase"; 
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-  export default function LoginScreen({ navigation }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
+// Obtener dimensiones de la pantalla
+const { width, height } = Dimensions.get('window');
 
-    const [emailError, setEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
+export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
-    const handleLogin = async () => {
-      // Validación de campos vacíos
-      setEmailError(!email);
-      setPasswordError(!password);
+  // Función para alternar la visibilidad de la contraseña
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
-      if (!email || !password) {
-        Alert.alert('Error', 'Por favor, complete todos los campos.');
-        return;
-      }
+  const handleLogin = async () => {
+    // Validación de campos vacíos
+    setEmailError(!email);
+    setPasswordError(!password);
 
-      try {
-        // Iniciar sesión con Firebase Authentication
-        await signInWithEmailAndPassword(auth, email, password);
-        navigation.navigate('Home');
-      } catch (error) {
-        console.error('Error en el inicio de sesión:', error);
-        Alert.alert('Error', 'No se pudo iniciar sesión. Verifique sus credenciales.');
-      }
-    };
+    if (!email || !password) {
+      Alert.alert('Error', 'Por favor, complete todos los campos.');
+      return;
+    }
 
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Iniciar Sesión</Text>
+    try {
+      // Iniciar sesión con Firebase Authentication
+      await signInWithEmailAndPassword(auth, email, password);
+      navigation.navigate('AgroSense'); // Cambiado de 'Home' a 'AgroSense'
+    } catch (error) {
+      console.error('Error en el inicio de sesión:', error);
+      Alert.alert('Error', 'No se pudo iniciar sesión. Verifique sus credenciales.');
+    }
+  };
 
-        {/* Campo Correo */}
-        <View style={[styles.inputContainer, emailError && styles.inputError]}>
-          <Image source={require('../../app/assets/icons8-logo-de-google-48.png')} style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Correo electrónico"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            placeholderTextColor="#4A6B3E"
-          />
-        </View>
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Iniciar Sesión</Text>
 
-        {/* Campo Contraseña */}
-        <View style={[styles.inputContainer, passwordError && styles.inputError]}>
-          <Image source={require('../../app/assets/icons8-contraseña-50.png')} style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Contraseña"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-            placeholderTextColor="#4A6B3E"
-          />
-          <TouchableOpacity onPress={togglePasswordVisibility}>
-            <Image source={require('../../app/assets/icons8-visible-48.png')} style={styles.eyeIconImage} />
-          </TouchableOpacity>
-        </View>
+      {/* Campo Correo */}
+      <View style={[styles.inputContainer, emailError && styles.inputError]}>
+        <Image source={require('../../app/assets/icons8-logo-de-google-48.png')} style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Correo electrónico"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          placeholderTextColor="#4A6B3E"
+        />
+      </View>
 
-        {/* Botón de Iniciar */}
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Iniciar</Text>
+      {/* Campo Contraseña */}
+      <View style={[styles.inputContainer, passwordError && styles.inputError]}>
+        <Image source={require('../../app/assets/icons8-contraseña-50.png')} style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+          placeholderTextColor="#4A6B3E"
+        />
+        <TouchableOpacity onPress={togglePasswordVisibility}>
+          <Image source={require('../../app/assets/icons8-visible-48.png')} style={styles.eyeIconImage} />
         </TouchableOpacity>
       </View>
-    );
-  }
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      padding: 16,
-      backgroundColor: "#fff",
-    },
-    title: {
-      fontSize: 32,
-      fontWeight: "bold",
-      marginBottom: 24,
-      color: "#4A6B3E",
-    },
-    inputContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      width: "85%",
-      height: 50,
-      paddingHorizontal: 10,
-      borderWidth: 2,
-      borderColor: "#9EAD6E",
-      borderRadius: 25,
-      marginBottom: 16,
-    },
-    inputError: {
-      borderColor: "red",
-    },
-    icon: {
-      width: 24,
-      height: 24,
-      marginRight: 10,
-    },
-    input: {
-      flex: 1,
-      height: "100%",
-      fontSize: 16,
-      paddingLeft: 10,
-      color: "#4A6B3E",
-    },
-    button: {
-      width: "85%",
-      height: 50,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#4A6B3E",
-      borderRadius: 25,
-    },
-    buttonText: {
-      color: "#fff",
-      fontSize: 18,
-      fontWeight: "bold",
-    },
-    eyeIconImage: {
-      width: 24,
-      height: 24,
-    },
-  });
+      {/* Botón de Iniciar */}
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Iniciar</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: width * 0.05, // Ajuste de padding basado en el ancho de la pantalla
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: width * 0.08, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
+    fontWeight: "bold",
+    marginBottom: height * 0.05, // Ajuste de márgenes basado en la altura de la pantalla
+    color: "#4A6B3E",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "85%",
+    height: height * 0.07, // Ajuste de altura del campo de texto basado en la altura de la pantalla
+    paddingHorizontal: width * 0.03,
+    borderWidth: 2,
+    borderColor: "#9EAD6E",
+    borderRadius: 25,
+    marginBottom: height * 0.02,
+  },
+  inputError: {
+    borderColor: "red",
+  },
+  icon: {
+    width: width * 0.06, // Ajuste del tamaño del ícono basado en el ancho de la pantalla
+    height: width * 0.06,
+    marginRight: width * 0.03,
+  },
+  input: {
+    flex: 1,
+    height: "100%",
+    fontSize: width * 0.04, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
+    paddingLeft: 10,
+    color: "#4A6B3E",
+  },
+  button: {
+    width: "85%",
+    height: height * 0.07, // Ajuste de altura del botón basado en la altura de la pantalla
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#4A6B3E",
+    borderRadius: 25,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: width * 0.05, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
+    fontWeight: "bold",
+  },
+  eyeIconImage: {
+    width: width * 0.06, // Ajuste del tamaño del ícono basado en el ancho de la pantalla
+    height: width * 0.06,
+  },
+});

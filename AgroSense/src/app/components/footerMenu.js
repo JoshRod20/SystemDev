@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 const FooterMenu = ({ navigation }) => {
   return (
@@ -18,7 +20,7 @@ const FooterMenu = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('agriculturalLibrary')} style={styles.menuItem}>
         <Image source={require('../../app/assets/library.png')} style={styles.icon} />
-        <Text style={styles.menuText}>Biblioteca agrícola</Text>
+        <Text style={styles.menuText}>AgroBiblio</Text>
       </TouchableOpacity>
     </View>
   );
@@ -29,7 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#BCEABB',
+    backgroundColor: '#BCEABB',  // Mantener el color definido
     paddingVertical: 10,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
@@ -40,9 +42,10 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     alignItems: 'center',
+    width: width * 0.35,  // Distribución uniforme sin cambiar el tamaño de los íconos ni el texto
   },
   icon: {
-    width: 40,
+    width: 40, 
     height: 40,
   },
   menuText: {
@@ -50,6 +53,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontWeight: 'bold',
     color: '#181818',
+    textAlign: 'center',
   },
 });
 

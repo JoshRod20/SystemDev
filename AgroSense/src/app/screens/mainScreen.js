@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import FeatureButton from '../components/featureButton';
 import FooterMenu from '../components/footerMenu';
 import WeatherCard from '../components/weatherCard';
 import { fetchWeatherData } from '../services/wheatherServices';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { auth } from '../../app/services/firebase'; // Importar auth de Firebase
-import { signOut } from 'firebase/auth'; // Importar signOut de Firebase
+import { auth } from '../../app/services/firebase'; 
+import { signOut } from 'firebase/auth'; 
+import GraficoReporteEnfermedades from './GraficoReporteEnfermedades';
 
+const { width, height } = Dimensions.get('window');
+
+// Datos del reporte de enfermedades
+const dataReporteEnfermedades = [
+  { date: "2017-01-05", count: 8 }, 
+  { date: "2017-01-19", count: 5 }, 
+  // más datos ...
+];
+
+// Componente Home (pantalla principal)
 const Home = ({ navigation }) => {
   const [weather, setWeather] = useState(null);
 
@@ -26,14 +37,12 @@ const Home = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Tarjeta del clima */}
       {weather ? (
         <WeatherCard weather={weather} />
       ) : (
         <Text>Cargando datos del clima...</Text>
       )}
 
-      {/* Botones de funcionalidades */}
       <View style={styles.featureContainer}>
         <View style={styles.featureRow}>
           <FeatureButton
@@ -65,18 +74,17 @@ const Home = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Menú inferior */}
       <FooterMenu navigation={navigation} />
     </View>
   );
 };
 
-// Componente para las configuraciones
+// Componente Settings (Configuraciones)
 const SettingsScreen = ({ navigation }) => {
   const handleLogout = async () => {
     try {
       await signOut(auth); // Cerrar sesión en Firebase
-      navigation.replace('Register'); // Navegar a la pantalla de Registro
+      navigation.replace('Register'); 
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }
@@ -98,7 +106,7 @@ function UserProfileDrawer() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen
-        name="AgroSense" // Cambiado a HomeScreen
+        name="AgroSense"
         component={Home}
         options={{
           drawerLabel: () => <Text style={styles.drawerLabel}>Inicio</Text>,
@@ -111,6 +119,13 @@ function UserProfileDrawer() {
           drawerLabel: () => <Text style={styles.drawerLabel}>Configuraciones</Text>,
         }}
       />
+      <Drawer.Screen
+        name="Reporte Enfermedades"
+        options={{
+          drawerLabel: () => <Text style={styles.drawerLabel}>Reporte Enfermedades</Text>,
+        }}>
+        {() => <GraficoReporteEnfermedades dataReporteEnfermedades={dataReporteEnfermedades} />}
+      </Drawer.Screen>
     </Drawer.Navigator>
   );
 }
@@ -120,43 +135,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    padding: width * 0.05,  // Ajuste dinámico basado en el ancho de la pantalla
   },
   featureContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginHorizontal: 20,
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: height * 0.05,
+    marginBottom: height * 0.05,
   },
   featureRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: height * 0.02,
   },
   featureButton: {
     flex: 1,
-    marginHorizontal: 5,
-  },
-  settingsText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#4A6B3E',
-    textAlign: 'center',
+    marginHorizontal: width * 0.02,
   },
   button: {
-    marginTop: 20,
-    padding: 10,
+    marginTop: height * 0.02,
+    padding: width * 0.03,
     backgroundColor: '#4A6B3E',
     borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: width * 0.045,  // Tamaño de fuente dinámico basado en el ancho
   },
   drawerLabel: {
-    fontSize: 18,
+    fontSize: width * 0.045,  // Tamaño de fuente dinámico basado en el ancho
     fontWeight: 'bold',
     color: '#4A6B3E',
   },
