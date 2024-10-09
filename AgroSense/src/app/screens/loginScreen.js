@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image, Alert, Dimensions } from 'react-native';
 import { auth } from "../../app/services/firebase"; 
 import { signInWithEmailAndPassword } from "firebase/auth";
+
+// Obtener dimensiones de la pantalla
+const { width, height } = Dimensions.get('window');
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -82,44 +85,44 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
+    padding: width * 0.05, // Ajuste de padding basado en el ancho de la pantalla
     backgroundColor: "#fff",
   },
   title: {
-    fontSize: 32,
+    fontSize: width * 0.08, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
     fontWeight: "bold",
-    marginBottom: 24,
+    marginBottom: height * 0.05, // Ajuste de márgenes basado en la altura de la pantalla
     color: "#4A6B3E",
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     width: "85%",
-    height: 50,
-    paddingHorizontal: 10,
+    height: height * 0.07, // Ajuste de altura del campo de texto basado en la altura de la pantalla
+    paddingHorizontal: width * 0.03,
     borderWidth: 2,
     borderColor: "#9EAD6E",
     borderRadius: 25,
-    marginBottom: 16,
+    marginBottom: height * 0.02,
   },
   inputError: {
     borderColor: "red",
   },
   icon: {
-    width: 24,
-    height: 24,
-    marginRight: 10,
+    width: width * 0.06, // Ajuste del tamaño del ícono basado en el ancho de la pantalla
+    height: width * 0.06,
+    marginRight: width * 0.03,
   },
   input: {
     flex: 1,
     height: "100%",
-    fontSize: 16,
+    fontSize: width * 0.04, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
     paddingLeft: 10,
     color: "#4A6B3E",
   },
   button: {
     width: "85%",
-    height: 50,
+    height: height * 0.07, // Ajuste de altura del botón basado en la altura de la pantalla
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#4A6B3E",
@@ -127,11 +130,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: width * 0.05, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
     fontWeight: "bold",
   },
   eyeIconImage: {
-    width: 24,
-    height: 24,
+    width: width * 0.06, // Ajuste del tamaño del ícono basado en el ancho de la pantalla
+    height: width * 0.06,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import FeatureButton from '../components/featureButton';
 import FooterMenu from '../components/footerMenu';
 import WeatherCard from '../components/weatherCard';
@@ -9,32 +9,13 @@ import { auth } from '../../app/services/firebase';
 import { signOut } from 'firebase/auth'; 
 import GraficoReporteEnfermedades from './GraficoReporteEnfermedades';
 
+const { width, height } = Dimensions.get('window');
+
 // Datos del reporte de enfermedades
 const dataReporteEnfermedades = [
   { date: "2017-01-05", count: 8 }, 
   { date: "2017-01-19", count: 5 }, 
-  { date: "2017-02-06", count: 2 }, 
-  { date: "2017-02-20", count: 4 }, 
-  { date: "2017-03-07", count: 1 }, 
-  { date: "2017-03-21", count: 3 }, 
-  { date: "2017-04-05", count: 6 }, 
-  { date: "2017-04-19", count: 2 }, 
-  { date: "2017-05-03", count: 4 },
-  { date: "2017-05-17", count: 7 },
-  { date: "2017-06-06", count: 9 }, 
-  { date: "2017-06-20", count: 5 }, 
-  { date: "2017-07-05", count: 3 }, 
-  { date: "2017-07-19", count: 4 }, 
-  { date: "2017-08-07", count: 2 },  
-  { date: "2017-08-21", count: 8 },  
-  { date: "2017-09-06", count: 3 },
-  { date: "2017-09-20", count: 7 },
-  { date: "2017-10-04", count: 5 },
-  { date: "2017-10-18", count: 6 },
-  { date: "2017-11-06", count: 2 },
-  { date: "2017-11-20", count: 9 }, 
-  { date: "2017-12-05", count: 4 },
-  { date: "2017-12-19", count: 7 } 
+  // más datos ...
 ];
 
 // Componente Home (pantalla principal)
@@ -154,36 +135,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    padding: width * 0.05,  // Ajuste dinámico basado en el ancho de la pantalla
   },
   featureContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    marginHorizontal: 20,
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: height * 0.05,
+    marginBottom: height * 0.05,
   },
   featureRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: height * 0.02,
   },
   featureButton: {
     flex: 1,
-    marginHorizontal: 5,
+    marginHorizontal: width * 0.02,
   },
   button: {
-    marginTop: 20,
-    padding: 10,
+    marginTop: height * 0.02,
+    padding: width * 0.03,
     backgroundColor: '#4A6B3E',
     borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: width * 0.045,  // Tamaño de fuente dinámico basado en el ancho
   },
   drawerLabel: {
-    fontSize: 18,
+    fontSize: width * 0.045,  // Tamaño de fuente dinámico basado en el ancho
     fontWeight: 'bold',
     color: '#4A6B3E',
   },

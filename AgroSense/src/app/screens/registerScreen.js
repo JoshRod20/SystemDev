@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import InputField from '../components/inputField'; 
 import Button from '../components/button';
+
+// Obtener las dimensiones de la pantalla
+const { width, height } = Dimensions.get('window');
 
 const RegisterScreen = ({ navigation }) => {
   // Estado para los campos del registro
@@ -33,7 +36,6 @@ const RegisterScreen = ({ navigation }) => {
     }
 
     // Si todo está correcto, simula un registro exitoso
-    setIsRegistered(true);
     navigation.navigate('Login');  // Redirige al login después del registro
   };
 
@@ -42,15 +44,10 @@ const RegisterScreen = ({ navigation }) => {
       <Text style={styles.title}>Registrarse</Text>
       
       {/* Campo de Nombre */}
-      <View>
+      <View style={styles.inputGroup}>
         <View style={styles.icon}>
-          <Image source={require('../assets/icons8-usuario-48.png')} />
+          <Image source={require('../assets/icons8-usuario-48.png')} style={styles.iconImage} />
         </View>
-
-      <View style={styles.inputContainer}>
-
-
-      </View>
         <InputField 
           placeholder="Nombre" 
           value={name} 
@@ -75,7 +72,7 @@ const RegisterScreen = ({ navigation }) => {
         placeholder="Correo electrónico" 
         keyboardType="email-address" 
         value={email} 
-        onChangeText={setEmail} // Aquí defines setEmail
+        onChangeText={setEmail} 
         error={emailError} 
       />
       {emailError && <Text style={styles.errorText}>El correo electrónico es obligatorio</Text>}
@@ -114,30 +111,37 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: width * 0.05, // Ajuste de padding basado en el ancho de la pantalla
     backgroundColor: '#FFF',
   },
   title: {
-    fontSize: 24,
+    fontSize: width * 0.07, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
     fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: height * 0.03, // Ajuste de márgenes basado en la altura de la pantalla
+    marginBottom: height * 0.03,
     textAlign: 'center',
     color: '#4F7C44',
   },
   link: {
     color: '#4F7C44',
     textAlign: 'center',
-    marginTop: 15,
-    fontSize: 16,
+    marginTop: height * 0.02,
+    fontSize: width * 0.045, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
   },
   errorText: {
     color: 'red',
-    marginTop: 5,
+    marginTop: height * 0.01,
+  },
+  inputGroup: {
+    marginBottom: height * 0.02, // Ajuste de espacio entre inputs basado en la altura de la pantalla
   },
   icon: {
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
+  iconImage: {
+    width: width * 0.1, // Ajuste de tamaño del ícono basado en el ancho de la pantalla
+    height: width * 0.1,
+  },
 });
 
 export default RegisterScreen;
