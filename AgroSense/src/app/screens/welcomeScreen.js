@@ -6,7 +6,7 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={require('../../app/assets/AgroSenseLogo.jpg')} style={styles.logo} />
-      <Text style={styles.title}>Bienvenidos a AgroSens</Text>
+      <Text style={styles.title}>Bienvenidos a AgroSense </Text>
       <Button title="Continuar" onPress={() => navigation.navigate('Register')} />
     </View>
   );
