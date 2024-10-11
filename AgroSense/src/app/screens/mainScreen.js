@@ -142,16 +142,16 @@ function UserProfileDrawer() {
         }}
       />
       <Drawer.Screen
-        name="precioMercado"
+        name="Actividad de Plagas"
         options={{
-          drawerLabel: () => <Text style={styles.drawerLabel}>Reporte Enfermedades</Text>,
+          drawerLabel: () => <Text style={styles.drawerLabel}>Reporte de plagas</Text>,
         }}>
         {() => <GraficoReporteEnfermedades dataReporteEnfermedades={dataReporteEnfermedades} />}
       </Drawer.Screen>
       <Drawer.Screen
         name="Precios de Mercado"
         options={{
-          drawerLabel: () => <Text style={styles.drawerLabel}>Reporte Precios de Mercado</Text>,
+          drawerLabel: () => <Text style={styles.drawerLabel}>Precios de Mercado</Text>,
         }}>
         {() => <Estadisticas/>}
       </Drawer.Screen>
