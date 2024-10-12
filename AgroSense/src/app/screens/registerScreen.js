@@ -99,11 +99,6 @@ const RegisterScreen = ({ navigation }) => {
       
       {/* Botón de Registro */}
       <Button title="Registrarse" onPress={handleRegister} />
-
-      {/* Enlace para iniciar sesión */}
-      <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-        ¿Ya tienes una cuenta? Iniciar sesión
-      </Text>
     </View>
   );
 };
@@ -121,12 +116,6 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.03,
     textAlign: 'center',
     color: '#4F7C44',
-  },
-  link: {
-    color: '#4F7C44',
-    textAlign: 'center',
-    marginTop: height * 0.02,
-    fontSize: width * 0.045, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
   },
   errorText: {
     color: 'red',

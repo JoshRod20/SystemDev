@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image, Alert, Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from "../../app/services/firebase"; 
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -40,8 +41,11 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
+    <LinearGradient
+      colors={['#4A6B3E', '#fff']}
+      style={styles.container}
+    >
+      <Text style={styles.title}>Iniciar sesión</Text>
 
       {/* Campo Correo */}
       <View style={[styles.inputContainer, emailError && styles.inputError]}>
@@ -52,7 +56,7 @@ export default function LoginScreen({ navigation }) {
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
-          placeholderTextColor="#4A6B3E"
+          placeholderTextColor="rgba(255, 255, 255, 0.6)" // Placeholder blanco semitransparente
         />
       </View>
 
@@ -65,7 +69,7 @@ export default function LoginScreen({ navigation }) {
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}
-          placeholderTextColor="#4A6B3E"
+          placeholderTextColor="rgba(255, 255, 255, 0.6)" // Placeholder blanco semitransparente
         />
         <TouchableOpacity onPress={togglePasswordVisibility}>
           <Image source={require('../../app/assets/icons8-visible-48.png')} style={styles.eyeIconImage} />
@@ -76,7 +80,15 @@ export default function LoginScreen({ navigation }) {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar</Text>
       </TouchableOpacity>
-    </View>
+
+      {/* Enlace para registrar */}
+      <Text style={styles.registerLinkText}>
+        ¿Aún no tienes una cuenta?
+      </Text>
+      <Text style={styles.registerLink} onPress={() => navigation.navigate('Register')}>
+        ¡Registrate aquí!
+      </Text>
+    </LinearGradient>
   );
 }
 
@@ -85,56 +97,80 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: width * 0.05, // Ajuste de padding basado en el ancho de la pantalla
-    backgroundColor: "#fff",
+    padding: width * 0.05,
   },
   title: {
-    fontSize: width * 0.08, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
+    fontSize: width * 0.11,
     fontWeight: "bold",
-    marginBottom: height * 0.05, // Ajuste de márgenes basado en la altura de la pantalla
-    color: "#4A6B3E",
+    marginBottom: height * 0.05,
+    color: "#022D04",
+    textAlign: 'center',
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     width: "85%",
-    height: height * 0.07, // Ajuste de altura del campo de texto basado en la altura de la pantalla
+    height: height * 0.07,
     paddingHorizontal: width * 0.03,
     borderWidth: 2,
-    borderColor: "#9EAD6E",
-    borderRadius: 25,
+    borderColor: "#000000",
+    borderRadius: 20,
     marginBottom: height * 0.02,
+    backgroundColor: "transparent", // Fondo transparente
   },
   inputError: {
     borderColor: "red",
   },
   icon: {
-    width: width * 0.06, // Ajuste del tamaño del ícono basado en el ancho de la pantalla
+    width: width * 0.06,
     height: width * 0.06,
     marginRight: width * 0.03,
   },
   input: {
     flex: 1,
     height: "100%",
-    fontSize: width * 0.04, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
+    fontSize: width * 0.040,
     paddingLeft: 10,
-    color: "#4A6B3E",
+    color: "white", // Texto en blanco
   },
   button: {
     width: "85%",
-    height: height * 0.07, // Ajuste de altura del botón basado en la altura de la pantalla
+    height: height * 0.055,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#4A6B3E",
-    borderRadius: 25,
+    borderRadius: 15,
+    marginTop: height * 0.02,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
   },
   buttonText: {
     color: "#fff",
-    fontSize: width * 0.05, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
+    fontSize: width * 0.05,
     fontWeight: "bold",
   },
   eyeIconImage: {
-    width: width * 0.06, // Ajuste del tamaño del ícono basado en el ancho de la pantalla
+    width: width * 0.06,
     height: width * 0.06,
+  },
+  registerLinkText: {
+    color: '#000000',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: height * 0.03,
+    fontSize: width * 0.045,
+  },
+  registerLink: {
+    color: '#4A6B3E',
+    textAlign: 'center',
+    fontSize: width * 0.05,
+    fontWeight: 'bold',
+    marginTop: height * 0.01,
   },
 });
