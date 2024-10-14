@@ -4,17 +4,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Text, StyleSheet } from "react-native";
 
 // Importar las pantallas
-import WelcomeScreen from "../screens/welcomeScreen"; //Importar pantalla de bienvenida
-import RegisterScreen from "../screens/registerScreen"; //Importar pantalla de registro
-import LoginScreen from "../screens/loginScreen"; //Importar la pantalla de login
-import MainScreen from "../screens/mainScreen"; //Importar la pantalla principal
-import ChatbotScreen from "../screens/chatbotScreen"; // Importar la pantalla de Chatbot
-import FertilizerCalculator from "../screens/fertilizerCalculator"; // Importar la pantalla Calculadora de fertilizantes
-import PestsDiseases from "../screens/pestsDiseases"; //Importar la pantalla Plagas y enfermedades
-import CropAdvice from "../screens/cropAdvice"; //Importar la pantalla Consejo de cultivo
-import PestAlerts from "../screens/pestsAlerts"; //Importar la pantalla Alertas de plagas
-import theirCrops from "../screens/theirCrops"; //Importat la pantalla Sus cultivos
-import agriculturalLibrary from "../screens/agriculturalLibrary"; //Importar la pantalla Biblioteca agricola
+import WelcomeScreen from "../screens/welcomeScreen"; // Pantalla de bienvenida
+import RegisterScreen from "../screens/registerScreen"; // Pantalla de registro
+import LoginScreen from "../screens/loginScreen"; // Pantalla de login
+import MainScreen from "../screens/mainScreen"; // Pantalla principal
+import ChatbotScreen from "../screens/chatbotScreen"; // Pantalla de Chatbot
+import FertilizerCalculator from "../screens/fertilizerCalculator"; // Pantalla Calculadora de fertilizantes
+import PestsDiseases from "../screens/pestsDiseases"; // Pantalla Plagas y enfermedades
+import CropAdvice from "../screens/cropAdvice"; // Pantalla Consejo de cultivo
+import PestAlerts from "../screens/pestsAlerts"; // Pantalla Alertas de plagas
+import theirCrops from "../screens/theirCrops"; // Pantalla Sus cultivos
+import agriculturalLibrary from "../screens/agriculturalLibrary"; // Pantalla Biblioteca agricola
+import NoticiasIPSA from "../screens/Noticiascomunidad"; // Pantalla Noticias de la comunidad
+import MapaAlertasCercanas from "../screens/MapaAlerta"; // Pantalla Mapa de Alertas Cercanas
 
 const Stack = createStackNavigator();
 
@@ -30,102 +32,148 @@ const AppNavigator = ({ user }) => {
               component={MainScreen}
               options={{ headerShown: false }}
             />
+
+            {/* Calculadora de fertilizantes */}
             <Stack.Screen
               name="FertilizerCalculator"
-              component={FertilizerCalculator} // Pantalla Calculadora de Fertilizantes
+              component={FertilizerCalculator}
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>Calculadora de fertilizantes</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB', // Color de fondo
+                  backgroundColor: '#BCEABB',
                 },
-                headerTintColor: '#000000', // Color del texto del encabezado
-                headerTitleAlign: 'center', // Alinear el título al centro
+                headerTintColor: '#000000',
+                headerTitleAlign: 'center',
               }}
             />
+
+            {/* Plagas y enfermedades */}
             <Stack.Screen
               name="PestsDiseases"
-              component={PestsDiseases} // Pantalla Plagas y enfermedades
+              component={PestsDiseases}
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>Plagas y enfermedades</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB', // Color de fondo
+                  backgroundColor: '#BCEABB',
                 },
-                headerTintColor: '#000000', // Color del texto del encabezado
-                headerTitleAlign: 'center', // Alinear el título al centro
+                headerTintColor: '#000000',
+                headerTitleAlign: 'center',
               }}
             />
+
+            {/* Consejo de cultivos */}
             <Stack.Screen
               name="CropAdvice"
-              component={CropAdvice} // Pantalla Consejo de cultivos
+              component={CropAdvice}
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>Consejo de cultivos</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB', // Color de fondo
+                  backgroundColor: '#BCEABB',
                 },
-                headerTintColor: '#000000', // Color del texto del encabezado
-                headerTitleAlign: 'center', // Alinear el título al centro
+                headerTintColor: '#000000',
+                headerTitleAlign: 'center',
               }}
             />
+
+            {/* Alertas de plagas */}
             <Stack.Screen
               name="PestAlerts"
-              component={PestAlerts} // Pantalla Alertas de plagas
+              component={PestAlerts}
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>Alertas de plagas</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB', // Color de fondo
+                  backgroundColor: '#BCEABB',
                 },
-                headerTintColor: '#000000', // Color del texto del encabezado
-                headerTitleAlign: 'center', // Alinear el título al centro
+                headerTintColor: '#000000',
+                headerTitleAlign: 'center',
               }}
             />
-            <Stack.Screen
-              name="ChatBot"
-              component={ChatbotScreen} // Pantalla de Chatbot
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>ChatBot AgroSense</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: '#BCEABB', // Color de fondo
-                },
-                headerTintColor: '#000000', // Color del texto del encabezado
-                headerTitleAlign: 'center', // Alinear el título al centro
-              }}
-            />
+
+            {/* Sus cultivos */}
             <Stack.Screen
               name="theirCrops"
-              component={theirCrops} // Pantalla de Chatbot
+              component={theirCrops}
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>Sus cultivos</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB', // Color de fondo
+                  backgroundColor: '#BCEABB',
                 },
-                headerTintColor: '#000000', // Color del texto del encabezado
-                headerTitleAlign: 'center', // Alinear el título al centro
+                headerTintColor: '#000000',
+                headerTitleAlign: 'center',
               }}
             />
+
+            {/* Biblioteca agricola */}
             <Stack.Screen
               name="agriculturalLibrary"
-              component={agriculturalLibrary} // Pantalla de Chatbot
+              component={agriculturalLibrary}
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>Biblioteca agricola</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB', // Color de fondo
+                  backgroundColor: '#BCEABB',
                 },
-                headerTintColor: '#000000', // Color del texto del encabezado
-                headerTitleAlign: 'center', // Alinear el título al centro
+                headerTintColor: '#000000',
+                headerTitleAlign: 'center',
+              }}
+            />
+
+            {/* Noticias de la comunidad */}
+            <Stack.Screen
+  name="NoticiasIPSA"
+  component={NoticiasIPSA}
+  options={{
+    headerTitle: () => (
+      <Text style={styles.headerTitle}>Noticias de la comunidad</Text>
+    ),
+    headerStyle: {
+      backgroundColor: '#BCEABB',
+    },
+    headerTintColor: '#000000',
+    headerTitleAlign: 'center',
+  }}
+/>
+
+            {/* Mapa de alertas cercanas */}
+            <Stack.Screen
+              name="MapaAlertasCercanas"
+              component={MapaAlertasCercanas}
+              options={{
+                headerTitle: () => (
+                  <Text style={styles.headerTitle}>Mapa de Alertas Cercanas</Text>
+                ),
+                headerStyle: {
+                  backgroundColor: '#BCEABB',
+                },
+                headerTintColor: '#000000',
+                headerTitleAlign: 'center',
+              }}
+            />
+
+            {/* ChatBot */}
+            <Stack.Screen
+              name="ChatBot"
+              component={ChatbotScreen}
+              options={{
+                headerTitle: () => (
+                  <Text style={styles.headerTitle}>ChatBot AgroSense</Text>
+                ),
+                headerStyle: {
+                  backgroundColor: '#BCEABB',
+                },
+                headerTintColor: '#000000',
+                headerTitleAlign: 'center',
               }}
             />
           </>
@@ -157,8 +205,8 @@ const AppNavigator = ({ user }) => {
 const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold', // Negrita
-    color: '#000000', // Color blanco para el texto
+    fontWeight: 'bold',
+    color: '#000000',
   },
 });
 
