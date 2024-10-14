@@ -1,7 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, Alert, TouchableOpacity, Modal, TextInput, Button, Image } from 'react-native';
-import MapView, { Marker, Circle } from 'react-native-maps';
-import * as Location from 'expo-location';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Alert,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Button,
+  Image,
+} from "react-native";
+import MapView, { Marker, Circle } from "react-native-maps";
+import * as Location from "expo-location";
 
 const MapaAlertasCercanas = () => {
   const [region, setRegion] = useState(null);
@@ -9,14 +20,14 @@ const MapaAlertasCercanas = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false); // Controlar la visibilidad del modal
   const [newMarker, setNewMarker] = useState(null); // Almacenar la ubicación seleccionada
-  const [plagueName, setPlagueName] = useState(''); // Nombre de la plaga
-  const [plagueDescription, setPlagueDescription] = useState(''); // Descripción de la plaga
+  const [plagueName, setPlagueName] = useState(""); // Nombre de la plaga
+  const [plagueDescription, setPlagueDescription] = useState(""); // Descripción de la plaga
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permisos para acceder a la ubicación denegados');
+      if (status !== "granted") {
+        setErrorMsg("Permisos para acceder a la ubicación denegados");
         return;
       }
 
@@ -40,13 +51,20 @@ const MapaAlertasCercanas = () => {
   // Función para guardar la amenaza y cerrar el modal
   const handleSaveMarker = () => {
     if (newMarker && plagueName && plagueDescription) {
-      setMarkers([...markers, { ...newMarker, name: plagueName, description: plagueDescription }]);
+      setMarkers([
+        ...markers,
+        { ...newMarker, name: plagueName, description: plagueDescription },
+      ]);
       setIsModalVisible(false);
-      setPlagueName('');
-      setPlagueDescription('');
-      Alert.alert('Amenaza Agregada', 'Has agregado una nueva amenaza de plagas.', [{ text: 'OK' }]);
+      setPlagueName("");
+      setPlagueDescription("");
+      Alert.alert(
+        "Amenaza Agregada",
+        "Has agregado una nueva amenaza de plagas.",
+        [{ text: "OK" }]
+      );
     } else {
-      Alert.alert('Error', 'Debes llenar todos los campos.', [{ text: 'OK' }]);
+      Alert.alert("Error", "Debes llenar todos los campos.", [{ text: "OK" }]);
     }
   };
 
@@ -81,7 +99,10 @@ const MapaAlertasCercanas = () => {
           {markers.map((marker, index) => (
             <Marker
               key={index}
-              coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              }}
               title={marker.name}
               description={marker.description}
               // icon={require('./assets/plaga_icon.png')} // Ruta del ícono de la plaga
@@ -95,7 +116,11 @@ const MapaAlertasCercanas = () => {
       {/* Botón flotante para agregar alertas manualmente */}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => Alert.alert('Selecciona un lugar en el mapa para agregar una amenaza.')}
+        onPress={() =>
+          Alert.alert(
+            "Selecciona un lugar en el mapa para agregar una amenaza."
+          )
+        }
       >
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
@@ -126,7 +151,11 @@ const MapaAlertasCercanas = () => {
             />
 
             <Button title="Guardar" onPress={handleSaveMarker} />
-            <Button title="Cancelar" color="red" onPress={() => setIsModalVisible(false)} />
+            <Button
+              title="Cancelar"
+              color="red"
+              onPress={() => setIsModalVisible(false)}
+            />
           </View>
         </View>
       </Modal>
@@ -137,61 +166,61 @@ const MapaAlertasCercanas = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   loadingText: {
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
   },
   errorText: {
     fontSize: 16,
-    color: 'red',
-    textAlign: 'center',
+    color: "red",
+    textAlign: "center",
   },
   addButton: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: 'green',
+    backgroundColor: "green",
     borderRadius: 30,
     width: 60,
     height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     elevation: 5,
   },
   addButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
-    width: '80%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     padding: 10,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     marginBottom: 20,
     borderRadius: 5,
   },
