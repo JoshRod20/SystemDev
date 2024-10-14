@@ -1,135 +1,268 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
-import InputField from '../components/inputField'; 
-import Button from '../components/button';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 // Obtener las dimensiones de la pantalla
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 const RegisterScreen = ({ navigation }) => {
   // Estado para los campos del registro
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  
-  // Estados para manejar errores
-  const [nameError, setNameError] = useState(false);
-  const [phoneError, setPhoneError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Estado para manejar si el usuario ha intentado enviar el formulario
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
+
+  // Validaciones de los campos
+  const validateName = () => name.length > 0;
+  const validatePhone = () => /^\d+$/.test(phone);
+  const validateEmail = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = () => password.length >= 6;
+  const validateConfirmPassword = () => password === confirmPassword;
+
+  // Función para alternar la visibilidad de la contraseña
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   // Función para manejar el registro
   const handleRegister = () => {
-    // Reiniciar los errores
-    setNameError(!name);
-    setPhoneError(!phone);
-    setEmailError(!email);
-    setPasswordError(!password);
-    setConfirmPasswordError(password !== confirmPassword);
+    setAttemptedSubmit(true);
 
-    // Verificar si todo está bien
-    if (!name || !phone || !email || !password || password !== confirmPassword) {
-      return;
+    // Verificar si todos los campos son válidos
+    if (
+      validateName() &&
+      validatePhone() &&
+      validateEmail() &&
+      validatePassword() &&
+      validateConfirmPassword()
+    ) {
+      // Si todo está correcto, simula un registro exitoso
+      navigation.navigate("Login"); // Redirige al login después del registro
     }
-
-    // Si todo está correcto, simula un registro exitoso
-    navigation.navigate('Login');  // Redirige al login después del registro
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registrarse</Text>
-      
-      {/* Campo de Nombre */}
-      <View style={styles.inputGroup}>
-        <View style={styles.icon}>
-          <Image source={require('../assets/icons8-usuario-48.png')} style={styles.iconImage} />
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <LinearGradient colors={["#4A6B3E", "#fff"]} style={styles.container}>
+        <Text style={styles.title}>Registrarse</Text>
+
+        {/* Campo de Nombre */}
+        <View style={styles.inputContainer}>
+          <Image
+            source={require("../assets/profile-about-mobile-ui-svgrepo-com.png")}
+            style={styles.iconImage}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre de usuario"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#000"
+          />
         </View>
-        <InputField 
-          placeholder="Nombre" 
-          value={name} 
-          onChangeText={setName} 
-          error={nameError} 
-        />
-        {nameError && <Text style={styles.errorText}>El nombre es obligatorio</Text>}
-      </View>
+        {attemptedSubmit && !validateName() && (
+          <Text style={styles.errorText}>El nombre es obligatorio</Text>
+        )}
 
-      {/* Campo de Teléfono */}
-      <InputField 
-        placeholder="Número de teléfono" 
-        keyboardType="phone-pad" 
-        value={phone} 
-        onChangeText={setPhone} 
-        error={phoneError} 
-      />
-      {phoneError && <Text style={styles.errorText}>El teléfono es obligatorio</Text>}
+        {/* Campo de Teléfono */}
+        <View style={styles.inputContainer}>
+          <Image
+            source={require("../assets/cellphone-svgrepo-com.png")}
+            style={styles.iconImage}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Número de teléfono"
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="phone-pad"
+            placeholderTextColor="#000"
+          />
+        </View>
+        {attemptedSubmit && !validatePhone() && (
+          <Text style={styles.errorText}>
+            El número de teléfono debe ser válido
+          </Text>
+        )}
 
-      {/* Campo de Correo Electrónico */}
-      <InputField 
-        placeholder="Correo electrónico" 
-        keyboardType="email-address" 
-        value={email} 
-        onChangeText={setEmail} 
-        error={emailError} 
-      />
-      {emailError && <Text style={styles.errorText}>El correo electrónico es obligatorio</Text>}
+        {/* Campo de Correo Electrónico */}
+        <View style={styles.inputContainer}>
+          <Image
+            source={require("../assets/icons8-logo-de-google-48.png")}
+            style={styles.iconImage}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Correo electrónico"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            placeholderTextColor="#000"
+          />
+        </View>
+        {attemptedSubmit && !validateEmail() && (
+          <Text style={styles.errorText}>
+            El correo electrónico debe ser válido
+          </Text>
+        )}
 
-      {/* Campo de Contraseña */}
-      <InputField 
-        placeholder="Contraseña" 
-        secureTextEntry 
-        value={password} 
-        onChangeText={setPassword} 
-        error={passwordError} 
-      />
-      {passwordError && <Text style={styles.errorText}>La contraseña es obligatoria</Text>}
+        {/* Campo de Contraseña */}
+        <View style={styles.inputContainer}>
+          <Image
+            source={require("../assets/password-svgrepo-com.png")}
+            style={styles.iconImage}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            placeholderTextColor="#000"
+          />
+          <TouchableOpacity onPress={togglePasswordVisibility}>
+            <Image
+              source={require("../assets/eye-open-svgrepo-com.png")}
+              style={styles.eyeIconImage}
+            />
+          </TouchableOpacity>
+        </View>
+        {attemptedSubmit && !validatePassword() && (
+          <Text style={styles.errorText}>
+            La contraseña debe tener al menos 6 caracteres
+          </Text>
+        )}
 
-      {/* Campo de Confirmar Contraseña */}
-      <InputField 
-        placeholder="Confirmar contraseña" 
-        secureTextEntry 
-        value={confirmPassword} 
-        onChangeText={setConfirmPassword} 
-        error={confirmPasswordError} 
-      />
-      {confirmPasswordError && <Text style={styles.errorText}>Las contraseñas no coinciden</Text>}
-      
-      {/* Botón de Registro */}
-      <Button title="Registrarse" onPress={handleRegister} />
-    </View>
+        {/* Campo de Confirmar Contraseña */}
+        <View style={styles.inputContainer}>
+          <Image
+            source={require("../assets/password-code.png")}
+            style={styles.iconImage}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Confirmar contraseña"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry={!showPassword}
+            placeholderTextColor="#000"
+          />
+          <TouchableOpacity onPress={togglePasswordVisibility}>
+            <Image
+              source={require("../assets/eye-open-svgrepo-com.png")}
+              style={styles.eyeIconImage}
+            />
+          </TouchableOpacity>
+        </View>
+        {attemptedSubmit && !validateConfirmPassword() && (
+          <Text style={styles.errorText}>Las contraseñas no coinciden</Text>
+        )}
+
+        {/* Botón de Registro */}
+        <TouchableOpacity
+          style={styles.registerButton}
+          onPress={handleRegister}
+        >
+          <Text style={styles.registerButtonText}>Registrar</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: width * 0.05, // Ajuste de padding basado en el ancho de la pantalla
-    backgroundColor: '#FFF',
+    padding: width * 0.05,
+    justifyContent: "center",
+    alignItems: "center", // Alinea los elementos al centro horizontalmente
   },
   title: {
-    fontSize: width * 0.07, // Ajuste de tamaño de fuente basado en el ancho de la pantalla
-    fontWeight: 'bold',
-    marginTop: height * 0.03, // Ajuste de márgenes basado en la altura de la pantalla
+    fontSize: width * 0.11,
+    fontWeight: "bold",
     marginBottom: height * 0.03,
-    textAlign: 'center',
-    color: '#4F7C44',
+    textAlign: "center",
+    color: "#fff",
+    textShadowColor: "rgba(0, 0, 0, 0.5)", // Color de la sombra
+    textShadowOffset: { width: 0, height: 4 }, // Desplazamiento de la sombra
+    textShadowRadius: 7, // Radio de la sombra
   },
-  errorText: {
-    color: 'red',
-    marginTop: height * 0.01,
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "85%",
+    height: height * 0.06,
+    paddingHorizontal: width * 0.03,
+    borderWidth: 2,
+    borderColor: "#000000",
+    borderRadius: 18,
+    marginBottom: height * 0.02,
+    backgroundColor: "transparent",
   },
-  inputGroup: {
-    marginBottom: height * 0.02, // Ajuste de espacio entre inputs basado en la altura de la pantalla
-  },
-  icon: {
-    alignItems: 'center',
+  input: {
+    flex: 1,
+    height: "100%",
+    fontSize: width * 0.04,
+    paddingLeft: 10,
+    color: "white",
+    textAlign: "center",
+    paddingRight: 50,
   },
   iconImage: {
-    width: width * 0.1, // Ajuste de tamaño del ícono basado en el ancho de la pantalla
-    height: width * 0.1,
+    width: width * 0.06,
+    height: width * 0.06,
+    marginRight: width * 0.03,
+  },
+  eyeIconImage: {
+    width: width * 0.06,
+    height: width * 0.06,
+  },
+  errorText: {
+    color: "red",
+    fontSize: width * 0.03,
+    marginBottom: height * 0.02,
+    textAlign: "center",
+  },
+  registerButton: {
+    backgroundColor: "#4A6B3E",
+    borderRadius: 18,
+    paddingVertical: height * 0.02,
+    justifyContent: "center",
+    alignItems: "center",
+    height: height * 0.06,
+    width: "85%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+
+    elevation: 10,
+  },
+  registerButtonText: {
+    color: "#FFF",
+    fontSize: width * 0.05,
+    fontWeight: "bold",
+    height: height * 0.06,
+    width: "85%",
+    textAlign: "center",
+    paddingTop: 10,
   },
 });
 

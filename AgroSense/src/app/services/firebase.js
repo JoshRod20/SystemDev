@@ -1,6 +1,10 @@
-import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa AsyncStorage
+import { initializeApp, getApps } from "firebase/app";
+import {
+  getAuth,
+  initializeAuth,
+  getReactNativePersistence,
+} from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Importa AsyncStorage
 import { getFirestore } from "firebase/firestore";
 
 // Tu configuración de Firebase
@@ -10,7 +14,7 @@ const firebaseConfig = {
   projectId: "agrosense-dd62f",
   storageBucket: "agrosense-dd62f.appspot.com",
   messagingSenderId: "392700285794",
-  appId: "1:392700285794:web:7053ed7e808105cecc923b"
+  appId: "1:392700285794:web:7053ed7e808105cecc923b",
 };
 
 // Verificar si la app ya está inicializada
@@ -20,7 +24,7 @@ if (!getApps().length) {
   app = initializeApp(firebaseConfig);
   // Inicializa Firebase Auth con persistencia de AsyncStorage
   auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage)
+    persistence: getReactNativePersistence(AsyncStorage),
   });
 } else {
   app = getApps()[0];

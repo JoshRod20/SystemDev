@@ -1,43 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import FeatureButton from '../components/featureButton';
-import FooterMenu from '../components/footerMenu';
-import WeatherCard from '../components/weatherCard';
-import { fetchWeatherData } from '../services/wheatherServices';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { auth } from '../../app/services/firebase'; 
-import { signOut } from 'firebase/auth'; 
-import GraficoReporteEnfermedades from './GraficoReporteEnfermedades';
-import Estadisticas from './estadisticas';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import FeatureButton from "../components/featureButton";
+import FooterMenu from "../components/footerMenu";
+import WeatherCard from "../components/weatherCard";
+import { fetchWeatherData } from "../services/wheatherServices";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { auth } from "../../app/services/firebase";
+import { signOut } from "firebase/auth";
+import GraficoReporteEnfermedades from "./GraficoReporteEnfermedades";
+import Estadisticas from "./estadisticas";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 // Datos del reporte de enfermedades
 const dataReporteEnfermedades = [
-  { date: "2017-01-05", count: 8 }, 
-  { date: "2017-01-19", count: 5 }, 
-  { date: "2017-02-06", count: 2 }, 
-  { date: "2017-02-20", count: 4 }, 
-  { date: "2017-03-07", count: 1 }, 
-  { date: "2017-03-21", count: 3 }, 
-  { date: "2017-04-05", count: 6 }, 
-  { date: "2017-04-19", count: 2 }, 
+  { date: "2017-01-05", count: 8 },
+  { date: "2017-01-19", count: 5 },
+  { date: "2017-02-06", count: 2 },
+  { date: "2017-02-20", count: 4 },
+  { date: "2017-03-07", count: 1 },
+  { date: "2017-03-21", count: 3 },
+  { date: "2017-04-05", count: 6 },
+  { date: "2017-04-19", count: 2 },
   { date: "2017-05-03", count: 4 },
   { date: "2017-05-17", count: 7 },
-  { date: "2017-06-06", count: 9 }, 
-  { date: "2017-06-20", count: 5 }, 
-  { date: "2017-07-05", count: 3 }, 
-  { date: "2017-07-19", count: 4 }, 
-  { date: "2017-08-07", count: 2 },  
-  { date: "2017-08-21", count: 8 },  
+  { date: "2017-06-06", count: 9 },
+  { date: "2017-06-20", count: 5 },
+  { date: "2017-07-05", count: 3 },
+  { date: "2017-07-19", count: 4 },
+  { date: "2017-08-07", count: 2 },
+  { date: "2017-08-21", count: 8 },
   { date: "2017-09-06", count: 3 },
   { date: "2017-09-20", count: 7 },
   { date: "2017-10-04", count: 5 },
   { date: "2017-10-18", count: 6 },
   { date: "2017-11-06", count: 2 },
-  { date: "2017-11-20", count: 9 }, 
+  { date: "2017-11-20", count: 9 },
   { date: "2017-12-05", count: 4 },
-  { date: "2017-12-19", count: 7 } 
+  { date: "2017-12-19", count: 7 },
 ];
 
 // Componente Home (pantalla principal)
@@ -68,29 +74,29 @@ const Home = ({ navigation }) => {
       <View style={styles.featureContainer}>
         <View style={styles.featureRow}>
           <FeatureButton
-            icon={require('../../app/assets/fertilizer.png')}
+            icon={require("../../app/assets/fertilizer.png")}
             label="Calculadora de fertilizante"
-            onPress={() => navigation.navigate('FertilizerCalculator')}
+            onPress={() => navigation.navigate("FertilizerCalculator")}
             style={styles.featureButton}
           />
           <FeatureButton
-            icon={require('../../app/assets/pest.png')}
+            icon={require("../../app/assets/pest.png")}
             label="Plagas y enfermedades"
-            onPress={() => navigation.navigate('PestsDiseases')}
+            onPress={() => navigation.navigate("PestsDiseases")}
             style={styles.featureButton}
           />
         </View>
         <View style={styles.featureRow}>
           <FeatureButton
-            icon={require('../../app/assets/crops.png')}
+            icon={require("../../app/assets/crops.png")}
             label="Consejo de cultivo"
-            onPress={() => navigation.navigate('CropAdvice')}
+            onPress={() => navigation.navigate("CropAdvice")}
             style={styles.featureButton}
           />
           <FeatureButton
-            icon={require('../../app/assets/alerts.png')}
+            icon={require("../../app/assets/alerts.png")}
             label="Alertas de plagas"
-            onPress={() => navigation.navigate('PestAlerts')}
+            onPress={() => navigation.navigate("PestAlerts")}
             style={styles.featureButton}
           />
         </View>
@@ -106,9 +112,9 @@ const SettingsScreen = ({ navigation }) => {
   const handleLogout = async () => {
     try {
       await signOut(auth); // Cerrar sesión en Firebase
-      navigation.replace('Register'); 
+      navigation.replace("Login");
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error("Error al cerrar sesión:", error);
     }
   };
 
@@ -138,22 +144,34 @@ function UserProfileDrawer() {
         name="Configuraciones"
         component={SettingsScreen}
         options={{
-          drawerLabel: () => <Text style={styles.drawerLabel}>Configuraciones</Text>,
+          drawerLabel: () => (
+            <Text style={styles.drawerLabel}>Configuraciones</Text>
+          ),
         }}
       />
       <Drawer.Screen
         name="Actividad de Plagas"
         options={{
-          drawerLabel: () => <Text style={styles.drawerLabel}>Reporte de plagas</Text>,
-        }}>
-        {() => <GraficoReporteEnfermedades dataReporteEnfermedades={dataReporteEnfermedades} />}
+          drawerLabel: () => (
+            <Text style={styles.drawerLabel}>Reporte de plagas</Text>
+          ),
+        }}
+      >
+        {() => (
+          <GraficoReporteEnfermedades
+            dataReporteEnfermedades={dataReporteEnfermedades}
+          />
+        )}
       </Drawer.Screen>
       <Drawer.Screen
         name="Precios de Mercado"
         options={{
-          drawerLabel: () => <Text style={styles.drawerLabel}>Precios de Mercado</Text>,
-        }}>
-        {() => <Estadisticas/>}
+          drawerLabel: () => (
+            <Text style={styles.drawerLabel}>Precios de Mercado</Text>
+          ),
+        }}
+      >
+        {() => <Estadisticas />}
       </Drawer.Screen>
     </Drawer.Navigator>
   );
@@ -163,18 +181,18 @@ function UserProfileDrawer() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: width * 0.05,  // Ajuste dinámico basado en el ancho de la pantalla
+    backgroundColor: "#fff",
+    padding: width * 0.05, // Ajuste dinámico basado en el ancho de la pantalla
   },
   featureContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: "column",
+    justifyContent: "center",
     marginTop: height * 0.05,
     marginBottom: height * 0.05,
   },
   featureRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: height * 0.02,
   },
   featureButton: {
@@ -184,18 +202,18 @@ const styles = StyleSheet.create({
   button: {
     marginTop: height * 0.02,
     padding: width * 0.03,
-    backgroundColor: '#4A6B3E',
+    backgroundColor: "#4A6B3E",
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: '#fff',
-    fontSize: width * 0.045,  // Tamaño de fuente dinámico basado en el ancho
+    color: "#fff",
+    fontSize: width * 0.045, // Tamaño de fuente dinámico basado en el ancho
   },
   drawerLabel: {
-    fontSize: width * 0.045,  // Tamaño de fuente dinámico basado en el ancho
-    fontWeight: 'bold',
-    color: '#4A6B3E',
+    fontSize: width * 0.045, // Tamaño de fuente dinámico basado en el ancho
+    fontWeight: "bold",
+    color: "#4A6B3E",
   },
 });
 
