@@ -22,7 +22,7 @@ const WeatherCard = ({ weather }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#BCEABB',
+    backgroundColor: '#B7D2BF',
     height: height * 0.3, // Altura ajustada dinámicamente
     width: width * 0.9,   // Ancho ajustado dinámicamente
     marginTop: height * 0.03,
