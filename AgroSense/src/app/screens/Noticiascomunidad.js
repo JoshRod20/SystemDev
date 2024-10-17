@@ -1,29 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Button, Linking, Alert } from 'react-native';
 
 const NoticiasIPSA = () => {
+  // Función para abrir la URL de IPSA
+  const openIPSAWebsite = async () => {
+    const url = 'https://www.ipsa.gob.ni/NOTICIAS';
+
+    // Verifica si la URL puede ser abierta
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Abre el sitio web
+      await Linking.openURL(url);
+    } else {
+      // Si no es posible abrir, muestra un mensaje de error
+      Alert.alert(`No se puede abrir el sitio: ${url}`);
+    }
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Noticias de la comunidad - IPSA</Text>
-      <View style={styles.newsItem}>
-        <Text style={styles.newsTitle}>Noticia 1</Text>
-        <Text style={styles.newsDescription}>
-          Descripción de la noticia 1 sobre el trabajo del IPSA en Nicaragua...
-        </Text>
-      </View>
-      <View style={styles.newsItem}>
-        <Text style={styles.newsTitle}>Noticia 2</Text>
-        <Text style={styles.newsDescription}>
-          Descripción de la noticia 2 sobre avances en el control de plagas...
-        </Text>
-      </View>
-      <View style={styles.newsItem}>
-        <Text style={styles.newsTitle}>Noticia 3</Text>
-        <Text style={styles.newsDescription}>
-          Descripción de la noticia 3 relacionada con la agricultura...
-        </Text>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Noticias del IPSA</Text>
+      <Text style={styles.description}>
+        Mantente al tanto de las últimas noticias del IPSA visitando su sitio web.
+      </Text>
+      <Button
+        title="Ver Noticias del IPSA"
+        onPress={openIPSAWebsite}
+        color="green"
+      />
+    </View>
   );
 };
 
@@ -32,6 +38,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 22,
@@ -39,17 +47,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  newsItem: {
-    marginBottom: 20,
-  },
-  newsTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'green',
-  },
-  newsDescription: {
+  description: {
     fontSize: 16,
-    marginTop: 5,
+    marginBottom: 20,
+    textAlign: 'center',
   },
 });
 

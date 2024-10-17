@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const WeatherCard = ({ weather }) => {
   return (
@@ -9,9 +10,9 @@ const WeatherCard = ({ weather }) => {
         source={{ uri: `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png` }}
         style={styles.weatherIcon}
       />
-      <Text>{weather.weather[0].description}</Text>
-      <Text>Máx: {weather.main.temp_max}° Min: {weather.main.temp_min}°</Text>
-      <Text>Sensación térmica: {weather.main.feels_like}°C</Text>
+      <Text style={styles.description}>{weather.weather[0].description}</Text>
+      <Text style={styles.minMax}>Máx: {weather.main.temp_max}° Min: {weather.main.temp_min}°</Text>
+      <Text style={styles.feelsLike}>Sensación térmica: {weather.main.feels_like}°C</Text>
     </View>
   );
 };
@@ -19,12 +20,11 @@ const WeatherCard = ({ weather }) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#BCEABB',
-    height: 250,
-    width: 380,
-    marginTop: 30,
-    marginBottom: 15,
-    marginLeft: 15,
-    padding: 20,
+    height: hp('35%'), // 35% de la altura de la pantalla
+    width: wp('90%'),  // 90% del ancho de la pantalla
+    marginTop: hp('3%'), // 3% de la altura de la pantalla como margen superior
+    marginBottom: hp('2%'), // 2% de margen inferior
+    padding: wp('5%'), // 5% de padding basado en el ancho de la pantalla
     borderRadius: 10,
     alignItems: 'center',
     shadowColor: "#000",
@@ -34,16 +34,24 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    
     elevation: 5,
   },
   temperature: {
-    fontSize: 40,
+    fontSize: wp('10%'), // Ajustar tamaño de fuente según el ancho de la pantalla
     fontWeight: 'bold',
   },
   weatherIcon: {
-    width: 70,
-    height: 70,
+    width: wp('18%'), // Ajusta el tamaño del icono al 18% del ancho de la pantalla
+    height: wp('18%'),
+  },
+  description: {
+    fontSize: wp('4.5%'), // Ajusta la descripción para que sea más legible
+  },
+  minMax: {
+    fontSize: wp('4%'), // Ajuste de la fuente de las temperaturas mín/máx
+  },
+  feelsLike: {
+    fontSize: wp('4%'), // Ajuste de la fuente para la sensación térmica
   },
 });
 
