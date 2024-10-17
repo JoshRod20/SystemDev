@@ -106,7 +106,7 @@ const SettingsScreen = ({ navigation }) => {
   const handleLogout = async () => {
     try {
       await signOut(auth); // Cerrar sesión en Firebase
-      navigation.replace('Register'); 
+      navigation.replace('Login'); 
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }
