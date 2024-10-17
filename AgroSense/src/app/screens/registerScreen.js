@@ -64,7 +64,7 @@ const RegisterScreen = ({ navigation }) => {
         {/* Campo de Nombre */}
         <View style={styles.inputContainer}>
           <Image
-            source={require("../assets/icons8-usuario-48.png")}
+            source={require("../assets/profile-about-mobile-ui-svgrepo-com.png")}
             style={styles.iconImage}
           />
           <TextInput
@@ -82,7 +82,7 @@ const RegisterScreen = ({ navigation }) => {
         {/* Campo de Teléfono */}
         <View style={styles.inputContainer}>
           <Image
-            source={require("../assets/icons8-teléfono-50.png")}
+            source={require("../assets/cellphone-svgrepo-com.png")}
             style={styles.iconImage}
           />
           <TextInput
@@ -124,7 +124,7 @@ const RegisterScreen = ({ navigation }) => {
         {/* Campo de Contraseña */}
         <View style={styles.inputContainer}>
           <Image
-            source={require("../assets/icons8-contraseña-50.png")}
+            source={require("../assets/password-svgrepo-com.png")}
             style={styles.iconImage}
           />
           <TextInput
@@ -137,7 +137,7 @@ const RegisterScreen = ({ navigation }) => {
           />
           <TouchableOpacity onPress={togglePasswordVisibility}>
             <Image
-              source={require("../assets/icons8-visible-48.png")}
+              source={require("../assets/eye-svgrepo-com.png")}
               style={styles.eyeIconImage}
             />
           </TouchableOpacity>
@@ -151,7 +151,7 @@ const RegisterScreen = ({ navigation }) => {
         {/* Campo de Confirmar Contraseña */}
         <View style={styles.inputContainer}>
           <Image
-            source={require("../assets/icons8-contraseña-50.png")}
+            source={require("../assets/password-svgrepo-com (1).png")}
             style={styles.iconImage}
           />
           <TextInput
@@ -164,7 +164,7 @@ const RegisterScreen = ({ navigation }) => {
           />
           <TouchableOpacity onPress={togglePasswordVisibility}>
             <Image
-              source={require("../assets/icons8-visible-48.png")}
+              source={require("../assets/eye-svgrepo-com.png")}
               style={styles.eyeIconImage}
             />
           </TouchableOpacity>

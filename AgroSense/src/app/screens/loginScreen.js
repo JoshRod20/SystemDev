@@ -80,7 +80,7 @@ const LoginScreen = ({ navigation }) => {
         {/* Campo Contraseña */}
         <View style={styles.inputContainer}>
           <Image
-            source={require("../../app/assets/icons8-contraseña-50.png")}
+            source={require("../../app/assets/password-svgrepo-com.png")}
             style={styles.iconImage}
           />
           <TextInput
@@ -93,7 +93,7 @@ const LoginScreen = ({ navigation }) => {
           />
           <TouchableOpacity onPress={togglePasswordVisibility}>
             <Image
-              source={require("../../app/assets/icons8-visible-48.png")}
+              source={require("../../app/assets/eye-svgrepo-com.png")}
               style={styles.eyeIconImage}
             />
           </TouchableOpacity>

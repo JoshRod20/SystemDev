@@ -12,7 +12,7 @@ const WelcomeScreen = ({ navigation }) => {
         {/* Botón personalizado */}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Register')}
+          onPress={() => navigation.navigate('Login')}
         >
           <Text style={styles.buttonText}>Continuar</Text>
         </TouchableOpacity>
