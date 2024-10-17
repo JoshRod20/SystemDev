@@ -7,10 +7,11 @@ const MapaAlertasCercanas = () => {
   const [region, setRegion] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Controlar la visibilidad del modal
-  const [newMarker, setNewMarker] = useState(null); // Almacenar la ubicación seleccionada
-  const [plagueName, setPlagueName] = useState(''); // Nombre de la plaga
-  const [plagueDescription, setPlagueDescription] = useState(''); // Descripción de la plaga
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [newMarker, setNewMarker] = useState(null);
+  const [plagueName, setPlagueName] = useState('');
+  const [plagueDescription, setPlagueDescription] = useState('');
+  const [showPlagueMap, setShowPlagueMap] = useState(true); // Controla qué mapa mostrar (plagas o clima)
 
   useEffect(() => {
     (async () => {
@@ -30,14 +31,12 @@ const MapaAlertasCercanas = () => {
     })();
   }, []);
 
-  // Función para seleccionar una ubicación en el mapa
   const handlePressMap = (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setNewMarker({ latitude, longitude });
-    setIsModalVisible(true); // Mostrar el modal cuando se selecciona la ubicación
+    setIsModalVisible(true);
   };
 
-  // Función para guardar la amenaza y cerrar el modal
   const handleSaveMarker = () => {
     if (newMarker && plagueName && plagueDescription) {
       setMarkers([...markers, { ...newMarker, name: plagueName, description: plagueDescription }]);
@@ -50,7 +49,6 @@ const MapaAlertasCercanas = () => {
     }
   };
 
-  // Mostrar mensaje de error si no se concede acceso a la ubicación
   if (errorMsg) {
     return (
       <View style={styles.container}>
@@ -62,37 +60,51 @@ const MapaAlertasCercanas = () => {
   return (
     <View style={styles.container}>
       {region ? (
-        <MapView
-          style={styles.map}
-          region={region}
-          onPress={handlePressMap} // Permitir seleccionar una ubicación en el mapa
-          showsUserLocation={true} // Mostrar la ubicación actual del usuario
-          mapType="satellite" // Cambia el mapa a satélite
-        >
-          {/* Radio de distancia de 2 km */}
-          <Circle
-            center={{ latitude: region.latitude, longitude: region.longitude }}
-            radius={2000} // Radio de 2km
-            strokeColor="rgba(0, 150, 0, 0.5)"
-            fillColor="rgba(0, 150, 0, 0.2)"
-          />
-
-          {/* Marcadores de amenazas de plagas con íconos personalizados */}
-          {markers.map((marker, index) => (
-            <Marker
-              key={index}
-              coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-              title={marker.name}
-              description={marker.description}
-              // icon={require('./assets/plaga_icon.png')} // Ruta del ícono de la plaga
+        showPlagueMap ? (
+          <MapView
+            style={styles.map}
+            region={region}
+            onPress={handlePressMap}
+            showsUserLocation={true}
+            mapType="satellite"
+          >
+            <Circle
+              center={{ latitude: region.latitude, longitude: region.longitude }}
+              radius={2000}
+              strokeColor="rgba(0, 150, 0, 0.5)"
+              fillColor="rgba(0, 150, 0, 0.2)"
             />
-          ))}
-        </MapView>
+
+            {markers.map((marker, index) => (
+              <Marker
+                key={index}
+                coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+                title={marker.name}
+                description={marker.description}
+              />
+            ))}
+          </MapView>
+        ) : (
+          // Mapa climatológico (puedes configurar tu fuente de datos climáticos aquí)
+          <MapView
+            style={styles.map}
+            region={region}
+            showsUserLocation={true}
+            mapType="terrain"
+          >
+            {/* Círculo para el radio de distancia en el mapa climatológico */}
+            <Circle
+              center={{ latitude: region.latitude, longitude: region.longitude }}
+              radius={2000}
+              strokeColor="rgba(0, 0, 150, 0.5)"
+              fillColor="rgba(0, 0, 150, 0.2)"
+            />
+          </MapView>
+        )
       ) : (
         <Text style={styles.loadingText}>Cargando mapa...</Text>
       )}
 
-      {/* Botón flotante para agregar alertas manualmente */}
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => Alert.alert('Selecciona un lugar en el mapa para agregar una amenaza.')}
@@ -100,7 +112,15 @@ const MapaAlertasCercanas = () => {
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
 
-      {/* Modal para el formulario de la plaga */}
+      <TouchableOpacity
+        style={styles.toggleMapButton}
+        onPress={() => setShowPlagueMap(!showPlagueMap)} // Cambia entre el mapa de plagas y clima
+      >
+        <Text style={styles.toggleMapButtonText}>
+          {showPlagueMap ? 'Ver Mapa Climatológico' : 'Ver Mapa de Plagas'}
+        </Text>
+      </TouchableOpacity>
+
       <Modal
         visible={isModalVisible}
         animationType="slide"
@@ -169,6 +189,19 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 30,
     fontWeight: 'bold',
+  },
+  toggleMapButton: {
+    position: 'absolute',
+    bottom: 90,
+    right: 20,
+    backgroundColor: '#4682B4',
+    borderRadius: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  toggleMapButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
   modalContainer: {
     flex: 1,
