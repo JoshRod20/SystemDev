@@ -1,4 +1,5 @@
-import React from "react"; 
+
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Text, StyleSheet } from "react-native";
@@ -39,13 +40,15 @@ const AppNavigator = ({ user }) => {
               component={FertilizerCalculator}
               options={{
                 headerTitle: () => (
-                  <Text style={styles.headerTitle}>Calculadora de fertilizantes</Text>
+                  <Text style={styles.headerTitle}>
+                    Calculadora de fertilizantes
+                  </Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB',
+                  backgroundColor: "#fff",
                 },
-                headerTintColor: '#000000',
-                headerTitleAlign: 'center',
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
               }}
             />
 
@@ -58,10 +61,10 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Plagas y enfermedades</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB',
+                  backgroundColor: "#fff",
                 },
-                headerTintColor: '#000000',
-                headerTitleAlign: 'center',
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
               }}
             />
 
@@ -74,10 +77,10 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Consejo de cultivos</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB',
+                  backgroundColor: "#fff",
                 },
-                headerTintColor: '#000000',
-                headerTitleAlign: 'center',
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
               }}
             />
 
@@ -90,10 +93,10 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Alertas de plagas</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB',
+                  backgroundColor: "#fff",
                 },
-                headerTintColor: '#000000',
-                headerTitleAlign: 'center',
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
               }}
             />
 
@@ -106,10 +109,10 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Sus cultivos</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB',
+                  backgroundColor: "#fff",
                 },
-                headerTintColor: '#000000',
-                headerTitleAlign: 'center',
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
               }}
             />
 
@@ -122,28 +125,30 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Biblioteca agricola</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB',
+                  backgroundColor: "#fff",
                 },
-                headerTintColor: '#000000',
-                headerTitleAlign: 'center',
+                headerTintColor: "#000000",
+                headerTitleAlign: "rowr",
               }}
             />
 
             {/* Noticias de la comunidad */}
             <Stack.Screen
-  name="NoticiasIPSA"
-  component={NoticiasIPSA}
-  options={{
-    headerTitle: () => (
-      <Text style={styles.headerTitle}>Noticias de la comunidad</Text>
-    ),
-    headerStyle: {
-      backgroundColor: '#BCEABB',
-    },
-    headerTintColor: '#000000',
-    headerTitleAlign: 'center',
-  }}
-/>
+              name="NoticiasIPSA"
+              component={NoticiasIPSA}
+              options={{
+                headerTitle: () => (
+                  <Text style={styles.headerTitle}>
+                    Noticias de la comunidad
+                  </Text>
+                ),
+                headerStyle: {
+                  backgroundColor: "#fff",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
+              }}
+            />
 
             {/* Mapa de alertas cercanas */}
             <Stack.Screen
@@ -151,13 +156,15 @@ const AppNavigator = ({ user }) => {
               component={MapaAlertasCercanas}
               options={{
                 headerTitle: () => (
-                  <Text style={styles.headerTitle}>Mapa de Alertas Cercanas</Text>
+                  <Text style={styles.headerTitle}>
+                    Mapa de Alertas Cercanas
+                  </Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB',
+                  backgroundColor: "#fff",
                 },
-                headerTintColor: '#000000',
-                headerTitleAlign: 'center',
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
               }}
             />
 
@@ -170,10 +177,10 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>ChatBot AgroSense</Text>
                 ),
                 headerStyle: {
-                  backgroundColor: '#BCEABB',
+                  backgroundColor: "#fff",
                 },
-                headerTintColor: '#000000',
-                headerTitleAlign: 'center',
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
               }}
             />
           </>
@@ -205,8 +212,8 @@ const AppNavigator = ({ user }) => {
 const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000000',
+    fontWeight: "bold",
+    color: "#000000",
   },
 });
 

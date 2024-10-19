@@ -28,8 +28,9 @@ const GeminiChat = () => {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
       // Mensaje inicial de Agri
-      const initialMessage = "¡Hola! Bienvenido, soy Agri, tu asistente de AgroSense. ¿En qué puedo ayudarte hoy?";
-      
+      const initialMessage =
+        "¡Hola! Bienvenido, soy Agri, tu asistente de AgroSense. ¿En qué puedo ayudarte hoy?";
+
       // Se añade el mensaje inicial al chat
       setMessages([
         {
@@ -74,7 +75,10 @@ const GeminiChat = () => {
     const response = result.response;
 
     const cleanResponseText = cleanText(response.text());
-    setMessages((prevMessages) => [...prevMessages, { text: cleanResponseText, user: false }]);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { text: cleanResponseText, user: false },
+    ]);
     setLoading(false);
     setUserInput("");
   };
@@ -96,7 +100,7 @@ const GeminiChat = () => {
     >
       {!item.user && (
         <Image
-          source={require('../assets/chatbot.png')}
+          source={require("../assets/chatbot.png")}
           style={styles.botAvatar}
         />
       )}
@@ -130,7 +134,9 @@ const GeminiChat = () => {
         <TouchableOpacity
           style={[
             styles.inputButton,
-            userInput.trim() ? styles.inputButtonEnabled : styles.inputButtonDisabled,
+            userInput.trim()
+              ? styles.inputButtonEnabled
+              : styles.inputButtonDisabled,
           ]}
           onPress={sendMessage}
           disabled={!userInput.trim()}
@@ -168,7 +174,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   userMessageContainer: {
-    backgroundColor: "#BCEABB",
+    backgroundColor: "#B7D2BF",
     alignSelf: "flex-end",
   },
   botMessageContainer: {
@@ -193,7 +199,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    backgroundColor: "#B7E4C7",
+    backgroundColor: "#B7D2BF",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
