@@ -72,7 +72,7 @@ const MapaAlertasCercanas = () => {
           {/* Radio de distancia de 2 km */}
           <Circle
             center={{ latitude: region.latitude, longitude: region.longitude }}
-            radius={2000} // Radio de 2km
+            radius={3000} // Radio de 3km
             strokeColor="rgba(0, 150, 0, 0.5)"
             fillColor="rgba(0, 150, 0, 0.2)"
           />

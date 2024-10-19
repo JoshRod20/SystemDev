@@ -22,7 +22,7 @@ const WeatherCard = ({ weather }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#BCEABB',
+    backgroundColor: '#B7D2BF',
     height: height * 0.3, // Altura ajustada dinámicamente
     width: width * 0.9,   // Ancho ajustado dinámicamente
     marginTop: height * 0.03,
@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     padding: width * 0.05, // Padding dinámico
     borderRadius: 10,
     alignItems: 'center',
+    justifyContent: 'center', // Centra el contenido verticalmente
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -42,22 +43,27 @@ const styles = StyleSheet.create({
   temperature: {
     fontSize: width * 0.1, // Tamaño de la fuente dinámico
     fontWeight: 'bold',
+    textAlign: 'center', // Centra el texto
   },
   weatherIcon: {
     width: width * 0.2,  // Ajustar el tamaño del ícono dinámicamente
     height: width * 0.2,
+    marginVertical: 10, // Añade un margen vertical
   },
   description: {
     fontSize: width * 0.045, // Tamaño de la fuente dinámico
     marginTop: 5,
+    textAlign: 'center', // Centra el texto
   },
   minMax: {
     fontSize: width * 0.04, // Tamaño de la fuente dinámico
     marginTop: 5,
+    textAlign: 'center', // Centra el texto
   },
   feelsLike: {
     fontSize: width * 0.04, // Tamaño de la fuente dinámico
     marginTop: 5,
+    textAlign: 'center', // Centra el texto
   },
 });
 
