@@ -10,20 +10,21 @@ import {
   ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { auth, db } from "../services/firebase"; // Importa Firebase
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { showMessage } from "react-native-flash-message"; // Importa showMessage
 
 // Obtener las dimensiones de la pantalla
 const { width, height } = Dimensions.get("window");
 
 const RegisterScreen = ({ navigation }) => {
-  // Estado para los campos del registro
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  // Estado para manejar si el usuario ha intentado enviar el formulario
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
   // Validaciones de los campos
@@ -38,11 +39,9 @@ const RegisterScreen = ({ navigation }) => {
     setShowPassword(!showPassword);
   };
 
-  // Función para manejar el registro
-  const handleRegister = () => {
+  const handleRegister = async () => {
     setAttemptedSubmit(true);
-
-    // Verificar si todos los campos son válidos
+  
     if (
       validateName() &&
       validatePhone() &&
@@ -50,14 +49,63 @@ const RegisterScreen = ({ navigation }) => {
       validatePassword() &&
       validateConfirmPassword()
     ) {
-      // Si todo está correcto, simula un registro exitoso
-      navigation.navigate("Login"); // Redirige al login después del registro
+      try {
+        console.log("Iniciando proceso de registro...");
+        
+        // Crear un usuario con Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+      
+        // Obtener el usuario registrado
+        const user = userCredential.user;
+        console.log("Usuario creado exitosamente:", user);
+      
+        // Guardar la información del usuario en Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          name,
+          phone,
+          email,
+        });
+        
+        console.log("Información guardada en Firestore");
+      
+        // Redirigir al usuario a la pantalla de inicio de sesión
+        navigation.navigate("AgroSense");
+      } catch (error) {
+        console.error("Error en el registro:", error);
+      
+        // Mostrar notificación si el correo electrónico ya está registrado
+        let errorMessage = "Ocurrió un error al registrar el usuario.";
+        if (error.code === "auth/email-already-in-use") {
+          errorMessage = "El correo electrónico ya está registrado.";
+        }
+      
+        // Mostrar mensaje con react-native-flash-message
+        showMessage({
+          message: "Error en el registro",
+          description: errorMessage,
+          type: "danger",
+          icon: "auto",
+          duration: 3000,
+        });
+      }
+    } else {
+      console.log("Errores de validación:", {
+        name: validateName(),
+        phone: validatePhone(),
+        email: validateEmail(),
+        password: validatePassword(),
+        confirmPassword: validateConfirmPassword(),
+      });
     }
   };
-
+  
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      {/**LinearGradient para el degradado en la pantalla */}
       <LinearGradient colors={["#4A6B3E", "#fff"]} style={styles.container}>
         <Text style={styles.title}>Registrarse</Text>
 
@@ -248,8 +296,8 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: width * 0.045,
     fontWeight: "bold",
+    textAlign: "center",
   },
 });
 
 export default RegisterScreen;
-

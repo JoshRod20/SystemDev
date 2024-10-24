@@ -1,20 +1,15 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import FooterMenu from '../components/footerMenu';
+import React from "react";
+import { View, StyleSheet } from "react-native";
 
-const CropAdvice = ({navigation}) => {
-  return (
-    <View style={styles.container}>
-        <FooterMenu navigation={navigation} />
-    </View>
-  );
+const CropAdvice = ({ navigation }) => {
+  return <View style={styles.container}></View>;
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
 });
 
 export default CropAdvice;

@@ -8,10 +8,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
+
+import FooterMenu from "../components/footerMenu";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import FlashMessage, { showMessage } from "react-native-flash-message";
+import { useNavigation } from "@react-navigation/native"; // Importar el hook useNavigation
 
 const GeminiChat = () => {
   const [messages, setMessages] = useState([]);
@@ -19,6 +26,7 @@ const GeminiChat = () => {
   const [loading, setLoading] = useState(false);
   const [showStopIcon, setShowStopIcon] = useState(false);
   const currentGeneration = useRef(null);
+  const navigation = useNavigation(); // Usar useNavigation para obtener la referencia
 
   const API_KEY = "AIzaSyDvXtfYrTjnq9FU-6aPNk9ahItFTtyKpZo";
 
@@ -111,41 +119,54 @@ const GeminiChat = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item, index) => index.toString()}
-      />
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Escribe algo..."
-          onChangeText={setUserInput}
-          value={userInput}
-          onSubmitEditing={sendMessage}
-          style={styles.input}
-          placeholderTextColor="#fff"
-        />
-        {showStopIcon && (
-          <TouchableOpacity style={styles.stopIcon} onPress={stopGeneration}>
-            <Entypo name="controller-stop" size={24} color="white" />
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          style={[
-            styles.inputButton,
-            userInput.trim()
-              ? styles.inputButtonEnabled
-              : styles.inputButtonDisabled,
-          ]}
-          onPress={sendMessage}
-          disabled={!userInput.trim()}
-        >
-          <Text style={styles.inputButtonText}>Enviar</Text>
-          <FontAwesome name="send" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <FlatList
+            data={messages}
+            renderItem={renderMessage}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Escribe algo..."
+              onChangeText={setUserInput}
+              value={userInput}
+              onSubmitEditing={sendMessage}
+              style={styles.input}
+              placeholderTextColor="black"
+            />
+            {showStopIcon && (
+              <TouchableOpacity
+                style={styles.stopIcon}
+                onPress={stopGeneration}
+              >
+                <Entypo name="controller-stop" size={24} color="white" />
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              style={[
+                styles.inputButton,
+                userInput.trim()
+                  ? styles.inputButtonEnabled
+                  : styles.inputButtonDisabled,
+              ]}
+              onPress={sendMessage}
+              disabled={!userInput.trim()}
+            >
+              <Text style={styles.inputButtonText}>Enviar</Text>
+              <FontAwesome name="send" size={16} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.footerContainer}>
+            <FooterMenu navigation={navigation} />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -198,18 +219,30 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
-    backgroundColor: "#B7D2BF",
+    padding: 11,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    paddingBottom: 85,
+    marginLeft: 9.5,
   },
   input: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#40916C",
-    borderRadius: 20,
+    backgroundColor: "#B7D2BF",
+    borderRadius: 15,
     height: 50,
-    color: "white",
+    color: "black",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
   },
   stopIcon: {
     padding: 10,
@@ -222,24 +255,45 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   },
   inputButton: {
-    backgroundColor: "#74C69D",
-    borderRadius: 20,
-    padding: 15,
+    backgroundColor: "#B7D2BF",
+    borderRadius: 15,
+    padding: 10,
     margin: 10,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
+    height: 51,
+    width: 90,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
   },
   inputButtonEnabled: {
-    backgroundColor: "#52B788",
+    backgroundColor: "#79B47C",
   },
   inputButtonDisabled: {
-    backgroundColor: "#A8DADC",
+    backgroundColor: "#D9D9D9",
   },
   inputButtonText: {
     color: "black",
-    fontSize: 16,
-    marginRight: 5,
+    fontSize: 14,
+    marginRight: 4,
+    fontWeight: 'bold',
+  },
+  footerContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#FFFFFF",
   },
 });
 

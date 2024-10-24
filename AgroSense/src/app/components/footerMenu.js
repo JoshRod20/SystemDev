@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import {
   View,
@@ -64,7 +62,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    backgroundColor: "#B7D2BF", // Mantener el color definido
+    backgroundColor: "#B7D2BF",
     paddingVertical: 5,
     borderTopWidth: 1,
     borderRadius: 15,
@@ -74,10 +72,19 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 20,
     right: 20,
+    // Propiedades de sombra
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -3, // Sombra orientada hacia arriba para dar efecto de elevación
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5, // Propiedad específica para Android
   },
   menuItem: {
     alignItems: "center",
-    width: width * 0.35, // Distribución uniforme sin cambiar el tamaño de los íconos ni el texto
+    width: width * 0.35,
   },
   icon: {
     width: 30,
