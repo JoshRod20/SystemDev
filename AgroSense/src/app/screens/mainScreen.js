@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import FeatureButton from "../components/featureButton";
 import FooterMenu from "../components/footerMenu";
 import WeatherCard from "../components/weatherCard";
@@ -17,34 +11,6 @@ import GraficoReporteEnfermedades from "./GraficoReporteEnfermedades";
 import Estadisticas from "./estadisticas";
 
 const { width, height } = Dimensions.get("window");
-
-// Datos del reporte de enfermedades
-const dataReporteEnfermedades = [
-  { date: "2017-01-05", count: 8 },
-  { date: "2017-01-19", count: 5 },
-  { date: "2017-02-06", count: 2 },
-  { date: "2017-02-20", count: 4 },
-  { date: "2017-03-07", count: 1 },
-  { date: "2017-03-21", count: 3 },
-  { date: "2017-04-05", count: 6 },
-  { date: "2017-04-19", count: 2 },
-  { date: "2017-05-03", count: 4 },
-  { date: "2017-05-17", count: 7 },
-  { date: "2017-06-06", count: 9 },
-  { date: "2017-06-20", count: 5 },
-  { date: "2017-07-05", count: 3 },
-  { date: "2017-07-19", count: 4 },
-  { date: "2017-08-07", count: 2 },
-  { date: "2017-08-21", count: 8 },
-  { date: "2017-09-06", count: 3 },
-  { date: "2017-09-20", count: 7 },
-  { date: "2017-10-04", count: 5 },
-  { date: "2017-10-18", count: 6 },
-  { date: "2017-11-06", count: 2 },
-  { date: "2017-11-20", count: 9 },
-  { date: "2017-12-05", count: 4 },
-  { date: "2017-12-19", count: 7 },
-];
 
 // Componente Home (pantalla principal)
 const Home = ({ navigation }) => {
@@ -131,6 +97,33 @@ const SettingsScreen = ({ navigation }) => {
 const Drawer = createDrawerNavigator();
 
 function UserProfileDrawer() {
+  const dataReporteEnfermedades = [
+    { date: "2017-01-05", count: 8 },
+    { date: "2017-01-19", count: 5 },
+    { date: "2017-02-06", count: 2 },
+    { date: "2017-02-20", count: 4 },
+    { date: "2017-03-07", count: 1 },
+    { date: "2017-03-21", count: 3 },
+    { date: "2017-04-05", count: 6 },
+    { date: "2017-04-19", count: 2 },
+    { date: "2017-05-03", count: 4 },
+    { date: "2017-05-17", count: 7 },
+    { date: "2017-06-06", count: 9 },
+    { date: "2017-06-20", count: 5 },
+    { date: "2017-07-05", count: 3 },
+    { date: "2017-07-19", count: 4 },
+    { date: "2017-08-07", count: 2 },
+    { date: "2017-08-21", count: 8 },
+    { date: "2017-09-06", count: 3 },
+    { date: "2017-09-20", count: 7 },
+    { date: "2017-10-04", count: 5 },
+    { date: "2017-10-18", count: 6 },
+    { date: "2017-11-06", count: 2 },
+    { date: "2017-11-20", count: 9 },
+    { date: "2017-12-05", count: 4 },
+    { date: "2017-12-19", count: 7 },
+  ];
+
   return (
     <Drawer.Navigator>
       <Drawer.Screen
@@ -158,9 +151,7 @@ function UserProfileDrawer() {
         }}
       >
         {() => (
-          <GraficoReporteEnfermedades
-            dataReporteEnfermedades={dataReporteEnfermedades}
-          />
+          <GraficoReporteEnfermedades dataReporteEnfermedades={dataReporteEnfermedades} />
         )}
       </Drawer.Screen>
       <Drawer.Screen
@@ -218,4 +209,3 @@ const styles = StyleSheet.create({
 });
 
 export default UserProfileDrawer;
-
