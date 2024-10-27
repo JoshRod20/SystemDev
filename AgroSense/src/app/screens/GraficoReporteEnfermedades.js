@@ -1,16 +1,34 @@
-import { StyleSheet, View, Dimensions, ScrollView, Alert, Text } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  ScrollView,
+  Alert,
+  Text,
+} from "react-native";
 import { ContributionGraph } from "react-native-chart-kit";
 
-export default function GraficoReporteEnfermedades({ dataReporteEnfermedades }) {
-
+export default function GraficoReporteEnfermedades({
+  dataReporteEnfermedades,
+}) {
   const screenWidth = Dimensions.get("window").width;
   const squareSize = 30;
   const numDays = 365;
 
   const getMonthLabel = (monthIndex) => {
     const months = [
-      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
     ];
     return months[monthIndex];
   };
@@ -20,8 +38,15 @@ export default function GraficoReporteEnfermedades({ dataReporteEnfermedades }) 
   };
 
   // Verificamos si los datos están disponibles y son un array
-  if (!Array.isArray(dataReporteEnfermedades) || dataReporteEnfermedades.length === 0) {
-    return <Text style={styles.errorText}>No hay datos disponibles para mostrar el gráfico.</Text>;
+  if (
+    !Array.isArray(dataReporteEnfermedades) ||
+    dataReporteEnfermedades.length === 0
+  ) {
+    return (
+      <Text style={styles.errorText}>
+        No hay datos disponibles para mostrar el gráfico.
+      </Text>
+    );
   }
 
   return (
@@ -59,9 +84,9 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
   },
 });

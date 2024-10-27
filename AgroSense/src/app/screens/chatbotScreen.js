@@ -98,7 +98,7 @@ const GeminiChat = () => {
     }
   };
 
-  // Nueva función para reiniciar el chat
+  // Función para reiniciar el chat
   const startNewChat = () => {
     setMessages([]); // Limpiar los mensajes
     setUserInput(""); // Limpiar el input
