@@ -41,7 +41,7 @@ const AppNavigator = ({ user }) => {
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>
-                    Calculadora de fertilizantes
+                    Calculadora de Insumos
                   </Text>
                 ),
                 headerStyle: {

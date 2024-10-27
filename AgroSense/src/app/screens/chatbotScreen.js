@@ -13,12 +13,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-
 import FooterMenu from "../components/footerMenu";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons"; // Importar MaterialIcons para el icono de nuevo chat
 import FlashMessage, { showMessage } from "react-native-flash-message";
-import { useNavigation } from "@react-navigation/native"; // Importar el hook useNavigation
+import { useNavigation } from "@react-navigation/native";
 
 const GeminiChat = () => {
   const [messages, setMessages] = useState([]);
@@ -26,7 +26,7 @@ const GeminiChat = () => {
   const [loading, setLoading] = useState(false);
   const [showStopIcon, setShowStopIcon] = useState(false);
   const currentGeneration = useRef(null);
-  const navigation = useNavigation(); // Usar useNavigation para obtener la referencia
+  const navigation = useNavigation();
 
   const API_KEY = "AIzaSyDvXtfYrTjnq9FU-6aPNk9ahItFTtyKpZo";
 
@@ -35,11 +35,9 @@ const GeminiChat = () => {
       const genAI = new GoogleGenerativeAI.GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-      // Mensaje inicial de Agri
       const initialMessage =
         "¡Hola! Bienvenido, soy Agri, tu asistente de AgroSense. ¿En qué puedo ayudarte hoy?";
 
-      // Se añade el mensaje inicial al chat
       setMessages([
         {
           text: initialMessage,
@@ -47,7 +45,6 @@ const GeminiChat = () => {
         },
       ]);
 
-      // Mostrar mensaje de bienvenida
       showMessage({
         message: "Bienvenido, soy Agri 🤖",
         description: initialMessage,
@@ -69,7 +66,9 @@ const GeminiChat = () => {
   };
 
   const sendMessage = async () => {
-    if (!userInput.trim()) return;
+    setUserInput(""); // Limpiar el input inmediatamente al presionar el botón
+
+    if (!userInput.trim()) return; // Si no hay texto, no se envía
     setLoading(true);
     const userMessage = { text: userInput, user: true };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
@@ -88,7 +87,7 @@ const GeminiChat = () => {
       { text: cleanResponseText, user: false },
     ]);
     setLoading(false);
-    setUserInput("");
+    setUserInput(""); // Limpiar el input después de enviar
   };
 
   const stopGeneration = () => {
@@ -97,6 +96,27 @@ const GeminiChat = () => {
       setShowStopIcon(false);
       setLoading(false);
     }
+  };
+
+  // Función para reiniciar el chat
+  const startNewChat = () => {
+    setMessages([]); // Limpiar los mensajes
+    setUserInput(""); // Limpiar el input
+    const initialMessage =
+      "¡Hola! Bienvenido, soy Agri, tu asistente de AgroSense. ¿En qué puedo ayudarte hoy?";
+    setMessages([
+      {
+        text: initialMessage,
+        user: false,
+      },
+    ]);
+    showMessage({
+      message: "Nuevo chat iniciado 🤖",
+      description: initialMessage,
+      type: "info",
+      icon: "info",
+      duration: 2000,
+    });
   };
 
   const renderMessage = ({ item }) => (
@@ -125,11 +145,21 @@ const GeminiChat = () => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
+          <View style={styles.header}></View>
           <FlatList
             data={messages}
             renderItem={renderMessage}
             keyExtractor={(item, index) => index.toString()}
           />
+          <View style={styles.newChat}>
+            <TouchableOpacity
+              style={styles.newChatButton}
+              onPress={startNewChat}
+            >
+              <MaterialIcons name="refresh" size={24} color="#1B4332" />
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.inputContainer}>
             <TextInput
               placeholder="Escribe algo..."
@@ -147,6 +177,8 @@ const GeminiChat = () => {
                 <Entypo name="controller-stop" size={24} color="white" />
               </TouchableOpacity>
             )}
+
+            {/* Botón de Enviar */}
             <TouchableOpacity
               style={[
                 styles.inputButton,
@@ -175,6 +207,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
   },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#B7D2BF",
+  },
   messageContainer: {
     borderRadius: 10,
     paddingVertical: 10,
@@ -201,15 +240,15 @@ const styles = StyleSheet.create({
   botMessageContainer: {
     backgroundColor: "#FFFFFF",
     alignSelf: "flex-start",
-    marginLeft: 60, // Aumenta el margen para que haya espacio para el avatar
+    marginLeft: 60,
   },
   botAvatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
     position: "absolute",
-    left: -50, // Ajuste de la posición izquierda
-    top: -5, // Alineación vertical del avatar
+    left: -50,
+    top: -5,
   },
   messageText: {
     fontSize: 16,
@@ -222,7 +261,7 @@ const styles = StyleSheet.create({
     padding: 11,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingBottom: 85,
+    paddingBottom: 90,
     marginLeft: 9.5,
   },
   input: {
@@ -244,16 +283,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "relative",
   },
-  stopIcon: {
-    padding: 10,
-    backgroundColor: "#40916C",
-    borderRadius: 25,
-    height: 50,
-    width: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 3,
-  },
   inputButton: {
     backgroundColor: "#B7D2BF",
     borderRadius: 15,
@@ -272,9 +301,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    position: "relative",
   },
   inputButtonEnabled: {
     backgroundColor: "#79B47C",
@@ -286,7 +312,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 14,
     marginRight: 4,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   footerContainer: {
     position: "absolute",
@@ -294,6 +320,25 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: "#FFFFFF",
+  },
+  newChatButton: {
+    backgroundColor: "#B7D2BF",
+    alignItems: 'center',
+    padding: 7,
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  newChat: {
+    paddingLeft:20,
   },
 });
 
