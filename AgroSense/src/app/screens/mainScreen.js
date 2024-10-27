@@ -75,7 +75,7 @@ const Home = ({ navigation }) => {
         <View style={styles.featureRow}>
           <FeatureButton
             icon={require("../../app/assets/fertilizer.png")}
-            label="Calculadora de fertilizante"
+            label="Calculadora de Insumos"
             onPress={() => navigation.navigate("FertilizerCalculator")}
             style={styles.featureButton}
           />
