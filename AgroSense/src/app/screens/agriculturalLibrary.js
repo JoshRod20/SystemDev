@@ -9,6 +9,9 @@ const AgriculturalLibrary = ({ navigation }) => {
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
+        <Text>
+          Probando
+        </Text>
         <FooterMenu navigation={navigation} />
       </KeyboardAvoidingView>
     </View>
