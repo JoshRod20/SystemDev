@@ -122,7 +122,7 @@ const AppNavigator = ({ user }) => {
               component={agriculturalLibrary}
               options={{
                 headerTitle: () => (
-                  <Text style={styles.headerTitle}>Biblioteca agricola</Text>
+                  <Text style={styles.headerTitle}>AgroBiblio</Text>
                 ),
                 headerStyle: {
                   backgroundColor: "#fff",
