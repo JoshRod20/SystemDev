@@ -43,10 +43,6 @@ const AgriculturalLibrary = ({ navigation }) => {
         scrollEventThrottle={16} // Actualiza con frecuencia el evento de desplazamiento
       >
         <Library
-          picture={require("../assets/trigo-icono-de-cultivo-__1_-removebg-preview.png")}
-          info="El cultivo de trigo, necesita la mayor cantidad de agua durante la fase de floración, con una media de 0.5cm al día... "
-        />
-        <Library
           picture={require("../assets/caf--icono-de-cultivo--removebg-preview.png")}
           info="El café es una de las bebidas más populares. Sin embargo, detrás de cada taza de café se encuentra un proceso de cultivo que requiere cuidado y atención constantes... "
         />
