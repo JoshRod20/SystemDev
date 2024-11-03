@@ -12,7 +12,7 @@ const PrecioMercado = ({ dataPrecioMercado }) => {
         height={300}
         chartConfig={{
             backgroundGradientFrom: "rgba(74, 107, 62, 0.3)", // Verde oscuro con transparencia
-            backgroundGradientFromOpacity: 0.3,
+            backgroundGradientFromOpacity: 0.1,
             backgroundGradientTo: "rgba(166, 204, 111, 0.3)", // Verde más claro con transparencia
             backgroundGradientToOpacity: 0.3,
             color: (opacity = 1) => `rgba(34, 139, 34, ${opacity})`, // Verde intenso para los datos
