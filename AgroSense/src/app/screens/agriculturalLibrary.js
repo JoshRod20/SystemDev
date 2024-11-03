@@ -60,7 +60,7 @@ const AgriculturalLibrary = ({ navigation }) => {
       >
         <Library
           picture={require("../assets/caf--icono-de-cultivo--removebg-preview.png")}
-          info="El café es una de las bebidas más populares. Sin embargo, detrás de cada taza de café se encuentra un proceso de cultivo que requiere cuidado y atención constantes... "
+          info="Detrás de cada grano de café se encuentra un proceso de cultivo que requiere cuidado y atención constantes... "
           onPressButton={() => handleButtonPress("Cafe")} // Enlace al campo 'Cafe'
         />
         <Library
@@ -75,7 +75,7 @@ const AgriculturalLibrary = ({ navigation }) => {
         />
         <Library
           picture={require("../assets/icon Maiz.png")}
-          info="El maíz es el cereal más producido en el mundo, por lo que se destaca de otros cultivos. En los últimos 50 años, la producción de este grano ha ido en aumento... "
+          info="El maíz es el cereal más producido en el mundo, por lo que se destaca de otros cultivos... "
           onPressButton={() => handleButtonPress("Maiz")} // Enlace al campo 'Maiz'
         />
         <Library

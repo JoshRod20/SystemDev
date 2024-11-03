@@ -1,5 +1,7 @@
 import React from "react";
-import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, Image, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+
+const { width } = Dimensions.get("window"); // Obtener el ancho de la pantalla
 
 const Library = ({ picture, info, onPressButton }) => {
   return (
@@ -25,8 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#B7D2BF",
     borderRadius: 17,
     marginTop: 15,
-    marginLeft: 15,
-    marginRight: 15,
+    marginHorizontal: width * 0.05, // Margen horizontal responsivo
     marginBottom: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -44,11 +45,13 @@ const styles = StyleSheet.create({
   picture: {
     height: 110,
     width: "95%",
+    resizeMode: "contain", // Asegurarse de que la imagen se ajuste bien
   },
   info: {
-    fontSize: 16,
+    fontSize: width < 400 ? 14 : 16, // Tamaño de texto adaptativo
     textAlign: "left",
     marginVertical: 5,
+    paddingRight: 7,
     paddingBottom: 20,
   },
   textContainer: {
@@ -61,10 +64,11 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 3,
     height: 35,
-    width: 170,
-    marginLeft: 30,
+    width: "100%", // Botón de ancho completo
+    maxWidth: 170, // Ancho máximo del botón
+    alignSelf: "center", // Centrar el botón
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
