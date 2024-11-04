@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -41,6 +44,7 @@ const AppNavigator = ({ user }) => {
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>
+<<<<<<< HEAD
                     Calculadora de Insumos
                   </Text>
                 ),
@@ -49,6 +53,16 @@ const AppNavigator = ({ user }) => {
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "row",
+=======
+                    Calculadora de fertilizantes
+                  </Text>
+                ),
+                headerStyle: {
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
 
@@ -61,10 +75,17 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Plagas y enfermedades</Text>
                 ),
                 headerStyle: {
+<<<<<<< HEAD
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "row",
+=======
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
 
@@ -77,10 +98,17 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Consejo de cultivos</Text>
                 ),
                 headerStyle: {
+<<<<<<< HEAD
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "row",
+=======
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
 
@@ -93,10 +121,17 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Alertas de plagas</Text>
                 ),
                 headerStyle: {
+<<<<<<< HEAD
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "row",
+=======
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
 
@@ -109,10 +144,17 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>Sus cultivos</Text>
                 ),
                 headerStyle: {
+<<<<<<< HEAD
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "row",
+=======
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
 
@@ -125,10 +167,17 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>AgroBiblio</Text>
                 ),
                 headerStyle: {
+<<<<<<< HEAD
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "rowr",
+=======
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
 
@@ -143,10 +192,17 @@ const AppNavigator = ({ user }) => {
                   </Text>
                 ),
                 headerStyle: {
+<<<<<<< HEAD
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "row",
+=======
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
 
@@ -161,10 +217,17 @@ const AppNavigator = ({ user }) => {
                   </Text>
                 ),
                 headerStyle: {
+<<<<<<< HEAD
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "row",
+=======
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
 
@@ -177,10 +240,17 @@ const AppNavigator = ({ user }) => {
                   <Text style={styles.headerTitle}>ChatBot AgroSense</Text>
                 ),
                 headerStyle: {
+<<<<<<< HEAD
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
                 headerTitleAlign: "row",
+=======
+                  backgroundColor: "#BCEABB",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
               }}
             />
           </>

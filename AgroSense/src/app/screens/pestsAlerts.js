@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -25,6 +26,17 @@ const PestAlerts = ({ navigation }) => {
   // Mostrar notificaciones en un modal al hacer clic en la campanita
   const showNotifications = () => {
     setModalVisible(true);
+=======
+import React from "react";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import FooterMenu from "../components/footerMenu";
+
+const PestAlerts = ({ navigation }) => {
+  // Mostrar alerta dentro de la app
+  const showAlert = () => {
+    alert("Se ha detectado una plaga en tu cultivo.");
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
   };
 
   // Agregar el ícono de campanita en el header
@@ -33,7 +45,11 @@ const PestAlerts = ({ navigation }) => {
       headerRight: () => (
         <TouchableOpacity
           style={{ marginRight: 15 }}
+<<<<<<< HEAD
           onPress={showNotifications}
+=======
+          onPress={() => alert("Aquí puedes ver las notificaciones")}
+>>>>>>> 5f07213db87065d03ed6ab0080fea26a52ea9eb0
         >
           <Icon name="notifications-outline" size={25} color="black" />
           {/* Muestra un punto rojo si hay notificaciones nuevas */}
