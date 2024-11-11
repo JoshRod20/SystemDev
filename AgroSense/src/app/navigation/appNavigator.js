@@ -14,7 +14,8 @@ import FertilizerCalculator from "../screens/fertilizerCalculator"; // Pantalla 
 import PestsDiseases from "../screens/pestsDiseases"; // Pantalla Plagas y enfermedades
 import CropAdvice from "../screens/cropAdvice"; // Pantalla Consejo de cultivo
 import PestAlerts from "../screens/pestsAlerts"; // Pantalla Alertas de plagas
-import theirCrops from "../screens/theirCrops"; // Pantalla Sus cultivos
+import CultivoDetailScreen from "../screens/CultivoDetailScreen"; //Pantalla de detalle de cultivo
+import theirCrops from "../screens/theirCrops"; // Pantalla agregar cultivos
 import agriculturalLibrary from "../screens/agriculturalLibrary"; // Pantalla Biblioteca agricola
 import NoticiasIPSA from "../screens/Noticiascomunidad"; // Pantalla Noticias de la comunidad
 import MapaAlertasCercanas from "../screens/MapaAlerta"; // Pantalla Mapa de Alertas Cercanas
@@ -99,7 +100,7 @@ const AppNavigator = ({ user }) => {
                 headerTitleAlign: "row",
               }}
             />
-
+            
             {/* Sus cultivos */}
             <Stack.Screen
               name="theirCrops"
@@ -116,6 +117,21 @@ const AppNavigator = ({ user }) => {
               }}
             />
 
+            {/* Detalle de cultivos */}
+              <Stack.Screen
+              name="CultivoDetailScreen"
+              component={CultivoDetailScreen}
+              options={{
+                headerTitle: () => (
+                  <Text style={styles.headerTitle}>Sus cultivos</Text>
+                ),
+                headerStyle: {
+                  backgroundColor: "#fff",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "row",
+              }}
+            />
             {/* Biblioteca agricola */}
             <Stack.Screen
               name="agriculturalLibrary"
