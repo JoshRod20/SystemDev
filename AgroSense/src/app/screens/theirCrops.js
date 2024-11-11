@@ -1,60 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import {
   View,
   Text,
-  StyleSheet,
+  Modal,
   TextInput,
-  Button,
-  ScrollView,
-  Image,
-  Alert,
+  TouchableOpacity,
   FlatList,
-  KeyboardAvoidingView,
-  Platform,
+  Image,
+  StyleSheet,
+  ScrollView,
 } from "react-native";
 import FooterMenu from "../components/footerMenu";
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from "expo-image-picker";
-import * as Location from "expo-location";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-const TheirCrops = ({ navigation }) => {
-  const [cropName, setCropName] = useState("");
-  const [growthStage, setGrowthStage] = useState("");
+const CultivosScreen = () => {
+  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [nameCultivo, setNameCultivo] = useState("");
+  const [newEtapa, setNewEtapa] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date()); // Estado para la fecha seleccionada
+  const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar el selector de fecha
   const [weeklyImages, setWeeklyImages] = useState([]);
-  const [location, setLocation] = useState(null);
-  const [weatherAlert, setWeatherAlert] = useState(null);
-  const [crops, setCrops] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert("Error", "Permisos para acceder a la ubicación denegados");
-        return;
-      }
-
-      let loc = await Location.getCurrentPositionAsync({});
-      setLocation(loc);
-      fetchWeatherAlert(loc.coords.latitude, loc.coords.longitude);
-    })();
-  }, []);
-
-  const fetchWeatherAlert = async (latitude, longitude) => {
-    try {
-      const apiKey = "YOUR_OPENWEATHER_API_KEY"; // Coloca tu API Key de OpenWeather aquí
-      const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`
-      );
-      const weather = response.data;
-
-      if (weather.alerts) {
-        setWeatherAlert(weather.alerts[0].description);
-      } else {
-        setWeatherAlert("No hay alertas meteorológicas en este momento");
-      }
-    } catch (error) {
-      console.error("Error al obtener las alertas meteorológicas:", error);
-    }
-  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -63,92 +31,150 @@ const TheirCrops = ({ navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    if (!result.cancelled) {
-      setWeeklyImages([...weeklyImages, result.uri]);
+  
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
+      setWeeklyImages([...weeklyImages, result.assets[0].uri]);
     }
   };
 
-  const addCrop = () => {
-    if (cropName && growthStage) {
-      const newCrop = {
-        id: Date.now().toString(),
-        name: cropName,
-        growthStage,
-        images: weeklyImages,
-      };
-      setCrops([...crops, newCrop]);
-      setCropName("");
-      setGrowthStage("");
-      setWeeklyImages([]);
-      Alert.alert("Éxito", "Cultivo registrado con éxito.");
-    } else {
-      Alert.alert("Error", "Por favor, completa todos los campos.");
+  const requestPermissions = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Se necesitan permisos para acceder a las imágenes.');
     }
   };
+  
+  useEffect(() => {
+    requestPermissions();
+  }, []);
+
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(false); // Oculta el selector de fecha después de la selección
+    if (date) {
+      setSelectedDate(date); // Actualiza la fecha seleccionada
+    }
+  };
+
+  const [cultivos, setCultivos] = useState([]);
+
+  const renderCultivo = ({ item }) => (
+    <View style={styles.cultivoContainer}>
+      <Image source={{ uri: item.imagen }} style={styles.cultivoImagen} />
+      <View style={styles.cultivoInfo}>
+        <Text style={styles.fecha}>{item.fecha}</Text>
+        <Text style={styles.nombre}>{item.nombre}</Text>
+        <Text style={[styles.estado, item.estado === 'Completo' ? styles.completo : styles.incompleto]}>
+          {item.estado}
+        </Text>
+      </View>
+      <TouchableOpacity  style={styles.item}
+            onPress={() => navigation.navigate('CultivoDetailScreen', { cultivo: item })}>
+        <Text style={styles.detalleIcono}>›</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const agregarCultivo = () => {
+    const nuevoCultivo = {
+      id: (cultivos.length + 1).toString(),
+      fecha: selectedDate.toLocaleDateString(),
+      nombre: nameCultivo,
+      estado: newEtapa ? "Completo" : "Incompleto", // "Completo" si hay etapa, "Incompleto" si no
+      imagen: weeklyImages.length > 0 ? weeklyImages[0] : "https://via.placeholder.com/50",
+    };
+  
+    setCultivos([...cultivos, nuevoCultivo]);
+    setModalVisible(false);
+    setNameCultivo("");
+    setNewEtapa("");
+    setSelectedDate(new Date());
+    setWeeklyImages([]); // Limpiar las imágenes después de agregar el cultivo
+  };  
 
   return (
     <View style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <Text style={styles.title}>Lista de cultivos</Text>
+      <FlatList
+        data={cultivos}
+        renderItem={renderCultivo}
+        keyExtractor={(item) => item.id}
+      />
+
+      {/* Botón para abrir el modal de agregar cultivo, colocado justo antes del FooterMenu */}
+      <TouchableOpacity
+        style={styles.addButtonFixed}
+        onPress={() => setModalVisible(true)}
       >
-        <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.title}>Seguimiento de Cultivos</Text>
+        <Text style={styles.buttonText}>Agregar cultivo</Text>
+      </TouchableOpacity>
 
-          {/* Formulario para agregar nuevo cultivo */}
-          <TextInput
-            style={styles.input}
-            placeholder="Nombre del Cultivo"
-            value={cropName}
-            onChangeText={setCropName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Etapa de Crecimiento"
-            value={growthStage}
-            onChangeText={setGrowthStage}
-          />
+      <FooterMenu navigation={navigation} />
 
-          <Button title="Agregar Imagen " onPress={pickImage} />
-          <ScrollView horizontal>
-            {weeklyImages.map((uri, index) => (
-              <Image key={index} source={{ uri }} style={styles.imagePreview} />
-            ))}
-          </ScrollView>
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Agregar nuevo cultivo</Text>
 
-          <Button title="Registrar Cultivo" onPress={addCrop} />
+            <TextInput
+              style={styles.input}
+              placeholder="Nombre del cultivo"
+              value={nameCultivo}
+              onChangeText={setNameCultivo}
+            />
+            {/* Botón para abrir el selector de fecha */}
+            <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.dateButton}>
+              <Text style={styles.dateButtonText}>
+                Fecha de siembra: {selectedDate.toLocaleDateString()}
+              </Text>
+            </TouchableOpacity>
 
-          <Text style={styles.subtitle}>Alertas Meteorológicas</Text>
-          <Text style={styles.weatherAlert}>
-            {weatherAlert || "Cargando alertas..."}
-          </Text>
-
-          {/* Lista de cultivos registrados */}
-          <FlatList
-            data={crops}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.cropItem}>
-                <Text style={styles.cropName}>{item.name}</Text>
-                <Text>Etapa de Crecimiento: {item.growthStage}</Text>
-                <ScrollView horizontal>
-                  {item.images.map((uri, index) => (
-                    <Image
-                      key={index}
-                      source={{ uri }}
-                      style={styles.imagePreview}
-                    />
-                  ))}
-                </ScrollView>
-              </View>
+            {/* Selector de fecha (DateTimePicker) */}
+            {showDatePicker && (
+              <DateTimePicker
+                value={selectedDate}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
             )}
-          />
-        </ScrollView>
-        <FooterMenu navigation={navigation} />
-      </KeyboardAvoidingView>
+            <TextInput
+              style={styles.input}
+              placeholder="Etapa de crecimiento"
+              value={newEtapa}
+              onChangeText={setNewEtapa}
+            />
 
+            {/* Botón personalizado para agregar imagen */}
+            <TouchableOpacity style={styles.addButtonI} onPress={pickImage}>
+              <Text style={styles.addButtonText}>Agregar imagen</Text>
+            </TouchableOpacity>
+            
+            <ScrollView horizontal>
+              {weeklyImages.map((uri, index) => (
+                <Image key={index} source={{ uri }} style={styles.imagePreview} />
+              ))}
+            </ScrollView>
 
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={agregarCultivo}
+            >
+              <Text style={styles.addButtonText}>Agregar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -156,23 +182,36 @@ const TheirCrops = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 16,
     backgroundColor: "#fff",
   },
-  content: {
+  addButtonFixed: {
+    position: "absolute",
+    bottom: 100,
+    left: "50%",
+    transform: [{ translateX: -50 }],
+    backgroundColor: "#28a745",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
     padding: 20,
-    flexGrow: 1,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  subtitle: {
+  modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: 30,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   input: {
     width: "100%",
@@ -180,7 +219,94 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 15,
+  },
+  addButtonI: {
+    backgroundColor: "#5900ff",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 10,
+  },
+  addButton: {
+    backgroundColor: "#28a745",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 10,
+  },
+  addButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  closeButton: {
+    marginTop: 10,
+    backgroundColor: "#ff000d",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "100%",
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginVertical: 16,
+  },
+  cultivoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+  },
+  cultivoImagen: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    marginRight: 16,
+  },
+  cultivoInfo: {
+    flex: 1,
+  },
+  fecha: {
+    fontSize: 12,
+    color: '#666',
+  },
+  nombre: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  estado: {
+    fontSize: 12,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    textAlign: 'center',
+    marginTop: 4,
+  },
+  completo: {
+    backgroundColor: '#D4EDDA',
+    color: '#155724',
+  },
+  incompleto: {
+    backgroundColor: '#F8D7DA',
+    color: '#721C24',
+  },
+  detalleIcono: {
+    fontSize: 24,
+    color: '#CCC',
   },
   imagePreview: {
     width: 100,
@@ -188,22 +314,19 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
   },
-  weatherAlert: {
-    fontSize: 16,
-    marginBottom: 20,
-    color: "red",
-  },
-  cropItem: {
-    padding: 15,
+  dateButton: {
+    width: "100%",
+    padding: 10,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#ccc",
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 15,
+    alignItems: "center",
   },
-  cropName: {
-    fontSize: 18,
-    fontWeight: "bold",
+  dateButtonText: {
+    fontSize: 16,
+    color: "#333",
   },
 });
 
-export default TheirCrops;
+export default CultivosScreen;
