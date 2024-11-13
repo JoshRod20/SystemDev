@@ -75,14 +75,14 @@ const PrecioMercado = ({ dataPrecioMercado }) => {
           width={screenWidth - screenWidth * 0.1}
           height={370}
           chartConfig={{
-            backgroundGradientFrom: "rgba(74, 107, 62, 0.3)", // Verde oscuro con transparencia
+            backgroundGradientFrom: "rgba(183, 210, 191, 1)",
             backgroundGradientFromOpacity: 0.1,
-            backgroundGradientTo: "rgba(166, 204, 111, 0.3)", // Verde más claro con transparencia
+            backgroundGradientTo: "rgba(183, 210, 191, 1)",
             backgroundGradientToOpacity: 0.3,
-            color: (opacity = 1) => `rgba(34, 139, 34, ${opacity})`, // Verde intenso para los datos
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
             strokeWidth: 2,
             barPercentage: 0.5,
-            fillShadowGradient: "#81B622", // Verde lima para las barras
+            fillShadowGradient: "#4A6B3E",
             fillShadowGradientOpacity: 1,
           }}
           style={{
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonStyle: {
-    backgroundColor: "#81B622",
+    backgroundColor: "#B7D2BF",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     elevation: 13,
   },
   buttonText: {
-    color: "#ffffff",
+    color: "black",
     fontSize: 16,
     fontWeight: "bold",
   },
