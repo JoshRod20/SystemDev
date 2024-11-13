@@ -6,7 +6,12 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={["#fff", "#4A6B3E"]} style={styles.container}>
       <View style={styles.content}>
-        <Image source={require('../../app/assets/AgroSenseLogo-removebg.png')} style={styles.logo} />
+        {/* Agregado testID para pruebas */}
+        <Image 
+          source={require('../../app/assets/AgroSenseLogo-removebg.png')} 
+          style={styles.logo} 
+          testID="logo"
+        />
         <Text style={styles.title}>“Bienvenido a AgroSense”</Text>
         
         {/* Botón personalizado */}

@@ -15,7 +15,7 @@ export default function Estadisticas() {
     datasets: [{ data: [] }] // Inicializa datasets como un array con un objeto
   });
 
-  // Carga de datos de tipos de sangre
+  // Carga de datos 
   useEffect(() => {
     const recibirDatosPrecioMercado = async () => {
       try {
@@ -28,7 +28,7 @@ export default function Estadisticas() {
           const datosBD = doc.data();
           const { tipo_grano, precio_quintal } = datosBD;
             tipos_granos.push(tipo_grano); // Agrega nombre a la lista
-            precios_quintales.push(precio_quintal); // Agrega salario a la lista
+            precios_quintales.push(precio_quintal); // Agrega precio a la lista
 
         });
 
