@@ -18,6 +18,22 @@ import theirCrops from "../screens/theirCrops"; // Pantalla Sus cultivos
 import agriculturalLibrary from "../screens/agriculturalLibrary"; // Pantalla Biblioteca agricola
 import NoticiasIPSA from "../screens/Noticiascomunidad"; // Pantalla Noticias de la comunidad
 import MapaAlertasCercanas from "../screens/MapaAlerta"; // Pantalla Mapa de Alertas Cercanas
+// import AdminDashboard from "../screens/Administrador"; //Pantalla administrador
+
+// Crear un Stack Navigator para las funcionalidades de administración
+const AdminStack = createStackNavigator();
+
+function AdminNavigator() {
+  return (
+    <AdminStack.Navigator>
+      <AdminStack.Screen
+        name="AdminDashboard"
+        component={AdminDashboard}
+        options={{ headerShown: false }} 
+      />
+    </AdminStack.Navigator>
+  );
+}
 
 const Stack = createStackNavigator();
 
@@ -41,7 +57,7 @@ const AppNavigator = ({ user }) => {
               options={{
                 headerTitle: () => (
                   <Text style={styles.headerTitle}>
-                    Calculadora de fertilizantes
+                    Calculadora de Insumos
                   </Text>
                 ),
                 headerStyle: {
@@ -112,6 +128,7 @@ const AppNavigator = ({ user }) => {
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
+                
                 headerTitleAlign: "row",
               }}
             />
@@ -122,7 +139,7 @@ const AppNavigator = ({ user }) => {
               component={agriculturalLibrary}
               options={{
                 headerTitle: () => (
-                  <Text style={styles.headerTitle}>Biblioteca agricola</Text>
+                  <Text style={styles.headerTitle}>AgroBiblio</Text>
                 ),
                 headerStyle: {
                   backgroundColor: "#fff",
@@ -183,6 +200,17 @@ const AppNavigator = ({ user }) => {
                 headerTitleAlign: "row",
               }}
             />
+            <Stack.Screen
+              name='Admin'
+              component={AdminNavigator}
+              options={{
+                headerShown: false,
+                tabBarLabel: 'Admin',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons name="shield-account" size={size} color={color} />
+                ),
+          }}
+        />
           </>
         ) : (
           <>

@@ -75,14 +75,14 @@ const Home = ({ navigation }) => {
         <View style={styles.featureRow}>
           <FeatureButton
             icon={require("../../app/assets/fertilizer.png")}
-            label="Calculadora de fertilizante"
+            label="Calculadora de Insumos"
             onPress={() => navigation.navigate("FertilizerCalculator")}
             style={styles.featureButton}
           />
           <FeatureButton
             icon={require("../../app/assets/pest.png")}
             label="Plagas y enfermedades"
-            onPress={() => navigation.navigate("PestsDiseases")}
+            onPress={() => navigation.navigate("PestsDiseases")}            
             style={styles.featureButton}
           />
         </View>

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, Alert, TouchableOpacity, Modal, TextInput, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Alert, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import * as Location from 'expo-location';
+import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 
 const MapaAlertasCercanas = () => {
   const [region, setRegion] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Controlar la visibilidad del modal
-  const [newMarker, setNewMarker] = useState(null); // Almacenar la ubicación seleccionada
-  const [plagueName, setPlagueName] = useState(''); // Nombre de la plaga
-  const [plagueDescription, setPlagueDescription] = useState(''); // Descripción de la plaga
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [newMarker, setNewMarker] = useState(null);
+  const [plagueName, setPlagueName] = useState('');
+  const [plagueDescription, setPlagueDescription] = useState('');
+
+  const firestore = getFirestore();
 
   useEffect(() => {
     (async () => {
@@ -27,30 +30,62 @@ const MapaAlertasCercanas = () => {
         latitudeDelta: 0.05,
         longitudeDelta: 0.05,
       });
+
+      fetchMarkers();
     })();
   }, []);
 
-  // Función para seleccionar una ubicación en el mapa
+  const fetchMarkers = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(firestore, 'plaga_mapa'));
+      const loadedMarkers = querySnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter(marker => marker.latitude !== undefined && marker.longitude !== undefined); // Filtrar marcadores sin coordenadas
+  
+      setMarkers(loadedMarkers);
+    } catch (error) {
+      console.error('Error al cargar los marcadores:', error);
+    }
+  };
+
   const handlePressMap = (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setNewMarker({ latitude, longitude });
-    setIsModalVisible(true); // Mostrar el modal cuando se selecciona la ubicación
+    setIsModalVisible(true);
   };
 
-  // Función para guardar la amenaza y cerrar el modal
-  const handleSaveMarker = () => {
+  const handleSaveMarker = async () => {
     if (newMarker && plagueName && plagueDescription) {
-      setMarkers([...markers, { ...newMarker, name: plagueName, description: plagueDescription }]);
-      setIsModalVisible(false);
-      setPlagueName('');
-      setPlagueDescription('');
-      Alert.alert('Amenaza Agregada', 'Has agregado una nueva amenaza de plagas.', [{ text: 'OK' }]);
+      try {
+        // Guardar en Firestore con coordenadas
+        const docRef = await addDoc(collection(firestore, 'plaga_mapa'), {
+          name: plagueName,
+          description: plagueDescription,
+          latitude: newMarker.latitude,  // Asegúrate de que esté definido
+          longitude: newMarker.longitude, // Asegúrate de que esté definido
+          timestamp: serverTimestamp(),
+        });
+  
+        setMarkers([...markers, { id: docRef.id, ...newMarker, name: plagueName, description: plagueDescription }]);
+  
+        // Cerrar el modal y limpiar los campos
+        setIsModalVisible(false);
+        setPlagueName('');
+        setPlagueDescription('');
+        Alert.alert('Amenaza Agregada', 'Has agregado una nueva amenaza de plagas.', [{ text: 'OK' }]);
+      } catch (error) {
+        Alert.alert('Error', 'No se pudo agregar la amenaza. Intenta de nuevo.', [{ text: 'OK' }]);
+        console.error('Error al guardar en Firestore:', error);
+      }
     } else {
       Alert.alert('Error', 'Debes llenar todos los campos.', [{ text: 'OK' }]);
     }
   };
+  
 
-  // Mostrar mensaje de error si no se concede acceso a la ubicación
   if (errorMsg) {
     return (
       <View style={styles.container}>
@@ -65,34 +100,37 @@ const MapaAlertasCercanas = () => {
         <MapView
           style={styles.map}
           region={region}
-          onPress={handlePressMap} // Permitir seleccionar una ubicación en el mapa
-          showsUserLocation={true} // Mostrar la ubicación actual del usuario
-          mapType="satellite" // Cambia el mapa a satélite
+          onPress={handlePressMap}
+          showsUserLocation={true}
+          mapType="satellite"
         >
-          {/* Radio de distancia de 2 km */}
           <Circle
             center={{ latitude: region.latitude, longitude: region.longitude }}
-            radius={3000} // Radio de 3km
+            radius={2000}
             strokeColor="rgba(0, 150, 0, 0.5)"
             fillColor="rgba(0, 150, 0, 0.2)"
           />
 
-          {/* Marcadores de amenazas de plagas con íconos personalizados */}
-          {markers.map((marker, index) => (
-            <Marker
-              key={index}
-              coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-              title={marker.name}
-              description={marker.description}
-              // icon={require('./assets/plaga_icon.png')} // Ruta del ícono de la plaga
-            />
-          ))}
+          {markers.map((marker) => {
+            if (marker.latitude && marker.longitude) { // Validación para evitar errores de coordenadas undefined
+              return (
+                <Marker
+                  key={marker.id}
+                  coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+                  title={marker.name}
+                  description={marker.description}
+                />
+              );
+            } else {
+              console.warn('Coordenadas inválidas para el marcador:', marker);
+              return null;
+            }
+          })}
         </MapView>
       ) : (
         <Text style={styles.loadingText}>Cargando mapa...</Text>
       )}
 
-      {/* Botón flotante para agregar alertas manualmente */}
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => Alert.alert('Selecciona un lugar en el mapa para agregar una amenaza.')}
@@ -100,7 +138,6 @@ const MapaAlertasCercanas = () => {
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
 
-      {/* Modal para el formulario de la plaga */}
       <Modal
         visible={isModalVisible}
         animationType="slide"

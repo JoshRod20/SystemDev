@@ -15,7 +15,7 @@ export default function Estadisticas() {
     datasets: [{ data: [] }] // Inicializa datasets como un array con un objeto
   });
 
-  // Carga de datos de tipos de sangre
+ 
   useEffect(() => {
     const recibirDatosPrecioMercado = async () => {
       try {
