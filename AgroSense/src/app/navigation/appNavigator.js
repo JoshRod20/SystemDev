@@ -19,6 +19,22 @@ import theirCrops from "../screens/theirCrops"; // Pantalla agregar cultivos
 import agriculturalLibrary from "../screens/agriculturalLibrary"; // Pantalla Biblioteca agricola
 import NoticiasIPSA from "../screens/Noticiascomunidad"; // Pantalla Noticias de la comunidad
 import MapaAlertasCercanas from "../screens/MapaAlerta"; // Pantalla Mapa de Alertas Cercanas
+// import AdminDashboard from "../screens/Administrador"; //Pantalla administrador
+
+// Crear un Stack Navigator para las funcionalidades de administración
+const AdminStack = createStackNavigator();
+
+function AdminNavigator() {
+  return (
+    <AdminStack.Navigator>
+      <AdminStack.Screen
+        name="AdminDashboard"
+        component={AdminDashboard}
+        options={{ headerShown: false }} 
+      />
+    </AdminStack.Navigator>
+  );
+}
 
 const Stack = createStackNavigator();
 
@@ -113,6 +129,7 @@ const AppNavigator = ({ user }) => {
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
+                
                 headerTitleAlign: "row",
               }}
             />
@@ -199,6 +216,17 @@ const AppNavigator = ({ user }) => {
                 headerTitleAlign: "row",
               }}
             />
+            <Stack.Screen
+              name='Admin'
+              component={AdminNavigator}
+              options={{
+                headerShown: false,
+                tabBarLabel: 'Admin',
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons name="shield-account" size={size} color={color} />
+                ),
+          }}
+        />
           </>
         ) : (
           <>

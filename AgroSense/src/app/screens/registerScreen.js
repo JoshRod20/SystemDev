@@ -204,6 +204,7 @@ const RegisterScreen = ({ navigation }) => {
             secureTextEntry={!showPassword}
             placeholderTextColor="#000"
           />
+
           <TouchableOpacity onPress={togglePasswordVisibility}>
             <Image
               source={require("../assets/eye-svgrepo-com.png")}

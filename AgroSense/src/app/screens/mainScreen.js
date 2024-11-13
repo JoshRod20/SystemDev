@@ -48,7 +48,7 @@ const Home = ({ navigation }) => {
           <FeatureButton
             icon={require("../../app/assets/pest.png")}
             label="Plagas y enfermedades"
-            onPress={() => navigation.navigate("PestsDiseases")}
+            onPress={() => navigation.navigate("PestsDiseases")}            
             style={styles.featureButton}
           />
         </View>
