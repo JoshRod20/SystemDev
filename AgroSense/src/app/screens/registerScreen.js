@@ -8,22 +8,23 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { auth, db } from "../services/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 // Obtener las dimensiones de la pantalla
 const { width, height } = Dimensions.get("window");
 
 const RegisterScreen = ({ navigation }) => {
-  // Estado para los campos del registro
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  // Estado para manejar si el usuario ha intentado enviar el formulario
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
   // Validaciones de los campos
@@ -38,11 +39,9 @@ const RegisterScreen = ({ navigation }) => {
     setShowPassword(!showPassword);
   };
 
-  // Función para manejar el registro
-  const handleRegister = () => {
+  const handleRegister = async () => {
     setAttemptedSubmit(true);
 
-    // Verificar si todos los campos son válidos
     if (
       validateName() &&
       validatePhone() &&
@@ -50,14 +49,57 @@ const RegisterScreen = ({ navigation }) => {
       validatePassword() &&
       validateConfirmPassword()
     ) {
-      // Si todo está correcto, simula un registro exitoso
-      navigation.navigate("Login"); // Redirige al login después del registro
+      try {
+        // Verificar si el correo electrónico ya está registrado en Firestore
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          // Mostrar alerta si el correo ya está registrado
+          Alert.alert(
+            "Advertencia",
+            "El correo electrónico ya está registrado.",
+            [{ text: "OK" }]
+          );
+          return;
+        }
+
+        // Continuar con el registro si no existe el correo en Firestore
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          name,
+          phone,
+          email,
+        });
+
+        navigation.navigate("AgroSense");
+      } catch (error) {
+        let errorMessage = "Ocurrió un error al registrar el usuario.";
+        if (error.code === "auth/email-already-in-use") {
+          errorMessage = "El correo electrónico ya está registrado.";
+        } else if (error.code === "auth/invalid-email") {
+          errorMessage = "El correo electrónico no es válido.";
+        } else if (error.code === "auth/weak-password") {
+          errorMessage = "La contraseña es muy débil.";
+        }
+
+        Alert.alert("Error en el registro", errorMessage, [{ text: "OK" }]);
+      }
+    } else {
+      Alert.alert(
+        "Advertencia",
+        "Por favor, complete todos los campos correctamente.",
+        [{ text: "OK" }]
+      );
     }
   };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      {/**LinearGradient para el degradado en la pantalla */}
       <LinearGradient colors={["#4A6B3E", "#fff"]} style={styles.container}>
         <Text style={styles.title}>Registrarse</Text>
 
@@ -188,7 +230,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: width * 0.05,
     justifyContent: "center",
-    alignItems: "center", // Alinea los elementos al centro horizontalmente
+    alignItems: "center",
   },
   title: {
     fontSize: width * 0.11,
@@ -196,9 +238,9 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.03,
     textAlign: "center",
     color: "#fff",
-    textShadowColor: "rgba(0, 0, 0, 0.5)", // Color de la sombra
-    textShadowOffset: { width: 0, height: 2 }, // Desplazamiento de la sombra
-    textShadowRadius: 4, // Radio de la sombra
+    textShadowColor: "rgba(0, 0, 0, 0.5)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   inputContainer: {
     flexDirection: "row",
@@ -224,31 +266,31 @@ const styles = StyleSheet.create({
   iconImage: {
     width: width * 0.06,
     height: width * 0.06,
-    marginRight: width * 0.03,
+    marginRight: width * 0.02,
   },
   eyeIconImage: {
-    width: width * 0.06,
-    height: width * 0.06,
+    width: width * 0.05,
+    height: width * 0.05,
+  },
+  registerButton: {
+    width: "85%",
+    height: height * 0.06,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#4A6B3E",
+    borderRadius: 20,
+    marginBottom: height * 0.03,
+    marginTop: height * 0.01,
+  },
+  registerButtonText: {
+    fontSize: width * 0.05,
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
   errorText: {
     color: "red",
-    fontSize: width * 0.03,
-    marginBottom: height * 0.02,
-    textAlign: "center",
-  },
-  registerButton: {
-    backgroundColor: "#4A6B3E",
-    borderRadius: 25,
-    paddingVertical: height * 0.02,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: height * 0.02,
-    width: "85%",
-  },
-  registerButtonText: {
-    color: "#FFF",
-    fontSize: width * 0.045,
-    fontWeight: "bold",
+    fontSize: 14,
+    marginBottom: 8,
   },
 });
 

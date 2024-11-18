@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Modal, FlatList } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import FooterMenu from '../components/footerMenu';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Modal,
+  FlatList,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const PestAlerts = ({ navigation }) => {
   const [notifications, setNotifications] = useState([]); // Estado para las notificaciones
@@ -25,7 +31,10 @@ const PestAlerts = ({ navigation }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity style={{ marginRight: 15 }} onPress={showNotifications}>
+        <TouchableOpacity
+          style={{ marginRight: 15 }}
+          onPress={showNotifications}
+        >
           <Icon name="notifications-outline" size={25} color="black" />
           {/* Muestra un punto rojo si hay notificaciones nuevas */}
           {notifications.length > 0 && (
@@ -68,17 +77,20 @@ const PestAlerts = ({ navigation }) => {
       </Modal>
 
       {/* Botón para Mapa de Alertas Cercanas */}
-      <TouchableOpacity style={styles.greenButton} onPress={() => navigation.navigate('MapaAlertasCercanas')}>
+      <TouchableOpacity
+        style={styles.greenButton}
+        onPress={() => navigation.navigate("MapaAlertasCercanas")}
+      >
         <Text style={styles.buttonText}>Mapa de Alertas Cercanas</Text>
       </TouchableOpacity>
 
       {/* Botón para Noticias de la comunidad */}
-      <TouchableOpacity style={[styles.greenButton, styles.marginTop]} onPress={() => navigation.navigate('NoticiasIPSA')}>
+      <TouchableOpacity
+        style={[styles.greenButton, styles.marginTop]}
+        onPress={() => navigation.navigate("NoticiasIPSA")}
+      >
         <Text style={styles.buttonText}>Noticias de la comunidad</Text>
       </TouchableOpacity>
-
-      {/* FooterMenu */}
-      <FooterMenu navigation={navigation} />
     </View>
   );
 };
@@ -86,30 +98,30 @@ const PestAlerts = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    justifyContent: "center",
     padding: 20,
   },
   greenButton: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
     padding: 15,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   marginTop: {
     marginTop: 20,
   },
   // Estilo para el badge de notificación
   notificationBadge: {
-    position: 'absolute',
+    position: "absolute",
     right: -5,
     top: -5,
-    backgroundColor: 'red',
+    backgroundColor: "red",
     borderRadius: 5,
     width: 10,
     height: 10,
@@ -117,36 +129,36 @@ const styles = StyleSheet.create({
   // Estilos para el modal
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
+    width: "80%",
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 15,
   },
   notificationItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    width: '100%',
+    borderBottomColor: "#ccc",
+    width: "100%",
   },
   closeButton: {
-    backgroundColor: 'green',
+    backgroundColor: "green",
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
   },
   closeButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
   },
 });

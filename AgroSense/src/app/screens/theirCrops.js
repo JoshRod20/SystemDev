@@ -35,30 +35,65 @@ const TheirCrops = ({ navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    if (!result.cancelled) {
-      setWeeklyImages([...weeklyImages, result.uri]);
+  
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
+      setWeeklyImages([...weeklyImages, result.assets[0].uri]);
     }
   };
 
-  // Función para registrar un nuevo cultivo
-  const addCrop = () => {
-    if (cropName && growthStage) {
-      const newCrop = {
-        id: Date.now().toString(),
-        name: cropName,
-        growthStage,
-        images: weeklyImages,
-      };
-      setCrops([...crops, newCrop]);
-      setCropName('');
-      setGrowthStage('');
-      setWeeklyImages([]);
-      Alert.alert('Éxito', 'Cultivo registrado con éxito.');
-    } else {
-      Alert.alert('Error', 'Por favor, completa todos los campos.');
+  const requestPermissions = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Se necesitan permisos para acceder a las imágenes.');
     }
   };
+  
+  useEffect(() => {
+    requestPermissions();
+  }, []);
+
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(false); // Oculta el selector de fecha después de la selección
+    if (date) {
+      setSelectedDate(date); // Actualiza la fecha seleccionada
+    }
+  };
+
+  const [cultivos, setCultivos] = useState([]);
+
+  const renderCultivo = ({ item }) => (
+    <View style={styles.cultivoContainer}>
+      <Image source={{ uri: item.imagen }} style={styles.cultivoImagen} />
+      <View style={styles.cultivoInfo}>
+        <Text style={styles.fecha}>{item.fecha}</Text>
+        <Text style={styles.nombre}>{item.nombre}</Text>
+        <Text style={[styles.estado, item.estado === 'Completo' ? styles.completo : styles.incompleto]}>
+          {item.estado}
+        </Text>
+      </View>
+      <TouchableOpacity  style={styles.item}
+            onPress={() => navigation.navigate('CultivoDetailScreen', { cultivo: item })}>
+        <Text style={styles.detalleIcono}>›</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const agregarCultivo = () => {
+    const nuevoCultivo = {
+      id: (cultivos.length + 1).toString(),
+      fecha: selectedDate.toLocaleDateString(),
+      nombre: nameCultivo,
+      estado: newEtapa ? "Completo" : "Incompleto", // "Completo" si hay etapa, "Incompleto" si no
+      imagen: weeklyImages.length > 0 ? weeklyImages[0] : "https://via.placeholder.com/50",
+    };
+  
+    setCultivos([...cultivos, nuevoCultivo]);
+    setModalVisible(false);
+    setNameCultivo("");
+    setNewEtapa("");
+    setSelectedDate(new Date());
+    setWeeklyImages([]); // Limpiar las imágenes después de agregar el cultivo
+  };  
 
   // Función para centrar el mapa en la ubicación actual
   const centerMapOnLocation = () => {
@@ -179,8 +214,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 20,
+    color: '#333',
     textAlign: 'center',
+    marginVertical: 16,
   },
   subtitle: {
     fontSize: 22,
@@ -210,14 +246,14 @@ const styles = StyleSheet.create({
   cropItem: {
     padding: 15,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ccc",
     borderRadius: 5,
     marginBottom: 20,
     alignItems: 'center',
   },
-  cropName: {
-    fontSize: 18,
-    fontWeight: 'bold',
+  dateButtonText: {
+    fontSize: 16,
+    color: "#333",
   },
   map: {
     width: 360,

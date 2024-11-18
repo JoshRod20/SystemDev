@@ -1,6 +1,4 @@
-
-
-import React from "react";
+import React, { useRef } from "react";
 import {
   View,
   TouchableOpacity,
@@ -8,14 +6,35 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  Animated,
 } from "react-native";
 
 const { width } = Dimensions.get("window");
 
 const FooterMenu = ({ navigation }) => {
+  // Referencias para animaciones
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  // Función para manejar la animación del texto
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1.2, // Escala el texto al 120%
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1, // Regresa a su tamaño original
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
     <View style={styles.footer}>
       <TouchableOpacity
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
         onPress={() => navigation.navigate("MainScreen")}
         style={styles.menuItem}
       >
@@ -23,9 +42,13 @@ const FooterMenu = ({ navigation }) => {
           source={require("../../app/assets/home-svgrepo-com.png")}
           style={styles.icon}
         />
-        <Text style={styles.menuText}>Inicio</Text>
+        <Animated.Text style={[styles.menuText, { transform: [{ scale: scaleAnim }] }]}>
+          Inicio
+        </Animated.Text>
       </TouchableOpacity>
       <TouchableOpacity
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
         onPress={() => navigation.navigate("theirCrops")}
         style={styles.menuItem}
       >
@@ -33,9 +56,13 @@ const FooterMenu = ({ navigation }) => {
           source={require("../../app/assets/advice.png")}
           style={styles.icon}
         />
-        <Text style={styles.menuText}>Sus cultivos</Text>
+        <Animated.Text style={[styles.menuText, { transform: [{ scale: scaleAnim }] }]}>
+          Sus cultivos
+        </Animated.Text>
       </TouchableOpacity>
       <TouchableOpacity
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
         onPress={() => navigation.navigate("ChatBot")}
         style={styles.menuItem}
       >
@@ -43,9 +70,13 @@ const FooterMenu = ({ navigation }) => {
           source={require("../../app/assets/chatbot.png")}
           style={styles.icon}
         />
-        <Text style={styles.menuText}>ChatBot</Text>
+        <Animated.Text style={[styles.menuText, { transform: [{ scale: scaleAnim }] }]}>
+          ChatBot
+        </Animated.Text>
       </TouchableOpacity>
       <TouchableOpacity
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
         onPress={() => navigation.navigate("agriculturalLibrary")}
         style={styles.menuItem}
       >
@@ -53,7 +84,9 @@ const FooterMenu = ({ navigation }) => {
           source={require("../../app/assets/library.png")}
           style={styles.icon}
         />
-        <Text style={styles.menuText}>AgroBiblio</Text>
+        <Animated.Text style={[styles.menuText, { transform: [{ scale: scaleAnim }] }]}>
+          AgroBiblio
+        </Animated.Text>
       </TouchableOpacity>
     </View>
   );
@@ -64,7 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    backgroundColor: "#B7D2BF", // Mantener el color definido
+    backgroundColor: "#B7D2BF",
     paddingVertical: 5,
     borderTopWidth: 1,
     borderRadius: 15,
@@ -74,10 +107,18 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 20,
     right: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   menuItem: {
     alignItems: "center",
-    width: width * 0.35, // Distribución uniforme sin cambiar el tamaño de los íconos ni el texto
+    width: width * 0.35,
   },
   icon: {
     width: 30,
