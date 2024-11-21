@@ -8,7 +8,7 @@ import WelcomeScreen from "../screens/welcomeScreen";
 import RegisterScreen from "../screens/registerScreen";
 import LoginScreen from "../screens/loginScreen";
 import MainScreen from "../screens/mainScreen";
-import AdminScreen from "../screens/AdminDashboard"; // Importamos AdminScreen
+import AdminScreen from "../screens/AdminDashboard";
 import ChatbotScreen from "../screens/chatbotScreen";
 import FertilizerCalculator from "../screens/fertilizerCalculator";
 import PestsDiseases from "../screens/pestsDiseases";
@@ -23,12 +23,14 @@ import MapaAlertasCercanas from "../screens/MapaAlerta";
 const Stack = createStackNavigator();
 
 const AppNavigator = ({ user }) => {
+  const isAdmin = user?.email?.includes("admin"); // Verificar si el correo contiene "admin"
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {user ? (
-          <>
-            {/* Pantalla de Administrador */}
+          isAdmin ? (
+            // Si el correo contiene "admin", mostrar AdminScreen
             <Stack.Screen
               name="AdminScreen"
               component={AdminScreen}
@@ -43,176 +45,160 @@ const AppNavigator = ({ user }) => {
                 headerTitleAlign: "center",
               }}
             />
-
-            <Stack.Screen
-              name="MainScreen"
-              component={MainScreen}
-              options={{ headerShown: false }}
-            />
-
-            <Stack.Screen
-              name="FertilizerCalculator"
-              component={FertilizerCalculator}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>Calculadora de Insumos</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-
-            <Stack.Screen
-              name="PestsDiseases"
-              component={PestsDiseases}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>Plagas y enfermedades</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-
-            <Stack.Screen
-              name="CropAdvice"
-              component={CropAdvice}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>Consejo de cultivos</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-
-            <Stack.Screen
-              name="PestAlerts"
-              component={PestAlerts}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>Alertas de plagas</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-            
-            <Stack.Screen
-              name="theirCrops"
-              component={theirCrops}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>Sus cultivos</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                
-                headerTitleAlign: "row",
-              }}
-            />
-
-            <Stack.Screen
-              name="CultivoDetailScreen"
-              component={CultivoDetailScreen}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>Sus cultivos</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-
-            <Stack.Screen
-              name="agriculturalLibrary"
-              component={agriculturalLibrary}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>AgroBiblio</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-
-            <Stack.Screen
-              name="NoticiasIPSA"
-              component={NoticiasIPSA}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>Noticias de la comunidad</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-
-            <Stack.Screen
-              name="MapaAlertasCercanas"
-              component={MapaAlertasCercanas}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>Mapa de Alertas Cercanas</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-
-            <Stack.Screen
-              name="ChatBot"
-              component={ChatbotScreen}
-              options={{
-                headerTitle: () => (
-                  <Text style={styles.headerTitle}>ChatBot AgroSense</Text>
-                ),
-                headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                headerTintColor: "#000000",
-                headerTitleAlign: "row",
-              }}
-            />
-            <Stack.Screen
-              name='Admin'
-              component={AdminScreen}
-              options={{
-                headerShown: false,
-                tabBarLabel: 'Admin',
-                tabBarIcon: ({ color, size }) => (
-                  <MaterialCommunityIcons name="shield-account" size={size} color={color} />
-                ),
-          }}
-        />
-          </>
+          ) : (
+            // Si no contiene "admin", mostrar pantallas normales
+            <>
+              <Stack.Screen
+                name="MainScreen"
+                component={MainScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="FertilizerCalculator"
+                component={FertilizerCalculator}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>Calculadora de Insumos</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="PestsDiseases"
+                component={PestsDiseases}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>Plagas y enfermedades</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="CropAdvice"
+                component={CropAdvice}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>Consejo de cultivos</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="PestAlerts"
+                component={PestAlerts}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>Alertas de plagas</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="theirCrops"
+                component={theirCrops}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>Sus cultivos</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="CultivoDetailScreen"
+                component={CultivoDetailScreen}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>Detalles del cultivo</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="agriculturalLibrary"
+                component={agriculturalLibrary}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>AgroBiblio</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="NoticiasIPSA"
+                component={NoticiasIPSA}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>
+                      Noticias de la comunidad
+                    </Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="MapaAlertasCercanas"
+                component={MapaAlertasCercanas}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>Mapa de Alertas Cercanas</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+              <Stack.Screen
+                name="ChatBot"
+                component={ChatbotScreen}
+                options={{
+                  headerTitle: () => (
+                    <Text style={styles.headerTitle}>ChatBot AgroSense</Text>
+                  ),
+                  headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  headerTintColor: "#000000",
+                  headerTitleAlign: "row",
+                }}
+              />
+            </>
+          )
         ) : (
+          // Pantallas para usuarios no autenticados
           <>
             <Stack.Screen
               name="Welcome"
