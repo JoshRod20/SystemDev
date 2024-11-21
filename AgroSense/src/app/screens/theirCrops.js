@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,18 +11,33 @@ import {
   ScrollView,
 } from "react-native";
 import FooterMenu from "../components/footerMenu";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import { getFirestore, collection, addDoc, onSnapshot } from "firebase/firestore"; // Importación de funciones de Firestore
+import { Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+
+const firestore = getFirestore();
 
 const CultivosScreen = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [nameCultivo, setNameCultivo] = useState("");
-  const [newEtapa, setNewEtapa] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Estado para la fecha seleccionada
-  const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar el selector de fecha
+  const [selectedEtapa, setSelectedEtapa] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [weeklyImages, setWeeklyImages] = useState([]);
+  const [cultivos, setCultivos] = useState([]);
+
+  const etapasDeCrecimiento = [
+    { label: "Germinación (0-2 semanas)", value: "Germinación" },
+    { label: "Crecimiento (3-6 semanas)", value: "Crecimiento" },
+    { label: "Floración (7-9 semanas)", value: "Floración" },
+    { label: "Maduración (10-12 semanas)", value: "Maduración" },
+  ];
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -31,7 +46,7 @@ const CultivosScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-  
+
     if (!result.cancelled && result.assets && result.assets.length > 0) {
       setWeeklyImages([...weeklyImages, result.assets[0].uri]);
     }
@@ -39,23 +54,57 @@ const CultivosScreen = () => {
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Se necesitan permisos para acceder a las imágenes.');
+    if (status !== "granted") {
+      alert("Se necesitan permisos para acceder a las imágenes.");
     }
   };
-  
+
   useEffect(() => {
     requestPermissions();
+    const cultivosRef = collection(firestore, "cultivos");
+
+    // Escuchar cambios en la colección "cultivos" en tiempo real
+    const unsubscribe = onSnapshot(cultivosRef, (snapshot) => {
+      const cultivosData = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id, // Guarda el ID del documento
+      }));
+      setCultivos(cultivosData); // Actualiza el estado con los cultivos obtenidos
+    });
+
+    return () => unsubscribe(); // Limpiar la suscripción cuando el componente se desmonte
   }, []);
 
   const handleDateChange = (event, date) => {
-    setShowDatePicker(false); // Oculta el selector de fecha después de la selección
+    setShowDatePicker(false);
     if (date) {
-      setSelectedDate(date); // Actualiza la fecha seleccionada
+      setSelectedDate(date);
     }
   };
 
-  const [cultivos, setCultivos] = useState([]);
+  const agregarCultivo = async () => {
+    const nuevoCultivo = {
+      fecha: selectedDate.toLocaleDateString(),
+      nombre: nameCultivo,
+      etapa: selectedEtapa,
+      imagen: weeklyImages.length > 0 ? weeklyImages[0] : "https://via.placeholder.com/50",
+    };
+
+    try {
+      // Guarda el cultivo en la colección "cultivos" en Firestore
+      await addDoc(collection(firestore, "cultivos"), nuevoCultivo);
+    } catch (error) {
+      console.error("Error al guardar el cultivo: ", error);
+      alert("Hubo un error al guardar el cultivo.");
+    }
+
+    // Resetea el estado del formulario
+    setModalVisible(false);
+    setNameCultivo("");
+    setSelectedEtapa("");
+    setSelectedDate(new Date());
+    setWeeklyImages([]);
+  };
 
   const renderCultivo = ({ item }) => (
     <View style={styles.cultivoContainer}>
@@ -63,33 +112,18 @@ const CultivosScreen = () => {
       <View style={styles.cultivoInfo}>
         <Text style={styles.fecha}>{item.fecha}</Text>
         <Text style={styles.nombre}>{item.nombre}</Text>
-        <Text style={[styles.estado, item.estado === 'Completo' ? styles.completo : styles.incompleto]}>
-          {item.estado}
-        </Text>
+        <Text style={styles.etapa}>{item.etapa}</Text>
       </View>
-      <TouchableOpacity  style={styles.item}
-            onPress={() => navigation.navigate('CultivoDetailScreen', { cultivo: item })}>
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => navigation.navigate("CultivoDetailScreen", { cultivo: item })}
+      >
         <Text style={styles.detalleIcono}>›</Text>
       </TouchableOpacity>
     </View>
   );
 
-  const agregarCultivo = () => {
-    const nuevoCultivo = {
-      id: (cultivos.length + 1).toString(),
-      fecha: selectedDate.toLocaleDateString(),
-      nombre: nameCultivo,
-      estado: newEtapa ? "Completo" : "Incompleto", // "Completo" si hay etapa, "Incompleto" si no
-      imagen: weeklyImages.length > 0 ? weeklyImages[0] : "https://via.placeholder.com/50",
-    };
   
-    setCultivos([...cultivos, nuevoCultivo]);
-    setModalVisible(false);
-    setNameCultivo("");
-    setNewEtapa("");
-    setSelectedDate(new Date());
-    setWeeklyImages([]); // Limpiar las imágenes después de agregar el cultivo
-  };  
 
   return (
     <View style={styles.container}>
@@ -97,10 +131,9 @@ const CultivosScreen = () => {
       <FlatList
         data={cultivos}
         renderItem={renderCultivo}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
 
-      {/* Botón para abrir el modal de agregar cultivo, colocado justo antes del FooterMenu */}
       <TouchableOpacity
         style={styles.addButtonFixed}
         onPress={() => setModalVisible(true)}
@@ -119,21 +152,17 @@ const CultivosScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Agregar nuevo cultivo</Text>
-
             <TextInput
               style={styles.input}
               placeholder="Nombre del cultivo"
               value={nameCultivo}
               onChangeText={setNameCultivo}
             />
-            {/* Botón para abrir el selector de fecha */}
             <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.dateButton}>
               <Text style={styles.dateButtonText}>
                 Fecha de siembra: {selectedDate.toLocaleDateString()}
               </Text>
             </TouchableOpacity>
-
-            {/* Selector de fecha (DateTimePicker) */}
             {showDatePicker && (
               <DateTimePicker
                 value={selectedDate}
@@ -142,28 +171,25 @@ const CultivosScreen = () => {
                 onChange={handleDateChange}
               />
             )}
-            <TextInput
-              style={styles.input}
-              placeholder="Etapa de crecimiento"
-              value={newEtapa}
-              onChangeText={setNewEtapa}
-            />
-
-            {/* Botón personalizado para agregar imagen */}
+            <Picker
+              selectedValue={selectedEtapa}
+              onValueChange={(itemValue) => setSelectedEtapa(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Seleccionar etapa de crecimiento" value="" />
+              {etapasDeCrecimiento.map((etapa, index) => (
+                <Picker.Item key={index} label={etapa.label} value={etapa.value} />
+              ))}
+            </Picker>
             <TouchableOpacity style={styles.addButtonI} onPress={pickImage}>
               <Text style={styles.addButtonText}>Agregar imagen</Text>
             </TouchableOpacity>
-            
             <ScrollView horizontal>
               {weeklyImages.map((uri, index) => (
                 <Image key={index} source={{ uri }} style={styles.imagePreview} />
               ))}
             </ScrollView>
-
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={agregarCultivo}
-            >
+            <TouchableOpacity style={styles.addButton} onPress={agregarCultivo}>
               <Text style={styles.addButtonText}>Agregar</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -182,16 +208,16 @@ const CultivosScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     backgroundColor: "#fff",
   },
   addButtonFixed: {
     position: "absolute",
-    bottom: 100,
+    bottom: height * 0.12,  // 12% desde el fondo
     left: "50%",
     transform: [{ translateX: -50 }],
     backgroundColor: "#28a745",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderRadius: 5,
     alignItems: "center",
   },
@@ -202,49 +228,49 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: "80%",
-    padding: 20,
+    width: width * 0.8,  // 80% del ancho de la pantalla
+    padding: width * 0.05,  // 5% del ancho de la pantalla
     backgroundColor: "#fff",
     borderRadius: 10,
     alignItems: "center",
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: width * 0.05,  // 5% del ancho de la pantalla
     fontWeight: "bold",
-    marginBottom: 15,
+    marginBottom: height * 0.02,  // 2% de la altura de la pantalla
   },
   input: {
     width: "100%",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    marginBottom: 15,
+    marginBottom: height * 0.02,  // 2% de la altura de la pantalla
   },
   addButtonI: {
     backgroundColor: "#5900ff",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderRadius: 5,
     alignItems: "center",
     width: "100%",
-    marginBottom: 10,
+    marginBottom: height * 0.015,  // 1.5% de la altura de la pantalla
   },
   addButton: {
     backgroundColor: "#28a745",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderRadius: 5,
     alignItems: "center",
     width: "100%",
-    marginBottom: 10,
+    marginBottom: height * 0.015,  // 1.5% de la altura de la pantalla
   },
   addButtonText: {
     color: "#fff",
     fontWeight: "bold",
   },
   closeButton: {
-    marginTop: 10,
+    marginTop: height * 0.015,  // 1.5% de la altura de la pantalla
     backgroundColor: "#ff000d",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderRadius: 5,
     alignItems: "center",
     width: "100%",
@@ -258,43 +284,43 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   title: {
-    fontSize: 24,
+    fontSize: width * 0.065,  // 6.5% del ancho de la pantalla
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
-    marginVertical: 16,
+    marginVertical: height * 0.02,  // 2% de la altura de la pantalla
   },
   cultivoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: height * 0.02,  // 2% de la altura de la pantalla
     borderBottomWidth: 1,
     borderBottomColor: '#EEE',
   },
   cultivoImagen: {
-    width: 50,
-    height: 50,
+    width: width * 0.13,  // 13% del ancho de la pantalla
+    height: width * 0.13,  // 13% del ancho de la pantalla
     borderRadius: 8,
-    marginRight: 16,
+    marginRight: width * 0.05,  // 5% del ancho de la pantalla
   },
   cultivoInfo: {
     flex: 1,
   },
   fecha: {
-    fontSize: 12,
+    fontSize: width * 0.03,  // 3% del ancho de la pantalla
     color: '#666',
   },
   nombre: {
-    fontSize: 16,
+    fontSize: width * 0.04,  // 4% del ancho de la pantalla
     fontWeight: 'bold',
   },
   estado: {
-    fontSize: 12,
-    paddingVertical: 2,
-    paddingHorizontal: 8,
+    fontSize: width * 0.03,  // 3% del ancho de la pantalla
+    paddingVertical: height * 0.005,  // 0.5% de la altura de la pantalla
+    paddingHorizontal: width * 0.02,  // 2% del ancho de la pantalla
     borderRadius: 12,
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: height * 0.01,  // 1% de la altura de la pantalla
   },
   completo: {
     backgroundColor: '#D4EDDA',
@@ -305,28 +331,33 @@ const styles = StyleSheet.create({
     color: '#721C24',
   },
   detalleIcono: {
-    fontSize: 24,
-    color: '#CCC',
+    fontSize: width * 0.1,  // 10% del ancho de la pantalla
+    color: 'black',
+    fontWeight: 'bold',
   },
   imagePreview: {
-    width: 100,
-    height: 100,
-    marginRight: 10,
-    marginTop: 10,
+    width: width * 0.25,  // 25% del ancho de la pantalla
+    height: width * 0.25,  // 25% del ancho de la pantalla
+    marginRight: width * 0.03,  // 3% del ancho de la pantalla
+    marginTop: height * 0.02,  // 2% de la altura de la pantalla
   },
   dateButton: {
     width: "100%",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    marginBottom: 15,
+    marginBottom: height * 0.02,  // 2% de la altura de la pantalla
     alignItems: "center",
   },
   dateButtonText: {
-    fontSize: 16,
+    fontSize: width * 0.04,  // 4% del ancho de la pantalla
     color: "#333",
+  },
+  item: {
+    marginRight: width * 0.08,  // 8% del ancho de la pantalla
   },
 });
 
-export default CultivosScreen;
+
+export default CultivosScreen;

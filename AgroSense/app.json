@@ -1,13 +1,14 @@
 {
   "expo": {
     "name": "AgroSense",
-    "slug": "AgroSense",
+    "slug": "agrosense",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "newArchEnabled": true,
+    "icon": "./assets/AgroSenseLogo-removebg.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/AgroSenseLogo-removebg.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,12 +17,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/AgroSenseLogo-removebg.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kennrod20.agrosense"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3e0347f2-6112-42d5-aab5-ffacc4d9fcac"
+      }
+    },
+    "owner": "kennrod20"
   }
 }

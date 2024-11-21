@@ -45,20 +45,8 @@ const Home = ({ navigation }) => {
             onPress={() => navigation.navigate("FertilizerCalculator")}
             style={styles.featureButton}
           />
-          <FeatureButton
-            icon={require("../../app/assets/pest.png")}
-            label="Plagas y enfermedades"
-            onPress={() => navigation.navigate("PestsDiseases")}
-            style={styles.featureButton}
-          />
         </View>
         <View style={styles.featureRow}>
-          <FeatureButton
-            icon={require("../../app/assets/crops.png")}
-            label="Consejo de cultivo"
-            onPress={() => navigation.navigate("CropAdvice")}
-            style={styles.featureButton}
-          />
           <FeatureButton
             icon={require("../../app/assets/alerts.png")}
             label="Alertas de plagas"
@@ -178,12 +166,12 @@ const styles = StyleSheet.create({
   featureContainer: {
     flexDirection: "column",
     justifyContent: "center",
-    marginTop: height * 0.05,
+    marginTop: height * 0.03,
     marginBottom: height * 0.05,
   },
   featureRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     marginBottom: height * 0.02,
   },
   featureButton: {
