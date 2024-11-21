@@ -4,38 +4,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Text, StyleSheet } from "react-native";
 
 // Importar las pantallas
-<<<<<<< HEAD
-import WelcomeScreen from "../screens/welcomeScreen"; // Pantalla de bienvenida
-import RegisterScreen from "../screens/registerScreen"; // Pantalla de registro
-import LoginScreen from "../screens/loginScreen"; // Pantalla de login
-import MainScreen from "../screens/mainScreen"; // Pantalla principal
-import ChatbotScreen from "../screens/chatbotScreen"; // Pantalla de Chatbot
-import FertilizerCalculator from "../screens/fertilizerCalculator"; // Pantalla Calculadora de fertilizantes
-import PestsDiseases from "../screens/pestsDiseases"; // Pantalla Plagas y enfermedades
-import CropAdvice from "../screens/cropAdvice"; // Pantalla Consejo de cultivo
-import PestAlerts from "../screens/pestsAlerts"; // Pantalla Alertas de plagas
-import CultivoDetailScreen from "../screens/CultivoDetailScreen"; //Pantalla de detalle de cultivo
-import theirCrops from "../screens/theirCrops"; // Pantalla agregar cultivos
-import agriculturalLibrary from "../screens/agriculturalLibrary"; // Pantalla Biblioteca agricola
-import NoticiasIPSA from "../screens/Noticiascomunidad"; // Pantalla Noticias de la comunidad
-import MapaAlertasCercanas from "../screens/MapaAlerta"; // Pantalla Mapa de Alertas Cercanas
-// import AdminDashboard from "../screens/Administrador"; //Pantalla administrador
-
-// Crear un Stack Navigator para las funcionalidades de administración
-const AdminStack = createStackNavigator();
-
-function AdminNavigator() {
-  return (
-    <AdminStack.Navigator>
-      <AdminStack.Screen
-        name="AdminDashboard"
-        component={AdminDashboard}
-        options={{ headerShown: false }} 
-      />
-    </AdminStack.Navigator>
-  );
-}
-=======
 import WelcomeScreen from "../screens/welcomeScreen";
 import RegisterScreen from "../screens/registerScreen";
 import LoginScreen from "../screens/loginScreen";
@@ -51,7 +19,6 @@ import theirCrops from "../screens/theirCrops";
 import agriculturalLibrary from "../screens/agriculturalLibrary";
 import NoticiasIPSA from "../screens/Noticiascomunidad";
 import MapaAlertasCercanas from "../screens/MapaAlerta";
->>>>>>> origin/Management
 
 const Stack = createStackNavigator();
 
@@ -235,7 +202,7 @@ const AppNavigator = ({ user }) => {
             />
             <Stack.Screen
               name='Admin'
-              component={AdminNavigator}
+              component={AdminScreen}
               options={{
                 headerShown: false,
                 tabBarLabel: 'Admin',

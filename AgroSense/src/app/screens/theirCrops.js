@@ -1,33 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image, Alert, FlatList } from 'react-native';
-import FooterMenu from '../components/footerMenu';
-import * as ImagePicker from 'expo-image-picker';
-import * as Location from 'expo-location';
-import MapView, { Marker } from 'react-native-maps';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import FooterMenu from "../components/footerMenu";
+import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import { getFirestore, collection, addDoc, onSnapshot } from "firebase/firestore"; // Importación de funciones de Firestore
 
-const TheirCrops = ({ navigation }) => {
-  const [cropName, setCropName] = useState('');
-  const [growthStage, setGrowthStage] = useState('');
+const firestore = getFirestore();
+
+const CultivosScreen = () => {
+  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [nameCultivo, setNameCultivo] = useState("");
+  const [selectedEtapa, setSelectedEtapa] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [weeklyImages, setWeeklyImages] = useState([]);
-  const [location, setLocation] = useState(null);
-  const [crops, setCrops] = useState([]);
-  const mapRef = useRef(null);  // Referencia para el MapView
+  const [cultivos, setCultivos] = useState([]);
 
-  // Solicitar permisos de ubicación y obtener la ubicación actual
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Error', 'Permisos para acceder a la ubicación denegados');
-        return;
-      }
+  const etapasDeCrecimiento = [
+    { label: "Germinación (0-2 semanas)", value: "Germinación" },
+    { label: "Crecimiento (3-6 semanas)", value: "Crecimiento" },
+    { label: "Floración (7-9 semanas)", value: "Floración" },
+    { label: "Maduración (10-12 semanas)", value: "Maduración" },
+  ];
 
-      let loc = await Location.getCurrentPositionAsync({});
-      setLocation(loc);
-    })();
-  }, []);
-
-  // Función para seleccionar una imagen semanal
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -35,7 +43,7 @@ const TheirCrops = ({ navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-  
+
     if (!result.cancelled && result.assets && result.assets.length > 0) {
       setWeeklyImages([...weeklyImages, result.assets[0].uri]);
     }
@@ -43,23 +51,57 @@ const TheirCrops = ({ navigation }) => {
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Se necesitan permisos para acceder a las imágenes.');
+    if (status !== "granted") {
+      alert("Se necesitan permisos para acceder a las imágenes.");
     }
   };
-  
+
   useEffect(() => {
     requestPermissions();
+    const cultivosRef = collection(firestore, "cultivos");
+
+    // Escuchar cambios en la colección "cultivos" en tiempo real
+    const unsubscribe = onSnapshot(cultivosRef, (snapshot) => {
+      const cultivosData = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id, // Guarda el ID del documento
+      }));
+      setCultivos(cultivosData); // Actualiza el estado con los cultivos obtenidos
+    });
+
+    return () => unsubscribe(); // Limpiar la suscripción cuando el componente se desmonte
   }, []);
 
   const handleDateChange = (event, date) => {
-    setShowDatePicker(false); // Oculta el selector de fecha después de la selección
+    setShowDatePicker(false);
     if (date) {
-      setSelectedDate(date); // Actualiza la fecha seleccionada
+      setSelectedDate(date);
     }
   };
 
-  const [cultivos, setCultivos] = useState([]);
+  const agregarCultivo = async () => {
+    const nuevoCultivo = {
+      fecha: selectedDate.toLocaleDateString(),
+      nombre: nameCultivo,
+      etapa: selectedEtapa,
+      imagen: weeklyImages.length > 0 ? weeklyImages[0] : "https://via.placeholder.com/50",
+    };
+
+    try {
+      // Guarda el cultivo en la colección "cultivos" en Firestore
+      await addDoc(collection(firestore, "cultivos"), nuevoCultivo);
+    } catch (error) {
+      console.error("Error al guardar el cultivo: ", error);
+      alert("Hubo un error al guardar el cultivo.");
+    }
+
+    // Resetea el estado del formulario
+    setModalVisible(false);
+    setNameCultivo("");
+    setSelectedEtapa("");
+    setSelectedDate(new Date());
+    setWeeklyImages([]);
+  };
 
   const renderCultivo = ({ item }) => (
     <View style={styles.cultivoContainer}>
@@ -67,136 +109,93 @@ const TheirCrops = ({ navigation }) => {
       <View style={styles.cultivoInfo}>
         <Text style={styles.fecha}>{item.fecha}</Text>
         <Text style={styles.nombre}>{item.nombre}</Text>
-        <Text style={[styles.estado, item.estado === 'Completo' ? styles.completo : styles.incompleto]}>
-          {item.estado}
-        </Text>
+        <Text style={styles.etapa}>{item.etapa}</Text>
       </View>
-      <TouchableOpacity  style={styles.item}
-            onPress={() => navigation.navigate('CultivoDetailScreen', { cultivo: item })}>
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => navigation.navigate("CultivoDetailScreen", { cultivo: item })}
+      >
         <Text style={styles.detalleIcono}>›</Text>
       </TouchableOpacity>
     </View>
   );
 
-  const agregarCultivo = () => {
-    const nuevoCultivo = {
-      id: (cultivos.length + 1).toString(),
-      fecha: selectedDate.toLocaleDateString(),
-      nombre: nameCultivo,
-      estado: newEtapa ? "Completo" : "Incompleto", // "Completo" si hay etapa, "Incompleto" si no
-      imagen: weeklyImages.length > 0 ? weeklyImages[0] : "https://via.placeholder.com/50",
-    };
-  
-    setCultivos([...cultivos, nuevoCultivo]);
-    setModalVisible(false);
-    setNameCultivo("");
-    setNewEtapa("");
-    setSelectedDate(new Date());
-    setWeeklyImages([]); // Limpiar las imágenes después de agregar el cultivo
-  };  
-
-  // Función para centrar el mapa en la ubicación actual
-  const centerMapOnLocation = () => {
-    if (location && mapRef.current) {
-      mapRef.current.animateToRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-      });
-    }
-  };
-
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Lista de cultivos</Text>
       <FlatList
-        data={crops}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={
-          <View style={styles.centered}>
-            <Text style={styles.title}>Seguimiento de Cultivos</Text>
-
-            {/* Formulario para agregar nuevo cultivo */}
-            <TextInput
-              style={styles.input}
-              placeholder="Nombre del Cultivo"
-              value={cropName}
-              onChangeText={setCropName}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Etapa de Crecimiento"
-              value={growthStage}
-              onChangeText={setGrowthStage}
-            />
-
-            <View style={styles.buttonContainer}>
-              <Button title="Agregar Imagen Semanal" onPress={pickImage} />
-            </View>
-
-            <FlatList
-              horizontal
-              data={weeklyImages}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <Image source={{ uri: item }} style={styles.imagePreview} />
-              )}
-              showsHorizontalScrollIndicator={false}
-            />
-
-            <View style={styles.buttonContainer}>
-              <Button style={styles.registerButton} title="Registrar Cultivo" onPress={addCrop} />
-            </View>
-
-            {/* Mapa de ubicación de los cultivos con vista satelital */}
-            {location && (
-              <View style={styles.centered}>
-                <Text style={styles.subtitle}>Ubicación de tus Cultivos</Text>
-                <MapView
-                  ref={mapRef}
-                  style={styles.map}
-                  mapType="satellite"
-                  initialRegion={{
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                  }}
-                >
-                  <Marker
-                    coordinate={{
-                      latitude: location.coords.latitude,
-                      longitude: location.coords.longitude,
-                    }}
-                    title="Ubicación del cultivo"
-                  />
-                </MapView>
-
-                {/* Botón para redirigirte a tu ubicación inicial */}
-                <View style={styles.buttonContainer}>
-                  <Button title="Centrar en mi Ubicación" onPress={centerMapOnLocation} />
-                </View>
-              </View>
-            )}
-          </View>
-        }
-        renderItem={({ item }) => (
-          <View style={styles.cropItem}>
-            <Text style={styles.cropName}>{item.name}</Text>
-            <Text>Etapa de Crecimiento: {item.growthStage}</Text>
-            <FlatList
-              horizontal
-              data={item.images}
-              keyExtractor={(uri, index) => index.toString()}
-              renderItem={({ item: uri }) => (
-                <Image source={{ uri }} style={styles.imagePreview} />
-              )}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        )}
-        ListFooterComponent={<FooterMenu navigation={navigation} />}
+        data={cultivos}
+        renderItem={renderCultivo}
+        keyExtractor={(item) => item.id.toString()}
       />
+
+      <TouchableOpacity
+        style={styles.addButtonFixed}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.buttonText}>Agregar cultivo</Text>
+      </TouchableOpacity>
+
+      <FooterMenu navigation={navigation} />
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Agregar nuevo cultivo</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Nombre del cultivo"
+              value={nameCultivo}
+              onChangeText={setNameCultivo}
+            />
+            <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.dateButton}>
+              <Text style={styles.dateButtonText}>
+                Fecha de siembra: {selectedDate.toLocaleDateString()}
+              </Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={selectedDate}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+            <Picker
+              selectedValue={selectedEtapa}
+              onValueChange={(itemValue) => setSelectedEtapa(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Seleccionar etapa de crecimiento" value="" />
+              {etapasDeCrecimiento.map((etapa, index) => (
+                <Picker.Item key={index} label={etapa.label} value={etapa.value} />
+              ))}
+            </Picker>
+            <TouchableOpacity style={styles.addButtonI} onPress={pickImage}>
+              <Text style={styles.addButtonText}>Agregar imagen</Text>
+            </TouchableOpacity>
+            <ScrollView horizontal>
+              {weeklyImages.map((uri, index) => (
+                <Image key={index} source={{ uri }} style={styles.imagePreview} />
+              ))}
+            </ScrollView>
+            <TouchableOpacity style={styles.addButton} onPress={agregarCultivo}>
+              <Text style={styles.addButtonText}>Agregar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -204,38 +203,132 @@ const TheirCrops = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    padding: 16,
+    backgroundColor: "#fff",
   },
-  centered: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  addButtonFixed: {
+    position: "absolute",
+    bottom: 100,
+    left: "53%",
+    transform: [{ translateX: -50 }],
+    backgroundColor: "#28a745",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+  input: {
+    width: "100%",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    marginBottom: 15,
+  },
+  addButtonI: {
+    backgroundColor: "#5900ff",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 10,
+  },
+  addButton: {
+    backgroundColor: "#28a745",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 10,
+  },
+  addButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  closeButton: {
+    marginTop: 10,
+    backgroundColor: "#ff000d",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "100%",
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
     marginVertical: 16,
   },
-  subtitle: {
-    fontSize: 22,
+  cultivoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+  },
+  cultivoImagen: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    marginRight: 16,
+  },
+  cultivoInfo: {
+    flex: 1,
+  },
+  fecha: {
+    fontSize: 12,
+    color: '#666',
+  },
+  nombre: {
+    fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 30,
-    marginBottom: 10,
+  },
+  estado: {
+    fontSize: 12,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 12,
     textAlign: 'center',
+    marginTop: 4,
   },
-  input: {
-    width: '90%',
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 7,
-    marginBottom: 20,
+  completo: {
+    backgroundColor: '#D4EDDA',
+    color: '#155724',
   },
-  buttonContainer: {
-    marginVertical: 10,
-    width: '90%',
+  incompleto: {
+    backgroundColor: '#F8D7DA',
+    color: '#721C24',
+  },
+  detalleIcono: {
+    fontSize: 45,
+    color: 'black',
+    fontWeight: 'bold',
   },
   imagePreview: {
     width: 100,
@@ -243,24 +336,22 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
   },
-  cropItem: {
-    padding: 15,
+  dateButton: {
+    width: "100%",
+    padding: 10,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    marginBottom: 20,
-    alignItems: 'center',
+    marginBottom: 15,
+    alignItems: "center",
   },
   dateButtonText: {
     fontSize: 16,
     color: "#333",
   },
-  map: {
-    width: 360,
-    height: 260,
-    marginTop: 20,
-    marginBottom: 20,
+  item: {
+    marginRight: 30,
   },
 });
 
-export default TheirCrops;
+export default CultivosScreen;

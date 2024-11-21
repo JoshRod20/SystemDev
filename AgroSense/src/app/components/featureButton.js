@@ -12,11 +12,11 @@ const FeatureButton = ({ icon, label, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: '47%',
-    height: 130,
+    width: '100%',
+    height: 150,
     backgroundColor: '#D9D9D9',
-    borderRadius: 15,
-    padding: 15,
+    borderRadius: 10,
+    padding: 35,
     alignItems: 'center',
     marginBottom: 20,
     shadowColor: "#000",
@@ -30,14 +30,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   icon: {
-    width: 45,
-    height: 40,
+    width: 48,
+    height: 45,
     padding: 15,
     marginBottom: 10,
   },
   label: {
     padding: 10,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
   },

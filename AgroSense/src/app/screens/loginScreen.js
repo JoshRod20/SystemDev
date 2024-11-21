@@ -14,11 +14,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../../app/services/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-<<<<<<< HEAD
-  
-  // Obtener dimensiones de la pantalla
-=======
->>>>>>> origin/Management
 const { width, height } = Dimensions.get("window");
 
 // Correo del administrador
@@ -234,8 +229,4 @@ const styles = StyleSheet.create({
   },
 });
 
-<<<<<<< HEAD
 export default LoginScreen;
-=======
-export default LoginScreen;
->>>>>>> origin/Management
