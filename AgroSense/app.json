@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AgroSense",
-    "slug": "AgroSense",
+    "slug": "agrosense",
     "version": "1.0.0",
     "orientation": "portrait",
     "newArchEnabled": true,
@@ -19,10 +19,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/AgroSenseLogo-removebg.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kennrod20.agrosense"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "34f91b07-cbfb-43ab-8db9-096aa312604d"
+      }
+    },
+    "owner": "kennrod20"
   }
 }

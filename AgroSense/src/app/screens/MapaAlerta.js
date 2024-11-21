@@ -12,6 +12,7 @@ const MapaAlertasCercanas = () => {
   const [newMarker, setNewMarker] = useState(null);
   const [plagueName, setPlagueName] = useState('');
   const [plagueDescription, setPlagueDescription] = useState('');
+  const [loading, setLoading] = useState(false);  // Indicador de carga
 
   const firestore = getFirestore();
 
@@ -43,11 +44,12 @@ const MapaAlertasCercanas = () => {
           id: doc.id,
           ...doc.data(),
         }))
-        .filter(marker => marker.latitude !== undefined && marker.longitude !== undefined); // Filtrar marcadores sin coordenadas
-  
+        .filter(marker => marker.latitude !== undefined && marker.longitude !== undefined);  // Filtrar marcadores sin coordenadas
+
       setMarkers(loadedMarkers);
     } catch (error) {
       console.error('Error al cargar los marcadores:', error);
+      setErrorMsg('Error al cargar los marcadores');
     }
   };
 
@@ -59,19 +61,18 @@ const MapaAlertasCercanas = () => {
 
   const handleSaveMarker = async () => {
     if (newMarker && plagueName && plagueDescription) {
+      setLoading(true);  // Mostrar indicador de carga mientras se guarda el marcador
       try {
-        // Guardar en Firestore con coordenadas
         const docRef = await addDoc(collection(firestore, 'plaga_mapa'), {
           name: plagueName,
           description: plagueDescription,
-          latitude: newMarker.latitude,  // Asegúrate de que esté definido
-          longitude: newMarker.longitude, // Asegúrate de que esté definido
+          latitude: newMarker.latitude,
+          longitude: newMarker.longitude,
           timestamp: serverTimestamp(),
         });
-  
+
         setMarkers([...markers, { id: docRef.id, ...newMarker, name: plagueName, description: plagueDescription }]);
-  
-        // Cerrar el modal y limpiar los campos
+
         setIsModalVisible(false);
         setPlagueName('');
         setPlagueDescription('');
@@ -79,12 +80,13 @@ const MapaAlertasCercanas = () => {
       } catch (error) {
         Alert.alert('Error', 'No se pudo agregar la amenaza. Intenta de nuevo.', [{ text: 'OK' }]);
         console.error('Error al guardar en Firestore:', error);
+      } finally {
+        setLoading(false);  // Ocultar el indicador de carga
       }
     } else {
       Alert.alert('Error', 'Debes llenar todos los campos.', [{ text: 'OK' }]);
     }
   };
-  
 
   if (errorMsg) {
     return (
@@ -112,7 +114,7 @@ const MapaAlertasCercanas = () => {
           />
 
           {markers.map((marker) => {
-            if (marker.latitude && marker.longitude) { // Validación para evitar errores de coordenadas undefined
+            if (marker.latitude && marker.longitude) {  // Validación para evitar errores de coordenadas undefined
               return (
                 <Marker
                   key={marker.id}
@@ -162,7 +164,7 @@ const MapaAlertasCercanas = () => {
               onChangeText={setPlagueDescription}
             />
 
-            <Button title="Guardar" onPress={handleSaveMarker} />
+            <Button title="Guardar" onPress={handleSaveMarker} disabled={loading} />
             <Button title="Cancelar" color="red" onPress={() => setIsModalVisible(false)} />
           </View>
         </View>
@@ -225,12 +227,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    width: '100%',
-    padding: 10,
+    height: 40,
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderColor: '#ddd',
     marginBottom: 20,
-    borderRadius: 5,
+    paddingLeft: 10,
+    width: '100%',
   },
 });
 
