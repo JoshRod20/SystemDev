@@ -6,6 +6,12 @@ import { auth } from "../services/firebase"; // Configuración de Firebase Auth
 import { signOut } from "firebase/auth";
 import { collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
 import { Picker } from "@react-native-picker/picker"; // Importación del selector
+import { Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
+
+// Función para ajustar el tamaño de los elementos en función del ancho de la pantalla
+const scale = (size) => width / 375 * size; // 375 es el ancho base
 
 const AdminScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
@@ -169,58 +175,59 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
-    padding: 16,
+    padding: scale(16),
   },
   title: {
-    fontSize: 24,
+    fontSize: scale(24),
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: scale(20),
     textAlign: "center",
   },
   input: {
     backgroundColor: "#fff",
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
+    padding: scale(10),
+    marginBottom: scale(10),
+    borderRadius: scale(5),
     borderWidth: 1,
     borderColor: "#ccc",
   },
   button: {
     backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginBottom: 20,
+    paddingVertical: scale(12),
+    paddingHorizontal: scale(24),
+    borderRadius: scale(8),
+    marginBottom: scale(20),
     alignItems: "center",
   },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: scale(14),
   },
   userRow: {
     backgroundColor: "#fff",
-    padding: 16,
-    marginBottom: 10,
-    borderRadius: 8,
+    padding: scale(16),
+    marginBottom: scale(10),
+    borderRadius: scale(8),
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: scale(2) },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: scale(4),
     elevation: 2,
   },
   userName: {
-    fontSize: 18,
+    fontSize: scale(18),
     fontWeight: "bold",
   },
   userRole: {
-    fontSize: 14,
+    fontSize: scale(14),
     color: "#555",
-    marginVertical: 8,
+    marginVertical: scale(8),
   },
   picker: {
-    height: 50,
+    height: scale(50),
     width: "100%",
-    marginBottom: 10,
+    marginBottom: scale(10),
   },
   actionsContainer: {
     flexDirection: "row",
@@ -228,31 +235,32 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     backgroundColor: "#007BFF",
-    padding: 8,
-    borderRadius: 5,
+    padding: scale(8),
+    borderRadius: scale(5),
   },
   deleteButton: {
     backgroundColor: "#DC3545",
   },
   actionText: {
     color: "#fff",
+    fontSize: scale(12),
   },
   logoutButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#dc3545",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginTop: 20,
+    paddingVertical: scale(12),
+    paddingHorizontal: scale(24),
+    borderRadius: scale(8),
+    marginTop: scale(20),
   },
   logoutIcon: {
-    marginRight: 8,
+    marginRight: scale(8),
   },
   logoutText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: scale(16),
     fontWeight: "bold",
   },
 });

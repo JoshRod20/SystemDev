@@ -2,9 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { getFirestore, collection, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { Dimensions } from 'react-native';
 
 // Inicializa Firestore
 const firestore = getFirestore();
+
+const { width } = Dimensions.get('window');
+
+// Función para ajustar el tamaño de los elementos en función del ancho de la pantalla
+const scale = (size) => width / 375 * size; // 375 es el ancho base
 
 export default function AdminDashboard({ navigation }) {
   const [users, setUsers] = useState([]);
@@ -89,12 +95,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F7F9FC',
-    padding: 20,
+    padding: scale(20),
   },
   navbar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 10,
+    paddingVertical: scale(10),
     backgroundColor: '#FFFFFF',
     borderBottomColor: '#CCCCCC',
     borderBottomWidth: 1,
@@ -104,55 +110,55 @@ const styles = StyleSheet.create({
   },
   navText: {
     color: '#003366',
-    fontSize: 12,
+    fontSize: scale(12),
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: scale(18),
     fontWeight: 'bold',
-    marginVertical: 10,
+    marginVertical: scale(10),
   },
   usersList: {
-    marginBottom: 20,
+    marginBottom: scale(20),
   },
   reporteList: {
-    marginBottom: 20,
+    marginBottom: scale(20),
   },
   userCard: {
     backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
+    padding: scale(15),
+    borderRadius: scale(10),
+    marginBottom: scale(10),
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: scale(1) },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowRadius: scale(2),
     elevation: 2,
   },
   userName: {
-    fontSize: 16,
+    fontSize: scale(16),
     fontWeight: 'bold',
     color: '#333333',
   },
   reporteCard: {
     backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
+    padding: scale(15),
+    borderRadius: scale(10),
+    marginBottom: scale(10),
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: scale(1) },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowRadius: scale(2),
     elevation: 2,
   },
   reporteTitle: {
-    fontSize: 16,
+    fontSize: scale(16),
     fontWeight: 'bold',
     color: '#333333',
   },
   editText: {
     color: '#1E90FF',
-    fontSize: 14,
+    fontSize: scale(14),
     fontWeight: 'bold',
-    marginTop: 5,
+    marginTop: scale(5),
   },
 });
