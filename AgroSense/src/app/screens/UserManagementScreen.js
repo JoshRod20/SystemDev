@@ -41,7 +41,7 @@ const UserManagementScreen = ({ navigation }) => {
       const usersRef = collection(db, "users");
       await addDoc(usersRef, {
         ...newUser,
-        rol: "Usuario Estándar", // Asignar rol por defecto
+        rol: "Usuario ", // Asignar rol por defecto
       });
       setNewUser({ nombre: "", email: "" });
       console.log("Usuario creado correctamente");

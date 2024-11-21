@@ -11,7 +11,7 @@ const AdminScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({ nombre: "", email: "" });
   const [selectedUser, setSelectedUser] = useState(null);
-  const roles = ["Administrador", "Usuario Estándar"]; // Roles disponibles
+  const roles = ["Administrador", "Usuario "]; // Roles disponibles
 
   // Obtener usuarios desde Firestore
   useEffect(() => {
