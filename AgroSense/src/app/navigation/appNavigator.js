@@ -1,24 +1,24 @@
-
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Text, StyleSheet } from "react-native";
 
 // Importar las pantallas
-import WelcomeScreen from "../screens/welcomeScreen"; // Pantalla de bienvenida
-import RegisterScreen from "../screens/registerScreen"; // Pantalla de registro
-import LoginScreen from "../screens/loginScreen"; // Pantalla de login
-import MainScreen from "../screens/mainScreen"; // Pantalla principal
-import ChatbotScreen from "../screens/chatbotScreen"; // Pantalla de Chatbot
-import FertilizerCalculator from "../screens/fertilizerCalculator"; // Pantalla Calculadora de fertilizantes
-import PestsDiseases from "../screens/pestsDiseases"; // Pantalla Plagas y enfermedades
-import CropAdvice from "../screens/cropAdvice"; // Pantalla Consejo de cultivo
-import PestAlerts from "../screens/pestsAlerts"; // Pantalla Alertas de plagas
-import CultivoDetailScreen from "../screens/CultivoDetailScreen"; //Pantalla de detalle de cultivo
-import theirCrops from "../screens/theirCrops"; // Pantalla agregar cultivos
-import agriculturalLibrary from "../screens/agriculturalLibrary"; // Pantalla Biblioteca agricola
-import NoticiasIPSA from "../screens/Noticiascomunidad"; // Pantalla Noticias de la comunidad
-import MapaAlertasCercanas from "../screens/MapaAlerta"; // Pantalla Mapa de Alertas Cercanas
+import WelcomeScreen from "../screens/welcomeScreen";
+import RegisterScreen from "../screens/registerScreen";
+import LoginScreen from "../screens/loginScreen";
+import MainScreen from "../screens/mainScreen";
+import AdminScreen from "../screens/AdminDashboard"; // Importamos AdminScreen
+import ChatbotScreen from "../screens/chatbotScreen";
+import FertilizerCalculator from "../screens/fertilizerCalculator";
+import PestsDiseases from "../screens/pestsDiseases";
+import CropAdvice from "../screens/cropAdvice";
+import PestAlerts from "../screens/pestsAlerts";
+import CultivoDetailScreen from "../screens/CultivoDetailScreen";
+import theirCrops from "../screens/theirCrops";
+import agriculturalLibrary from "../screens/agriculturalLibrary";
+import NoticiasIPSA from "../screens/Noticiascomunidad";
+import MapaAlertasCercanas from "../screens/MapaAlerta";
 
 const Stack = createStackNavigator();
 
@@ -28,22 +28,34 @@ const AppNavigator = ({ user }) => {
       <Stack.Navigator>
         {user ? (
           <>
-            {/* Si el usuario está autenticado, mostrar la pantalla Main y Chatbot */}
+            {/* Pantalla de Administrador */}
+            <Stack.Screen
+              name="AdminScreen"
+              component={AdminScreen}
+              options={{
+                headerTitle: () => (
+                  <Text style={styles.headerTitle}>Panel de Administrador</Text>
+                ),
+                headerStyle: {
+                  backgroundColor: "#fff",
+                },
+                headerTintColor: "#000000",
+                headerTitleAlign: "center",
+              }}
+            />
+
             <Stack.Screen
               name="MainScreen"
               component={MainScreen}
               options={{ headerShown: false }}
             />
 
-            {/* Calculadora de fertilizantes */}
             <Stack.Screen
               name="FertilizerCalculator"
               component={FertilizerCalculator}
               options={{
                 headerTitle: () => (
-                  <Text style={styles.headerTitle}>
-                    Calculadora de Insumos
-                  </Text>
+                  <Text style={styles.headerTitle}>Calculadora de Insumos</Text>
                 ),
                 headerStyle: {
                   backgroundColor: "#fff",
@@ -53,7 +65,6 @@ const AppNavigator = ({ user }) => {
               }}
             />
 
-            {/* Plagas y enfermedades */}
             <Stack.Screen
               name="PestsDiseases"
               component={PestsDiseases}
@@ -69,7 +80,6 @@ const AppNavigator = ({ user }) => {
               }}
             />
 
-            {/* Consejo de cultivos */}
             <Stack.Screen
               name="CropAdvice"
               component={CropAdvice}
@@ -85,7 +95,6 @@ const AppNavigator = ({ user }) => {
               }}
             />
 
-            {/* Alertas de plagas */}
             <Stack.Screen
               name="PestAlerts"
               component={PestAlerts}
@@ -101,7 +110,6 @@ const AppNavigator = ({ user }) => {
               }}
             />
             
-            {/* Sus cultivos */}
             <Stack.Screen
               name="theirCrops"
               component={theirCrops}
@@ -117,8 +125,7 @@ const AppNavigator = ({ user }) => {
               }}
             />
 
-            {/* Detalle de cultivos */}
-              <Stack.Screen
+            <Stack.Screen
               name="CultivoDetailScreen"
               component={CultivoDetailScreen}
               options={{
@@ -132,7 +139,7 @@ const AppNavigator = ({ user }) => {
                 headerTitleAlign: "row",
               }}
             />
-            {/* Biblioteca agricola */}
+
             <Stack.Screen
               name="agriculturalLibrary"
               component={agriculturalLibrary}
@@ -144,19 +151,16 @@ const AppNavigator = ({ user }) => {
                   backgroundColor: "#fff",
                 },
                 headerTintColor: "#000000",
-                headerTitleAlign: "rowr",
+                headerTitleAlign: "row",
               }}
             />
 
-            {/* Noticias de la comunidad */}
             <Stack.Screen
               name="NoticiasIPSA"
               component={NoticiasIPSA}
               options={{
                 headerTitle: () => (
-                  <Text style={styles.headerTitle}>
-                    Noticias de la comunidad
-                  </Text>
+                  <Text style={styles.headerTitle}>Noticias de la comunidad</Text>
                 ),
                 headerStyle: {
                   backgroundColor: "#fff",
@@ -166,15 +170,12 @@ const AppNavigator = ({ user }) => {
               }}
             />
 
-            {/* Mapa de alertas cercanas */}
             <Stack.Screen
               name="MapaAlertasCercanas"
               component={MapaAlertasCercanas}
               options={{
                 headerTitle: () => (
-                  <Text style={styles.headerTitle}>
-                    Mapa de Alertas Cercanas
-                  </Text>
+                  <Text style={styles.headerTitle}>Mapa de Alertas Cercanas</Text>
                 ),
                 headerStyle: {
                   backgroundColor: "#fff",
@@ -184,7 +185,6 @@ const AppNavigator = ({ user }) => {
               }}
             />
 
-            {/* ChatBot */}
             <Stack.Screen
               name="ChatBot"
               component={ChatbotScreen}
@@ -202,7 +202,6 @@ const AppNavigator = ({ user }) => {
           </>
         ) : (
           <>
-            {/* Si no está autenticado, mostrar Welcome, Register y Login */}
             <Stack.Screen
               name="Welcome"
               component={WelcomeScreen}

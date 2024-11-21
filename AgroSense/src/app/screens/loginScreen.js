@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   View,
@@ -9,55 +8,70 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../../app/services/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-// Obtener dimensiones de la pantalla
 const { width, height } = Dimensions.get("window");
 
+// Correo del administrador
+const ADMIN_EMAIL = "adminagrosense@.com";
+
 const LoginScreen = ({ navigation }) => {
-  // Estado para los campos de inicio de sesión
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  // Estado para manejar si el usuario ha intentado enviar el formulario
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
-  // Validaciones de los campos
   const validateEmail = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = () => password.length >= 6;
 
-  // Función para alternar la visibilidad de la contraseña
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Función para manejar el inicio de sesión
   const handleLogin = async () => {
     setAttemptedSubmit(true);
 
-    // Verificar si todos los campos son válidos
     if (validateEmail() && validatePassword()) {
       try {
-        // Iniciar sesión con Firebase Authentication
-        await signInWithEmailAndPassword(auth, email, password);
-        navigation.navigate("AgroSense"); // Redirige a AgroSense después del inicio de sesión
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        
+        // Verificar si el email es del administrador
+        if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+          navigation.navigate("AdminScreen");
+        } else {
+          navigation.navigate("AgroSense");
+        }
       } catch (error) {
-        console.error("Error en el inicio de sesión:", error);
+        let errorMessage = "Error al iniciar sesión";
+        
+        switch (error.code) {
+          case "auth/user-not-found":
+            errorMessage = "No existe una cuenta con este correo electrónico";
+            break;
+          case "auth/wrong-password":
+            errorMessage = "Contraseña incorrecta";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "Correo electrónico inválido";
+            break;
+          default:
+            errorMessage = "Error al iniciar sesión. Por favor, intente nuevamente";
+        }
+        
+        Alert.alert("Error", errorMessage);
       }
     }
   };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      {/**LinearGradient para el degradado en la pantalla */}
       <LinearGradient colors={["#4A6B3E", "#fff"]} style={styles.container}>
         <Text style={styles.title}>Iniciar sesión</Text>
 
-        {/* Campo Correo */}
         <View style={styles.inputContainer}>
           <Image
             source={require("../../app/assets/icons8-logo-de-google-48.png")}
@@ -78,7 +92,6 @@ const LoginScreen = ({ navigation }) => {
           </Text>
         )}
 
-        {/* Campo Contraseña */}
         <View style={styles.inputContainer}>
           <Image
             source={require("../../app/assets/password-svgrepo-com.png")}
@@ -105,12 +118,10 @@ const LoginScreen = ({ navigation }) => {
           </Text>
         )}
 
-        {/* Botón de Iniciar sesión */}
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Iniciar</Text>
         </TouchableOpacity>
 
-        {/* Enlace para registrar */}
         <Text style={styles.registerLinkText}>¿Aún no tienes una cuenta?</Text>
         <Text
           style={styles.registerLink}
@@ -136,9 +147,9 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.03,
     textAlign: "center",
     color: "#fff",
-    textShadowColor: "rgba(0, 0, 0, 0.5)", // Color de la sombra
-    textShadowOffset: { width: 0, height: 2 }, // Desplazamiento de la sombra
-    textShadowRadius: 4, // Radio de la sombra
+    textShadowColor: "rgba(0, 0, 0, 0.5)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   inputContainer: {
     flexDirection: "row",
@@ -219,6 +230,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-
-
-
