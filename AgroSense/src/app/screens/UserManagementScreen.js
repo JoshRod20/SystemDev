@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons"; // Asegúrate de tener react-native-vector-icons instalado
 import { db } from "../services/firebase"; // Configuración de Firestore
-import { auth } from "../services/firebase"; // Configuración de Firebase Auth
-import { signOut } from "firebase/auth";
 import { collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
-import { Picker } from "@react-native-picker/picker"; // Importación del selector
+import { auth } from "../services/firebase"; // Firebase Auth
+import { signOut } from "firebase/auth";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
-const AdminScreen = ({ navigation }) => {
+const UserManagementScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({ nombre: "", email: "" });
   const [selectedUser, setSelectedUser] = useState(null);
-  const roles = ["Administrador", "Usuario Estándar"]; // Roles disponibles
 
   // Obtener usuarios desde Firestore
   useEffect(() => {
@@ -24,14 +22,16 @@ const AdminScreen = ({ navigation }) => {
     return unsubscribe; // Detener la suscripción
   }, []);
 
-  // Asignar rol
-  const handleAssignRole = async (userId, newRole) => {
-    const userRef = doc(db, "users", userId);
+  // Función para cerrar sesión
+  const handleLogout = async () => {
     try {
-      await updateDoc(userRef, { rol: newRole });
-      console.log(`Rol actualizado a ${newRole} para el usuario ${userId}`);
+      await signOut(auth);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Welcome" }],
+      });
     } catch (error) {
-      console.error("Error al asignar rol:", error);
+      console.error("Error al cerrar sesión:", error);
     }
   };
 
@@ -75,20 +75,7 @@ const AdminScreen = ({ navigation }) => {
     }
   };
 
-  // Cerrar sesión
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Welcome" }],
-      });
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
-  };
-
-  // Seleccionar usuario para editar
+  // Seleccionar un usuario para editar
   const handleSelectUser = (user) => {
     setSelectedUser(user);
     setNewUser({ nombre: user.nombre, email: user.email });
@@ -96,7 +83,7 @@ const AdminScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Panel de Administración</Text>
+      <Text style={styles.title}>Gestión de Usuarios</Text>
 
       {/* Formulario para crear o editar usuarios */}
       <TextInput
@@ -126,21 +113,8 @@ const AdminScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.userRow}>
-            <Text style={styles.userName}>{item.name}</Text>
+            <Text style={styles.userName}>{item.nombre}</Text>
             <Text style={styles.userRole}>Rol: {item.rol}</Text>
-
-            {/* Selector de rol */}
-            <Picker
-              selectedValue={item.rol}
-              style={styles.picker}
-              onValueChange={(value) => handleAssignRole(item.id, value)}
-            >
-              {roles.map((role) => (
-                <Picker.Item key={role} label={role} value={role} />
-              ))}
-            </Picker>
-
-            {/* Botones de editar y eliminar */}
             <View style={styles.actionsContainer}>
               <TouchableOpacity onPress={() => handleSelectUser(item)} style={styles.actionButton}>
                 <Text style={styles.actionText}>Editar</Text>
@@ -215,12 +189,6 @@ const styles = StyleSheet.create({
   userRole: {
     fontSize: 14,
     color: "#555",
-    marginVertical: 8,
-  },
-  picker: {
-    height: 50,
-    width: "100%",
-    marginBottom: 10,
   },
   actionsContainer: {
     flexDirection: "row",
@@ -257,4 +225,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminScreen;
+export default UserManagementScreen;
