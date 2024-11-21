@@ -10,6 +10,12 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { getFirestore, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { Picker } from '@react-native-picker/picker';
+import { Dimensions, Platform } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+
+// Función para ajustar el tamaño de los elementos en función del tamaño de la pantalla
+const scale = (size) => width / 375 * size; // 375 es el ancho base del diseño
 
 const firestore = getFirestore();
 
@@ -114,66 +120,68 @@ const CultivoDetailScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: scale(16),
     backgroundColor: "#fff",
     alignItems: "center",
   },
   title: {
-    fontSize: 24,
+    fontSize: scale(24),
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: scale(8),
   },
   date: {
-    fontSize: 16,
+    fontSize: scale(16),
     color: "#666",
-    marginBottom: 8,
+    marginBottom: scale(8),
   },
   etapa: {
-    fontSize: 16,
-    marginBottom: 8,
+    fontSize: scale(16),
+    marginBottom: scale(8),
   },
   etapaValue: {
-    fontSize: 16,
+    fontSize: scale(16),
     color: "#555",
-    marginBottom: 8,
+    marginBottom: scale(8),
   },
   picker: {
     width: '80%',
-    height: 50,
-    marginBottom: 16,
+    height: scale(50),
+    marginBottom: scale(16),
   },
   image: {
-    width: 200,
-    height: 200,
+    width: scale(200),
+    height: scale(200),
     borderRadius: 10,
-    marginTop: 16,
-    marginBottom: 20,
+    marginTop: scale(16),
+    marginBottom: scale(20),
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 16,
+    marginBottom: scale(16),
+    flexWrap: 'wrap',
   },
   button: {
     flex: 1,
-    marginHorizontal: 8,
-    padding: 12,
+    marginHorizontal: scale(8),
+    padding: scale(12),
     backgroundColor: "#007BFF",
     borderRadius: 8,
     alignItems: 'center',
+    minWidth: scale(100),
   },
   deleteButton: {
     backgroundColor: "#DC3545",
   },
   buttonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: scale(16),
     fontWeight: 'bold',
   },
   saveButton: {
-    marginTop: 16,
-    padding: 12,
+    marginTop: scale(16),
+    padding: scale(12),
     backgroundColor: "#28A745",
     borderRadius: 8,
     alignItems: 'center',
@@ -181,9 +189,10 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: scale(16),
     fontWeight: 'bold',
   },
 });
+
 
 export default CultivoDetailScreen;

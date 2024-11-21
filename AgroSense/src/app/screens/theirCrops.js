@@ -16,6 +16,9 @@ import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { getFirestore, collection, addDoc, onSnapshot } from "firebase/firestore"; // Importación de funciones de Firestore
+import { Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 const firestore = getFirestore();
 
@@ -120,6 +123,8 @@ const CultivosScreen = () => {
     </View>
   );
 
+  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Lista de cultivos</Text>
@@ -203,16 +208,16 @@ const CultivosScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     backgroundColor: "#fff",
   },
   addButtonFixed: {
     position: "absolute",
-    bottom: 100,
-    left: "53%",
+    bottom: height * 0.12,  // 12% desde el fondo
+    left: "50%",
     transform: [{ translateX: -50 }],
     backgroundColor: "#28a745",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderRadius: 5,
     alignItems: "center",
   },
@@ -223,49 +228,49 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: "80%",
-    padding: 20,
+    width: width * 0.8,  // 80% del ancho de la pantalla
+    padding: width * 0.05,  // 5% del ancho de la pantalla
     backgroundColor: "#fff",
     borderRadius: 10,
     alignItems: "center",
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: width * 0.05,  // 5% del ancho de la pantalla
     fontWeight: "bold",
-    marginBottom: 15,
+    marginBottom: height * 0.02,  // 2% de la altura de la pantalla
   },
   input: {
     width: "100%",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    marginBottom: 15,
+    marginBottom: height * 0.02,  // 2% de la altura de la pantalla
   },
   addButtonI: {
     backgroundColor: "#5900ff",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderRadius: 5,
     alignItems: "center",
     width: "100%",
-    marginBottom: 10,
+    marginBottom: height * 0.015,  // 1.5% de la altura de la pantalla
   },
   addButton: {
     backgroundColor: "#28a745",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderRadius: 5,
     alignItems: "center",
     width: "100%",
-    marginBottom: 10,
+    marginBottom: height * 0.015,  // 1.5% de la altura de la pantalla
   },
   addButtonText: {
     color: "#fff",
     fontWeight: "bold",
   },
   closeButton: {
-    marginTop: 10,
+    marginTop: height * 0.015,  // 1.5% de la altura de la pantalla
     backgroundColor: "#ff000d",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderRadius: 5,
     alignItems: "center",
     width: "100%",
@@ -279,43 +284,43 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   title: {
-    fontSize: 24,
+    fontSize: width * 0.065,  // 6.5% del ancho de la pantalla
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
-    marginVertical: 16,
+    marginVertical: height * 0.02,  // 2% de la altura de la pantalla
   },
   cultivoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: height * 0.02,  // 2% de la altura de la pantalla
     borderBottomWidth: 1,
     borderBottomColor: '#EEE',
   },
   cultivoImagen: {
-    width: 50,
-    height: 50,
+    width: width * 0.13,  // 13% del ancho de la pantalla
+    height: width * 0.13,  // 13% del ancho de la pantalla
     borderRadius: 8,
-    marginRight: 16,
+    marginRight: width * 0.05,  // 5% del ancho de la pantalla
   },
   cultivoInfo: {
     flex: 1,
   },
   fecha: {
-    fontSize: 12,
+    fontSize: width * 0.03,  // 3% del ancho de la pantalla
     color: '#666',
   },
   nombre: {
-    fontSize: 16,
+    fontSize: width * 0.04,  // 4% del ancho de la pantalla
     fontWeight: 'bold',
   },
   estado: {
-    fontSize: 12,
-    paddingVertical: 2,
-    paddingHorizontal: 8,
+    fontSize: width * 0.03,  // 3% del ancho de la pantalla
+    paddingVertical: height * 0.005,  // 0.5% de la altura de la pantalla
+    paddingHorizontal: width * 0.02,  // 2% del ancho de la pantalla
     borderRadius: 12,
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: height * 0.01,  // 1% de la altura de la pantalla
   },
   completo: {
     backgroundColor: '#D4EDDA',
@@ -326,32 +331,33 @@ const styles = StyleSheet.create({
     color: '#721C24',
   },
   detalleIcono: {
-    fontSize: 45,
+    fontSize: width * 0.1,  // 10% del ancho de la pantalla
     color: 'black',
     fontWeight: 'bold',
   },
   imagePreview: {
-    width: 100,
-    height: 100,
-    marginRight: 10,
-    marginTop: 10,
+    width: width * 0.25,  // 25% del ancho de la pantalla
+    height: width * 0.25,  // 25% del ancho de la pantalla
+    marginRight: width * 0.03,  // 3% del ancho de la pantalla
+    marginTop: height * 0.02,  // 2% de la altura de la pantalla
   },
   dateButton: {
     width: "100%",
-    padding: 10,
+    padding: width * 0.04,  // 4% del ancho de la pantalla
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    marginBottom: 15,
+    marginBottom: height * 0.02,  // 2% de la altura de la pantalla
     alignItems: "center",
   },
   dateButtonText: {
-    fontSize: 16,
+    fontSize: width * 0.04,  // 4% del ancho de la pantalla
     color: "#333",
   },
   item: {
-    marginRight: 30,
+    marginRight: width * 0.08,  // 8% del ancho de la pantalla
   },
 });
+
 
 export default CultivosScreen;
