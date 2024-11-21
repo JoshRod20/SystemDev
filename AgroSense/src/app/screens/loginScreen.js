@@ -17,7 +17,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 const { width, height } = Dimensions.get("window");
 
 // Correo del administrador
-const ADMIN_EMAIL = "adminagrosense@.com";
+const ADMIN_EMAIL = "adminagrosense@gmail.com";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -34,20 +34,20 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     setAttemptedSubmit(true);
-
+  
     if (validateEmail() && validatePassword()) {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        
+  
         // Verificar si el email es del administrador
         if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
           navigation.navigate("AdminScreen");
         } else {
-          navigation.navigate("AgroSense");
+          navigation.navigate("MainScreen"); // Cambio para pantalla de usuario no admin
         }
       } catch (error) {
         let errorMessage = "Error al iniciar sesión";
-        
+  
         switch (error.code) {
           case "auth/user-not-found":
             errorMessage = "No existe una cuenta con este correo electrónico";
@@ -61,7 +61,7 @@ const LoginScreen = ({ navigation }) => {
           default:
             errorMessage = "Error al iniciar sesión. Por favor, intente nuevamente";
         }
-        
+  
         Alert.alert("Error", errorMessage);
       }
     }
