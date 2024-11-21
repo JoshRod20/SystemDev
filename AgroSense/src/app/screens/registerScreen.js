@@ -15,8 +15,10 @@ import { auth, db } from "../services/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 
-// Obtener las dimensiones de la pantalla
 const { width, height } = Dimensions.get("window");
+
+// Correo del administrador
+const ADMIN_EMAIL = "admin@agrosense.com";
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -42,6 +44,16 @@ const RegisterScreen = ({ navigation }) => {
   const handleRegister = async () => {
     setAttemptedSubmit(true);
 
+    // Verificar si están intentando registrarse con el email de administrador
+    if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+      Alert.alert(
+        "Error",
+        "Este correo electrónico no está disponible para registro.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+
     if (
       validateName() &&
       validatePhone() &&
@@ -56,9 +68,8 @@ const RegisterScreen = ({ navigation }) => {
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
-          // Mostrar alerta si el correo ya está registrado
           Alert.alert(
-            "Advertencia",
+            "Error",
             "El correo electrónico ya está registrado.",
             [{ text: "OK" }]
           );
@@ -74,6 +85,7 @@ const RegisterScreen = ({ navigation }) => {
           name,
           phone,
           email,
+          role: "user", // Asignamos el rol de usuario por defecto
         });
 
         navigation.navigate("AgroSense");
@@ -91,7 +103,7 @@ const RegisterScreen = ({ navigation }) => {
       }
     } else {
       Alert.alert(
-        "Advertencia",
+        "Error",
         "Por favor, complete todos los campos correctamente.",
         [{ text: "OK" }]
       );
